@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+#include "role/Role.h"
 
 USING_NS_CC;
 
@@ -71,6 +72,11 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+
+    joker::Role::loadAnimationSource();
+    auto role = joker::Role::create("joker");
+    addChild(role, 0);
+    role->setPosition(200, 200);
     
     return true;
 }

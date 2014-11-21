@@ -10,6 +10,7 @@ namespace joker
         ATTACKED,
         LEFT_RUN,
         RIGHT_RUN,
+        STOP,
     };
 
     enum class RoleDirection

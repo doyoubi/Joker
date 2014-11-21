@@ -1,6 +1,7 @@
 #ifndef JOKER_ROLE
 #define JOKER_ROLE
 
+#include <memory>
 #include <string>
 
 #include "cocos2d.h"
@@ -23,12 +24,14 @@ namespace joker
         void receiveCommand(RoleAction command);
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
+
         cocostudio::Armature * getArmature() { return _armature; }
+        std::unique_ptr<StateManager> & getStateManager() { return _stateManager; }
 
     private:
         Role(cocostudio::Armature * armature);
 
-        StateManager _stateManager;
+        std::unique_ptr<StateManager> _stateManager;
         cocostudio::Armature * _armature;
     };
 

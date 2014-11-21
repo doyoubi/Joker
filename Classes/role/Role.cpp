@@ -22,6 +22,9 @@ namespace joker
     Role * Role::create(const string & animationName)
     {
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName));
+        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"));
+        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"));
+        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"));
         Armature * armature = Armature::create(animationName);
 
         Role * role = new (std::nothrow) Role(armature);
@@ -31,20 +34,25 @@ namespace joker
             return nullptr;
         }
         role->autorelease();
+        return role;
     }
 
     Role::Role(Armature * armature)
-        : _stateManager(this, StatePtr(new IdleState())),
-        // warning: StateManager should only store 'this' pointer
-        // and should not access it's member data or member function
-        // and Role should not be used in multiple inheritance
-        _armature(armature)
+        : _armature(armature)
     {
+        CHECKNULL(_armature);
+        addChild(_armature);
+        _armature->retain();
+        
+        // require this->_armature initialized
+        _stateManager = std::move(std::unique_ptr<StateManager>(
+            new StateManager(this, IdleState::create())
+            ));
     }
 
     void Role::receiveCommand(RoleAction command)
     {
-        _stateManager.executeCommand(command);
+        _stateManager->executeCommand(command);
     }
 
     RoleDirection Role::getDirection() const
