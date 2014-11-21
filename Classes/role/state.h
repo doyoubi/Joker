@@ -5,6 +5,8 @@
 
 #include "cocos2d.h"
 
+#include "RoleEnumType.h"
+
 namespace joker
 {
 
@@ -20,6 +22,7 @@ namespace joker
         StateManager(Role * role, StatePtr initState);
         ~StateManager();
         void changeState(StatePtr && nextState);
+        void executeCommand(RoleAction command);
         Role * getRole() { return _role; }
         void update(float dt);
     private:
@@ -36,16 +39,18 @@ namespace joker
         virtual void enterState(Role * role) = 0;
         virtual void exitState(Role * role) = 0;
         virtual void execute(Role * role) = 0;
+        virtual void executeCommand(Role * role, RoleAction command) = 0;
     private:
         CC_DISALLOW_COPY_AND_ASSIGN(State);
     };
 
-    class IdleState
+    class IdleState : public State
     {
     public:
         virtual void enterState(Role * role) {}
         virtual void exitState(Role * role) {};
         virtual void execute(Role * role) {};
+        virtual void executeCommand(Role * role, RoleAction command) {};
     };
 
 }

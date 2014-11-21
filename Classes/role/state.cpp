@@ -29,4 +29,10 @@ namespace joker
         currState->execute(getRole());
     }
 
+    void StateManager::executeCommand(RoleAction command)
+    {
+        currState->executeCommand(_role, command);
+    }
+
+
 }

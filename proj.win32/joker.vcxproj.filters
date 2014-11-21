@@ -60,6 +60,9 @@
     <ClInclude Include="..\Classes\role\state.h">
       <Filter>Classes\role</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\role\RoleEnumType.h">
+      <Filter>Classes\role</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
