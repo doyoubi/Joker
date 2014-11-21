@@ -10,27 +10,55 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{15983625-705a-4d23-a981-3f47a411eaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\role">
+      <UniqueIdentifier>{d2b92e6f-aaed-4f11-9a18-a8e2b0871be1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\scene">
+      <UniqueIdentifier>{c2ca7b63-d732-4ffd-b2a3-5983971c93e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\utils">
+      <UniqueIdentifier>{fb656fcc-1955-49ce-b672-e44dc2d2440f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AppDelegate.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\utils\debug.cpp">
+      <Filter>Classes\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\HelloWorldScene.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\role\Role.cpp">
+      <Filter>Classes\role</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\scene\BattleScene.cpp">
+      <Filter>Classes\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\role\state.cpp">
+      <Filter>Classes\role</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AppDelegate.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\utils\debug.h">
+      <Filter>Classes\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\HelloWorldScene.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\role\Role.h">
+      <Filter>Classes\role</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\scene\BattleScene.h">
+      <Filter>Classes\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\role\state.h">
+      <Filter>Classes\role</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
