@@ -19,6 +19,7 @@ namespace joker
     class StateManager
     {
     public:
+        // require armature of role finish initialization
         StateManager(Role * role, StatePtr initState);
         ~StateManager();
         void changeState(StatePtr && nextState);

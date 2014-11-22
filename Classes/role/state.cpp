@@ -66,6 +66,10 @@ namespace joker
         role->getArmature()->getAnimation()->play("run");
     }
 
+    void RunState::exitState(Role * role)
+    {
+    }
+
     void RunState::execute(Role * role)
     {
         // update physical body

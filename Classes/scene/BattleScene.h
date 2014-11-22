@@ -3,20 +3,23 @@
 
 #include "cocos2d.h"
 
-namespace dyb
+namespace joker
 {
 
     class BattleScene : public cocos2d::Scene
     {
     public:
-        static BattleScene * create();
+        CREATE_FUNC(BattleScene);
     private:
+        bool init() override;
     };
 
     class BattleLayer : public cocos2d::Layer
     {
     public:
+        CREATE_FUNC(BattleLayer);
     private:
+        bool init() override;
     };
 
 }
