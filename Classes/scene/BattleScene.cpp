@@ -6,10 +6,11 @@
 
 #include "BattleScene.h"
 #include "role/Role.h"
+#include"gameplay/BattleDirector.h"
+#include "utils/debug.h"
 
 namespace joker
 {
-
     // BattleScene
     bool BattleScene::init()
     {
@@ -18,10 +19,29 @@ namespace joker
         Role::loadAnimationSource();
 
         auto battleLayer = BattleLayer::create();
+        battleLayer->setName("BattleLayer");
         addChild(battleLayer);
 
-        auto uiLayer = BattleUILayer::create();
+        _battleDirector = unique_ptr<BattleDirector>(new BattleDirector(this));
+
+        auto uiLayer = BattleUILayer::create(getBattleDirector());
+        uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
+        return true;
+    }
+
+    BattleLayer * BattleScene::getBattleLayer()
+    {
+        BattleLayer * ret = dynamic_cast<BattleLayer*>(getChildByName("BattleLayer"));
+        CHECKNULL(ret);
+        return ret;
+    }
+
+    BattleUILayer * BattleScene::getUIBattleLayer()
+    {
+        BattleUILayer * ret = dynamic_cast<BattleUILayer*>(getChildByName("BattleLayer"));
+        CHECKNULL(ret);
+        return ret;
     }
 
     // BattleLayer
@@ -29,14 +49,31 @@ namespace joker
     {
         if (!Layer::init()) return false;
 
-        auto joker = Role::create("joker");
-        joker->setPosition(200, 200);
-        addChild(joker);
+        _player = Role::create("joker");
+        _player->setPosition(200, 200);
+        addChild(_player);
+        return true;
     }
 
     // BattleUILayer
-    bool BattleUILayer::init()
+    BattleUILayer * BattleUILayer::create(unique_ptr<BattleDirector> & director)
     {
+        BattleUILayer * ret = new (std::nothrow) BattleUILayer();
+        if (ret && ret->init(director))
+        {
+            ret->autorelease();
+            return ret;
+        }
+        else
+        {
+            CC_SAFE_DELETE(ret);
+            return nullptr;
+        }
+    }
+
+    bool BattleUILayer::init(unique_ptr<BattleDirector> & director)
+    {
+        CHECKNULL(director);
         if (!Layer::init()) return false;
 
         using namespace cocostudio;
@@ -45,13 +82,22 @@ namespace joker
         addChild(battleUI);
         auto leftRun = Helper::seekWidgetByName(battleUI, "leftRun");
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
+
         using namespace std;
-        leftRun->addTouchEventListener([](Ref*, Widget::TouchEventType){
-            cout << "left run" << endl;
+        leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            if (touchEvent == Widget::TouchEventType::BEGAN)
+                director->sendCommand(director->getPlayer(), RoleAction::LEFT_RUN);
+            else if (touchEvent == Widget::TouchEventType::ENDED)
+                director->sendCommand(director->getPlayer(), RoleAction::STOP);
         });
-        rightRun->addTouchEventListener([](Ref*, Widget::TouchEventType){
-            cout << "left run" << endl;
+
+        rightRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            if (touchEvent == Widget::TouchEventType::BEGAN)
+                director->sendCommand(director->getPlayer(), RoleAction::RIGHT_RUN);
+            else if (touchEvent == Widget::TouchEventType::ENDED)
+                director->sendCommand(director->getPlayer(), RoleAction::STOP);
         });
+        return true;
     }
 
 }

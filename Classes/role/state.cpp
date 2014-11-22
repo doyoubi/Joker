@@ -42,6 +42,7 @@ namespace joker
     // IdleState
     void IdleState::enterState(Role * role)
     {
+        cout << "enter idle state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
         role->getArmature()->getAnimation()->play("static");
     }
@@ -62,8 +63,10 @@ namespace joker
 
     void RunState::enterState(Role * role)
     {
+        cout << "enter run state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
         role->getArmature()->getAnimation()->play("run");
+        role->setDirection(_direction);
     }
 
     void RunState::exitState(Role * role)
@@ -96,13 +99,19 @@ namespace joker
 
     void SlowDownState::enterState(Role * role)
     {
+        cout << "enter slow down state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
+        role->setDirection(_direction);
     }
 
     void SlowDownState::execute(Role * role)
     {
         // update physical body
+        if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
     }
 
     void SlowDownState::executeCommand(Role * role, RoleAction command)

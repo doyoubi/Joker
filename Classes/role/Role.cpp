@@ -51,7 +51,7 @@ namespace joker
             ));
     }
 
-    void Role::receiveCommand(RoleAction command)
+    void Role::executeCommand(RoleAction command)
     {
         _stateManager->executeCommand(command);
     }

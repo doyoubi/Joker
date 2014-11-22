@@ -22,6 +22,9 @@
     <Filter Include="Classes\utils">
       <UniqueIdentifier>{fb656fcc-1955-49ce-b672-e44dc2d2440f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\gameplay">
+      <UniqueIdentifier>{485d583c-ac41-439c-b30b-9f8c12dc2947}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -40,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\role\state.cpp">
       <Filter>Classes\role</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp">
+      <Filter>Classes\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\role\RoleEnumType.h">
       <Filter>Classes\role</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\BattleDirector.h">
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

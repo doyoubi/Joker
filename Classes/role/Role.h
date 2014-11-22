@@ -21,7 +21,7 @@ namespace joker
         static void loadAnimationSource();
         static Role * create(const std::string & animationName);
 
-        void receiveCommand(RoleAction command);
+        void executeCommand(RoleAction command);
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
 
