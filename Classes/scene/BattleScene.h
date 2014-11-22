@@ -22,6 +22,14 @@ namespace joker
         bool init() override;
     };
 
+    class BattleUILayer : public cocos2d::Layer
+    {
+    public:
+        CREATE_FUNC(BattleUILayer);
+    private:
+        bool init() override;
+    };
+
 }
 
 #endif

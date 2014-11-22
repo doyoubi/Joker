@@ -21,6 +21,7 @@ namespace joker
 
     Role * Role::create(const string & animationName)
     {
+        // check if animation has been loaded
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName));
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"));
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"));
