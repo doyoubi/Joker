@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+#include "scene/BattleScene.h"
 
 USING_NS_CC;
 
@@ -71,6 +72,18 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+
+
+    // change to battle scene
+    auto button = MenuItemImage::create(
+        "CloseNormal.png",
+        "CloseSelected.png",
+        [](Ref *){
+        Director::getInstance()->replaceScene(joker::BattleScene::create());
+    });
+    auto container = Menu::create(button, nullptr);
+    container->setPosition(200, 200);
+    this->addChild(container, 1);
     
     return true;
 }
