@@ -22,6 +22,9 @@
     <Filter Include="Classes\utils">
       <UniqueIdentifier>{fb656fcc-1955-49ce-b672-e44dc2d2440f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\SimplePhysics">
+      <UniqueIdentifier>{51334148-956c-4680-8551-338e470d8180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,9 @@
     <ClCompile Include="..\Classes\role\state.cpp">
       <Filter>Classes\role</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SimplePhysics\SimplePhysics.cpp">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -59,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\role\state.h">
       <Filter>Classes\role</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SimplePhysics\SimplePhysics.h">
+      <Filter>Classes\SimplePhysics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
