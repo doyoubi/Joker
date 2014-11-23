@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 
+#include "cocostudio/CocoStudio.h"
+
 #include "RhythmScript.h"
 #include "utils/debug.h"
 
@@ -13,16 +15,27 @@ namespace joker
 
     RhythmScript::RhythmScript(const char * scriptFile)
     {
-        auto str = String::createWithContentsOfFile(scriptFile);
-        using namespace std;
-        DEBUGCHECK(str->getCString() != nullptr, "can't open file: " + string(scriptFile));
-        stringstream ss(str->getCString());
-        string dt;
-        while (getline(ss, dt, ','))
+        DEBUGCHECK(FileUtils::getInstance()->isFileExist(scriptFile),
+            string(scriptFile) + " file not exit or empty");
+        string data = FileUtils::getInstance()->getStringFromFile(scriptFile);
+        DEBUGCHECK(data.length() != 0, string("empty file: ") + scriptFile);
+
+        using namespace rapidjson;
+        Document doc;
+        doc.Parse<kParseDefaultFlags>(data.c_str());
+        DEBUGCHECK(!doc.HasParseError(),
+            string(scriptFile) + ": " + (doc.GetParseError() == nullptr ? "" : doc.GetParseError())
+            );
+        
+        rapidjson::Value & rhythmPoints = doc["rhythmPoints"];
+        DEBUGCHECK(!rhythmPoints.IsNull(), "rhythmPoints parsed to null");
+        DEBUGCHECK(rhythmPoints.IsArray(), "type of rhythmPoints is not array");
+        DEBUGCHECK(rhythmPoints.Size() > 1, "there should be at least one rhythm point");
+        for (SizeType i = 0; i < rhythmPoints.Size(); i++)
         {
-            float t = strtof(dt.c_str(), nullptr);
-            DEBUGCHECK(t != 0.0f, "parse fail");
-            _rhythmScript.push_back(t / 1000.0f);
+            DEBUGCHECK(rhythmPoints[i].IsInt(), "data is not int");
+            int dt = rhythmPoints[i].GetInt();
+            _rhythmScript.push_back(dt / 1000.0f);
         }
     }
 
