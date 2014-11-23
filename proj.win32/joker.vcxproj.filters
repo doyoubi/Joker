@@ -47,6 +47,15 @@
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp">
       <Filter>Classes\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\metronome.cpp">
+      <Filter>Classes\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp">
+      <Filter>Classes\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp">
+      <Filter>Classes\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -70,6 +79,15 @@
       <Filter>Classes\role</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h">
+      <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\metronome.h">
+      <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h">
+      <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\RhythmScript.h">
       <Filter>Classes\gameplay</Filter>
     </ClInclude>
   </ItemGroup>

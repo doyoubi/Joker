@@ -7,7 +7,10 @@ namespace joker
 {
 
     BattleDirector::BattleDirector(BattleScene * battleScene)
-        : _battleScene(battleScene)
+        : _battleScene(battleScene),
+        _rhythmScript(""),   // rhythmScript should init first before metronome and eventDispatcher
+        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
+        _eventDispatcher(_rhythmScript)
     {
         CHECKNULL(battleScene);
     }

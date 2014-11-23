@@ -139,6 +139,9 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp" />
+    <ClCompile Include="..\Classes\gameplay\metronome.cpp" />
+    <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp" />
+    <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\role\Role.cpp" />
     <ClCompile Include="..\Classes\role\state.cpp" />
@@ -149,6 +152,9 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h" />
+    <ClInclude Include="..\Classes\gameplay\metronome.h" />
+    <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h" />
+    <ClInclude Include="..\Classes\gameplay\RhythmScript.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\role\Role.h" />
     <ClInclude Include="..\Classes\role\RoleEnumType.h" />
