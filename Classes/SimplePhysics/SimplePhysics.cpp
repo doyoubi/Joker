@@ -9,7 +9,7 @@ namespace joker {
     float SimplePhysics::_groundResistance(0.3f);
 
     SimplePhysics::SimplePhysics(float x, float y, float w, float h) :
-        _x(x), _y(y), _w(w), _h(h),_vx(0), _vy(0),
+        _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
         _landCallback(nullptr), _jumpCallback(nullptr) {
     }
 
@@ -27,13 +27,16 @@ namespace joker {
         _gravity = newGravity;
     }
 
-    void SimplePhysics::run(float v) {
-        _r = 0;
-        _vx = v;
+    float SimplePhysics::setVelocityX(float vx) {
+        return _vx = vx;
     }
 
-    void SimplePhysics::stop() {
-        _r = _groundResistance;
+    float SimplePhysics::setVelocityY(float vy) {
+        return _vy = vy;
+    }
+
+    float SimplePhysics::setResistanceX(float r) {
+        return _r = r;
     }
 
     void SimplePhysics::setGroundHeight(float newGroundHeight) {
@@ -55,13 +58,13 @@ namespace joker {
 
     void SimplePhysics::update() {
         /*
-         * 根据速度更新坐标
-         */
+        * 根据速度更新坐标
+        */
         _x += _vx;
         _y += _vy;
         /*
-         * 如果在没有锁定速度而且在地面，就受到反向阻力作用
-         */
+        * 如果在没有锁定速度而且在地面，就受到反向阻力作用
+        */
         if (_r != 0) {
             float new_vx = _vx - SIGN(_vx) * _r;
             if (SIGN(new_vx) != SIGN(_vx))
@@ -70,15 +73,15 @@ namespace joker {
                 _vx = new_vx;
         }
         /*
-         * 处理重力
-         */
+        * 处理重力
+        */
         if (_y > _groundHeight) {
             _vy -= _gravity;
         }
 
         /*
-         * 落到地面
-         */
+        * 落到地面
+        */
         if (_y < _groundHeight) {
             _y = _groundHeight;
             _vy = 0;

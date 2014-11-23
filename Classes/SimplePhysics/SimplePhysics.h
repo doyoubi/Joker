@@ -16,12 +16,27 @@ namespace joker {
         static void setGroundHeight(float newGroundHeight);
 
         inline bool isJumping();
-        
-        void jump();
 
-        void run(float v);
-        void stop();
-        
+        void jump();
+        /*
+        * [example]
+        * onKeyDown(let the role began to run)
+        *
+        *      physics->setVelocityX(vx);
+        *      physics->setResistanceX(0);
+        *
+        * onKeyUp (let the role brake)
+        *
+        *       physics->setResistanceX(Simple::getResistance());
+        *
+        * onKeyDown (ley the role jump)
+        *
+        *       physics->jump();
+        */
+        float setVelocityX(float vx);
+        float setVelocityY(float vy);
+        float setResistanceX(float r);
+
         float setWidth(float w)     { return _w = w; }
         float setHeight(float h)    { return _h = h; }
         float setX(float x)         { return _x = x; }
@@ -31,25 +46,27 @@ namespace joker {
         float getY()                { return _y; }
         float getWidth()            { return _w; }
         float getHeight()           { return _h; }
-        
+
+        static float getResistance() { return _groundResistance; }
+
         void update();
 
-        // 回调函数
-        std::function <void(void)> _landCallback; // 起跳
-        std::function <void(void)> _jumpCallback; // 落地
+        // callback functions
+        std::function <void(void)> _landCallback;
+        std::function <void(void)> _jumpCallback;
     protected:
 
-        static float _gravity;              // 重力
-        static float _groundHeight;         // 地面高度
-        static float _groundResistance;     // 地面阻力
+        static float _gravity;
+        static float _groundHeight;
+        static float _groundResistance;
 
-        float _r;       // 阻力
-        float _x;       // x坐标
-        float _y;       // y坐标
-        float _w;       // 宽度
-        float _h;       // 高度
-        float _vx;      // 水平方向速度
-        float _vy;      // 垂直方向速度
+        float _r;
+        float _x;
+        float _y;
+        float _w;
+        float _h;
+        float _vx;
+        float _vy;
 
     };
 }
