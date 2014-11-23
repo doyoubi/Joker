@@ -1,7 +1,6 @@
 #ifndef JOKER_RHYTHM_EVENT
 #define JOKER_RHYTHM_EVENT
 
-#include <initializer_list>
 #include <functional>
 #include <vector>
 
@@ -9,7 +8,6 @@
 
 namespace joker
 {
-    using std::initializer_list;
     using std::function;
     using std::vector;
 
@@ -19,7 +17,7 @@ namespace joker
         typedef function<void(void)> EventCallBack;
 
         RhythmEventDispatcher(const RhythmScript & rhythmScript);
-        void addEvent(initializer_list<int> eventIndices, EventCallBack eventCallBack);
+        void addEvent(vector<int> eventIndices, EventCallBack eventCallBack);
 
         void runEvent(int eventIndex);
 

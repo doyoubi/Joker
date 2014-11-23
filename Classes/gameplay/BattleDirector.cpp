@@ -13,8 +13,14 @@ namespace joker
         _eventDispatcher(_rhythmScript)
     {
         CHECKNULL(battleScene);
-        _metronome.setRhythmCallBack([](int i){
-            cout << i << endl;
+        _metronome.setRhythmCallBack([this](int i){
+            _eventDispatcher.runEvent(i);
+        });
+        _eventDispatcher.addEvent(_rhythmScript.getEvent("nod"), [](){
+            cout << "nod" << endl;
+        });
+        _eventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [](){
+            cout << "attack" << endl;
         });
         _metronome.reset();
         _metronome.start();

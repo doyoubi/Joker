@@ -27,6 +27,7 @@ namespace joker
             string(scriptFile) + ": " + (doc.GetParseError() == nullptr ? "" : doc.GetParseError())
             );
         
+        // get rhythm points
         rapidjson::Value & rhythmPoints = doc["rhythmPoints"];
         DEBUGCHECK(!rhythmPoints.IsNull(), "rhythmPoints parsed to null");
         DEBUGCHECK(rhythmPoints.IsArray(), "type of rhythmPoints is not array");
@@ -37,6 +38,25 @@ namespace joker
             int dt = rhythmPoints[i].GetInt();
             _rhythmScript.push_back(dt / 1000.0f);
         }
+
+        // get rhythm event
+        rapidjson::Value & events = doc["rhythmEvents"];
+        DEBUGCHECK(!events.IsNull(), "rhythmEvents parsed to null");
+        DEBUGCHECK(events.IsObject(), "type of rhythmEvents is not object");
+        for (rapidjson::Value::ConstMemberIterator it = events.MemberonBegin();
+            it != events.MemberonEnd(); it++)
+        {
+            string name = it->name.GetString();
+            vector<int> arr;
+            DEBUGCHECK(it->value.IsArray(), "value of " + name + "is not array");
+            for (SizeType i = 0; i < it->value.Size(); i++)
+            {
+                DEBUGCHECK(it->value[i].IsInt(), "data is not int");
+                int index = it->value[i].GetInt();
+                arr.push_back(index);
+            }
+            _events.emplace(name, std::move(arr));
+        }
     }
 
     vector<float> RhythmScript::getOffsetRhythmScript(float putOff)
@@ -46,6 +66,13 @@ namespace joker
         ret[0] = std::max(0.0f, _rhythmScript[0] + putOff);
         std::copy(++begin(_rhythmScript), end(_rhythmScript), ++begin(ret));
         return ret;
+    }
+
+    vector<int> & RhythmScript::getEvent(string eventName)
+    {
+        DEBUGCHECK(_events.find(eventName) != end(_events),
+            "event not exist for " + eventName);
+        return _events.at(eventName);
     }
 
 }

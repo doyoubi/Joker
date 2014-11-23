@@ -9,7 +9,7 @@ namespace joker
     {
     }
 
-    void RhythmEventDispatcher::addEvent(initializer_list<int> eventIndices, EventCallBack eventCallBack)
+    void RhythmEventDispatcher::addEvent(vector<int> eventIndices, EventCallBack eventCallBack)
     {
         _eventCallBackArray.push_back(std::move(eventCallBack));
         for (int i : eventIndices)
