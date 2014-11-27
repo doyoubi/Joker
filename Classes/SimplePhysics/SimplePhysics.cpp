@@ -4,23 +4,23 @@
 
 namespace joker {
 
-    float SimplePhysics::_groundHeight(0);
-    float SimplePhysics::_gravity(1);
-    float SimplePhysics::_groundResistance(0.3f);
+    float SimplePhysics::_groundHeight(200);
+    float SimplePhysics::_gravity(120.0f);
+    float SimplePhysics::_groundResistance(200.0f);
+    float SimplePhysics::_defaultSpeed(160.0f);
 
     SimplePhysics::SimplePhysics(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
         _landCallback(nullptr), _jumpCallback(nullptr) {
+        /*CCDirector::sharedDirector()->getScheduler()->
+            schedule((SEL_SCHEDULE)(SimplePhysics::update), nullptr, 0.0f, CC_REPEAT_FOREVER, 0.0f, false);
+        */
     }
 
-    SimplePhysics * SimplePhysics::create(float x, float y, float w, float h) {
-        SimplePhysics * phy = new SimplePhysics(x, y, w, h);
-        return phy;
-    }
-
-    SimplePhysics * SimplePhysics::create() {
-        SimplePhysics * phy = new SimplePhysics(0, 0, 0, 0);
-        return phy;
+    SimplePhysics::~SimplePhysics() {
+        /*CCDirector::sharedDirector()->getScheduler()->
+            unschedule((SEL_SCHEDULE)(SimplePhysics::update),nullptr);
+            */
     }
 
     void SimplePhysics::setGravity(float newGravity) {
@@ -56,17 +56,17 @@ namespace joker {
         return _y > _groundHeight;
     }
 
-    void SimplePhysics::update() {
+    void SimplePhysics::update(float dt) {
         /*
         * 根据速度更新坐标
         */
-        _x += _vx;
-        _y += _vy;
+        _x += _vx * dt;
+        _y += _vy * dt;
         /*
         * 如果在没有锁定速度而且在地面，就受到反向阻力作用
         */
         if (_r != 0) {
-            float new_vx = _vx - SIGN(_vx) * _r;
+            float new_vx = _vx - SIGN(_vx) * _r  * dt;
             if (SIGN(new_vx) != SIGN(_vx))
                 _vx = 0;
             else
@@ -76,7 +76,7 @@ namespace joker {
         * 处理重力
         */
         if (_y > _groundHeight) {
-            _vy -= _gravity;
+            _vy -= _gravity  * dt;
         }
 
         /*

@@ -30,7 +30,14 @@ namespace joker
 
     void StateManager::update(float dt)
     {
+        // always update physical body here
+        // dt required!!£¡
+        _role->getPhysicalBody()->update(dt);
+
         _currState->execute(_role);
+
+        // update physical body with position
+        _role->setPosition(_role->getPhysicalBody()->getX(), _role->getPhysicalBody()->getY());
     }
 
     void StateManager::executeCommand(RoleAction command)
@@ -67,6 +74,11 @@ namespace joker
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
         role->getArmature()->getAnimation()->play("run");
         role->setDirection(_direction);
+        
+        float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * SimplePhysics::getDefaultSpeed();
+
+        role->getPhysicalBody()->setVelocityX(speed);
+        role->getPhysicalBody()->setResistanceX(0);
     }
 
     void RunState::exitState(Role * role)
@@ -103,12 +115,15 @@ namespace joker
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
         role->setDirection(_direction);
+        // let player slow down
+        role->getPhysicalBody()->setResistanceX(SimplePhysics::getResistance());
     }
 
     void SlowDownState::execute(Role * role)
     {
         // update physical body
-        if (!role->getArmature()->getAnimation()->isPlaying())
+        if (!role->getArmature()->getAnimation()->isPlaying()
+            && role->getPhysicalBody()->getVelocityX() == 0)
         {
             role->getStateManager()->changeState(IdleState::create());
         }

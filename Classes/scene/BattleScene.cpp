@@ -6,7 +6,7 @@
 
 #include "BattleScene.h"
 #include "role/Role.h"
-#include"gameplay/BattleDirector.h"
+#include "gameplay/BattleDirector.h"
 #include "utils/debug.h"
 
 namespace joker
@@ -50,7 +50,8 @@ namespace joker
         if (!Layer::init()) return false;
 
         _player = Role::create("joker");
-        _player->setPosition(200, 200);
+        _player->getPhysicalBody()->setX(200);
+        _player->getPhysicalBody()->setY(200);
         addChild(_player);
         return true;
     }

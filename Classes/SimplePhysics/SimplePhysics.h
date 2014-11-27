@@ -7,10 +7,8 @@ namespace joker {
 
     class SimplePhysics {
     public:
-        static SimplePhysics * create(float x, float y, float w, float h);
-        static SimplePhysics * create();
-
         SimplePhysics(float x, float y, float w, float h);
+        ~SimplePhysics();
 
         static void setGravity(float newGravity);
         static void setGroundHeight(float newGroundHeight);
@@ -44,12 +42,14 @@ namespace joker {
 
         float getX()                { return _x; }
         float getY()                { return _y; }
+        float getVelocityX()        { return _vx; }
         float getWidth()            { return _w; }
         float getHeight()           { return _h; }
 
         static float getResistance() { return _groundResistance; }
+        static float getDefaultSpeed() { return _defaultSpeed; }
 
-        void update();
+        void update(float);
 
         // callback functions
         std::function <void(void)> _landCallback;
@@ -59,6 +59,7 @@ namespace joker {
         static float _gravity;
         static float _groundHeight;
         static float _groundResistance;
+        static float _defaultSpeed;
 
         float _r;
         float _x;
