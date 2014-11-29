@@ -32,7 +32,7 @@ namespace joker
     {
         _currState->execute(_role);
 
-        // update physical body with position
+        // update role with Physics position
         _role->setPosition(_role->getSimplePhysics()->getX(), _role->getSimplePhysics()->getY());
     }
 
