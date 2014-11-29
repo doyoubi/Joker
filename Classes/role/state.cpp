@@ -56,6 +56,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
         else if (command == RoleAction::RIGHT_RUN)
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        else if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
     }
 
     // RunState
@@ -79,6 +81,8 @@ namespace joker
 
     void RunState::exitState(Role * role)
     {
+        role->getSimplePhysics()->setVelocityX(0);
+        role->getSimplePhysics()->setResistanceX(0);
     }
 
     void RunState::execute(Role * role)
@@ -96,12 +100,16 @@ namespace joker
         else if (command == RoleAction::RIGHT_RUN)
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::STOP)
-            role->getStateManager()->changeState(SlowDownState::create(_direction));
+            role->getStateManager()->changeState(SlowDownState::create(
+                    role->getSimplePhysics()->getVelocityX()
+            ));
+        else if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
     }
 
     // SlowDownState
-    SlowDownState::SlowDownState(RoleDirection direction)
-        : _direction(direction)
+    SlowDownState::SlowDownState(float velocityX)
+        : _velocityX(velocityX)
     {
     }
 
@@ -110,7 +118,8 @@ namespace joker
         cout << "enter slow down state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
-        role->setDirection(_direction);
+        role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
+        role->getSimplePhysics()->setVelocityX(_velocityX);
         role->getSimplePhysics()->setResistanceX(SimplePhysics::getResistance());
     }
 
@@ -122,12 +131,50 @@ namespace joker
         }
     }
 
+    void SlowDownState::exitState(Role * role)
+    {
+        role->getSimplePhysics()->setVelocityX(0);
+        role->getSimplePhysics()->setResistanceX(0);
+    }
+
     void SlowDownState::executeCommand(Role * role, RoleAction command)
     {
         if (command == RoleAction::LEFT_RUN)
             role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
         else if (command == RoleAction::RIGHT_RUN)
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        else if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
+    }
+
+    // AttackState
+    void AttackState::enterState(Role * role)
+    {
+        cout << "enter attack state" << endl;
+        role->getArmature()->getAnimation()->play("attack");
+    }
+
+    void AttackState::execute(Role * role)
+    {
+        if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    // AttackedState
+    void enterState(Role * role)
+    {
+        cout << "enter attacked state" << endl;
+        role->getArmature()->getAnimation()->play("attacked");
+    }
+
+    void execute(Role * role)
+    {
+        if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
     }
 
 

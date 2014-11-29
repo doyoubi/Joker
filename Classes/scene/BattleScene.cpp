@@ -84,6 +84,7 @@ namespace joker
         addChild(battleUI);
         auto leftRun = Helper::seekWidgetByName(battleUI, "leftRun");
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
+        auto attack = Helper::seekWidgetByName(battleUI, "attack");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -98,6 +99,11 @@ namespace joker
                 director->sendCommand(director->getPlayer(), RoleAction::RIGHT_RUN);
             else if (touchEvent == Widget::TouchEventType::ENDED)
                 director->sendCommand(director->getPlayer(), RoleAction::STOP);
+        });
+
+        attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            if (touchEvent == Widget::TouchEventType::BEGAN)
+                director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
         });
         return true;
     }

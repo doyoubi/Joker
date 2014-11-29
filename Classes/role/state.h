@@ -70,14 +70,34 @@ namespace joker
     class SlowDownState : public State
     {
     public:
-        static StatePtr create(RoleDirection direction) { return StatePtr(new SlowDownState(direction)); }
-        SlowDownState(RoleDirection direction);
+        static StatePtr create(float velocityX) { return StatePtr(new SlowDownState(velocityX)); }
+        SlowDownState(float velocityX);
         void enterState(Role * role) override;
-        void exitState(Role * role) override {};
+        void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, RoleAction command) override;
     private:
-        RoleDirection _direction;
+        float _velocityX;
+    };
+
+    class AttackState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new AttackState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override {};
+    };
+
+    class AttackedState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new AttackedState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override {};
     };
 
 }
