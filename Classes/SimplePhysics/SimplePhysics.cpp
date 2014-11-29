@@ -11,7 +11,7 @@ namespace joker {
 
     float SimplePhysics::_groundHeight(200);
     float SimplePhysics::_gravity(120.0f);
-    float SimplePhysics::_groundResistance(260.0f);
+    float SimplePhysics::_groundResistance(480.0f);
     float SimplePhysics::_defaultSpeed(160.0f);
 
     SimplePhysics::SimplePhysics(float x, float y, float w, float h) :

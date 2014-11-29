@@ -13,9 +13,14 @@ namespace joker
     void Role::loadAnimationSource()
     {
         ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "joker/joker0.png",
-            "joker/joker0.plist",
-            "joker/joker.ExportJson"
+            "roleAnimation/joker/joker0.png",
+            "roleAnimation/joker/joker0.plist",
+            "roleAnimation/joker/joker.ExportJson"
+            );
+        ArmatureDataManager::getInstance()->addArmatureFileInfo(
+            "roleAnimation/enemy/enemy0.png",
+            "roleAnimation/enemy/enemy0.plist",
+            "roleAnimation/enemy/enemy.ExportJson"
             );
     }
 
@@ -66,5 +71,18 @@ namespace joker
     {
         setScaleX(direction == RoleDirection::RIGHT ? 1 : -1);
     }
+
+    void Role::setPosition(const Vec2 & position)
+    {
+        setPosition(position.x, position.y);
+    }
+
+    void Role::setPosition(float x, float y)
+    {
+        Node::setPosition(x, y);
+        getSimplePhysics()->setX(x);
+        getSimplePhysics()->setY(y);
+    }
+
 
 }

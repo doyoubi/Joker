@@ -29,6 +29,9 @@ namespace joker
         cocostudio::Armature * getArmature() { return _armature; }
         std::unique_ptr<StateManager> & getStateManager() { return _stateManager; }
 
+        void setPosition(const cocos2d::Vec2 & position) override;
+        void setPosition(float x, float y) override;
+
         SimplePhysics * getSimplePhysics() { return &_simplePhysics; }
 
     private:

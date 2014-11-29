@@ -7,11 +7,43 @@
       "name": "joker",
       "bone_data": [
         {
-          "name": "slowDown",
+          "name": "Layer1",
           "parent": "",
           "dI": -1,
-          "x": 0.0,
-          "y": 0.0,
+          "x": -5.1481475830078125,
+          "y": 54.851852416992188,
+          "z": 3,
+          "cX": 1.0,
+          "cY": 1.0,
+          "kX": 0.0,
+          "kY": 0.0,
+          "arrow_x": 0.0,
+          "arrow_y": 0.0,
+          "effectbyskeleton": false,
+          "bl": 0,
+          "display_data": [
+            {
+              "name": "joker_shache.psd_Psd.Dir/joker_zhanli.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "slowDown",
+          "parent": "",
+          "dI": 3,
+          "x": 2.0,
+          "y": 44.0,
           "z": 2,
           "cX": 1.0,
           "cY": 1.0,
@@ -97,9 +129,9 @@
         {
           "name": "run",
           "parent": "",
-          "dI": 0,
-          "x": 0.0,
-          "y": 0.0,
+          "dI": -1,
+          "x": -2.0,
+          "y": 28.0,
           "z": 1,
           "cX": 1.0,
           "cY": 1.0,
@@ -111,7 +143,7 @@
           "bl": 0,
           "display_data": [
             {
-              "name": "joker_run.psd_Psd.Dir/joker_run_1.png",
+              "name": "joker_shache.psd_Psd.Dir/joker_zhanli.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -125,7 +157,7 @@
               ]
             },
             {
-              "name": "joker_run.psd_Psd.Dir/joker_run_6.png",
+              "name": "joker_shache.psd_Psd.Dir/joker_shache4.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -139,7 +171,7 @@
               ]
             },
             {
-              "name": "joker_run.psd_Psd.Dir/joker_run_5.png",
+              "name": "joker_shache.psd_Psd.Dir/joker_shache3.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -153,7 +185,35 @@
               ]
             },
             {
-              "name": "joker_run.psd_Psd.Dir/joker_run_4.png",
+              "name": "joker_shache.psd_Psd.Dir/joker_shache2.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_shache.psd_Psd.Dir/joker_shache1.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_run.psd_Psd.Dir/joker_run_2.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -181,7 +241,49 @@
               ]
             },
             {
-              "name": "joker_run.psd_Psd.Dir/joker_run_2.png",
+              "name": "joker_run.psd_Psd.Dir/joker_run_4.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_run.psd_Psd.Dir/joker_run_5.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_run.psd_Psd.Dir/joker_run_6.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_run.psd_Psd.Dir/joker_run_1.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -217,91 +319,106 @@
               "dl": 0.0,
               "frame_data": [
                 {
-                  "dI": 0,
-                  "x": -5.0,
-                  "y": 0.0,
+                  "dI": 10,
+                  "x": -14.0,
+                  "y": 10.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 0,
-                  "twE": 1,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
                   "dI": 5,
-                  "x": -7.0,
-                  "y": 0.0,
+                  "x": -14.909090042114258,
+                  "y": 13.636363983154297,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 8,
-                  "twE": 1,
+                  "fi": 6,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
-                  "dI": 4,
-                  "x": -6.0,
-                  "y": -1.0,
+                  "dI": 6,
+                  "x": -14.0,
+                  "y": 10.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 12,
-                  "twE": 1,
+                  "fi": 11,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
-                  "dI": 3,
-                  "x": 0.0,
-                  "y": 0.0,
+                  "dI": 7,
+                  "x": -7.6363630294799805,
+                  "y": 13.636363983154297,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 16,
-                  "twE": 1,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
-                  "dI": 2,
-                  "x": -14.0,
-                  "y": 0.0,
+                  "dI": 8,
+                  "x": -22.181816101074219,
+                  "y": 12.727272033691406,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 23,
-                  "twE": 1,
+                  "fi": 21,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
-                  "dI": 1,
-                  "x": -13.0,
-                  "y": 0.0,
+                  "dI": 9,
+                  "x": -24.909095764160156,
+                  "y": 15.454545974731445,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 25,
+                  "twE": 0,
+                  "tweenFrame": false,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 10,
+                  "x": -14.0,
+                  "y": 10.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 30,
-                  "twE": 1,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
@@ -313,7 +430,7 @@
         {
           "name": "slowDown",
           "dr": 21,
-          "lp": false,
+          "lp": true,
           "to": 0,
           "drTW": 0,
           "twE": 0,
@@ -339,8 +456,8 @@
                   "bd_dst": 771
                 },
                 {
-                  "dI": 1,
-                  "x": -6.0,
+                  "dI": 0,
+                  "x": 0.0,
                   "y": 0.0,
                   "z": 0,
                   "cX": 1.0,
@@ -354,8 +471,8 @@
                   "bd_dst": 771
                 },
                 {
-                  "dI": 2,
-                  "x": 0.0,
+                  "dI": 1,
+                  "x": -6.0,
                   "y": 0.0,
                   "z": 0,
                   "cX": 1.0,
@@ -370,7 +487,7 @@
                 },
                 {
                   "dI": 3,
-                  "x": 0.0,
+                  "x": -11.0,
                   "y": 5.0,
                   "z": 0,
                   "cX": 1.0,
@@ -378,22 +495,22 @@
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 15,
-                  "twE": 2,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
                 },
                 {
-                  "dI": 4,
-                  "x": -6.0,
-                  "y": 10.0,
+                  "dI": 3,
+                  "x": -11.0,
+                  "y": 5.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 20,
-                  "twE": 2,
+                  "twE": 0,
                   "tweenFrame": false,
                   "bd_src": 1,
                   "bd_dst": 771
@@ -404,7 +521,7 @@
         },
         {
           "name": "static",
-          "dr": 1,
+          "dr": 0,
           "lp": true,
           "to": 0,
           "drTW": 0,
@@ -412,13 +529,13 @@
           "sc": 1.0,
           "mov_bone_data": [
             {
-              "name": "slowDown",
+              "name": "Layer1",
               "dl": 0.0,
               "frame_data": [
                 {
-                  "dI": 4,
-                  "x": -6.0,
-                  "y": 10.0,
+                  "dI": 0,
+                  "x": 0.0,
+                  "y": 0.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
@@ -487,7 +604,23 @@
       "plistFile": ""
     },
     {
-      "name": "joker_shache.psd_Psd.Dir/joker_shache1",
+      "name": "joker_shache.psd_Psd.Dir/joker_zhanli",
+      "width": 54.0,
+      "height": 110.0,
+      "pX": 0.5,
+      "pY": 0.5,
+      "plistFile": ""
+    },
+    {
+      "name": "joker_shache.psd_Psd.Dir/joker_shache4",
+      "width": 64.0,
+      "height": 102.0,
+      "pX": 0.5,
+      "pY": 0.5,
+      "plistFile": ""
+    },
+    {
+      "name": "joker_shache.psd_Psd.Dir/joker_shache3",
       "width": 86.0,
       "height": 90.0,
       "pX": 0.5,
@@ -503,25 +636,9 @@
       "plistFile": ""
     },
     {
-      "name": "joker_shache.psd_Psd.Dir/joker_shache3",
+      "name": "joker_shache.psd_Psd.Dir/joker_shache1",
       "width": 86.0,
       "height": 90.0,
-      "pX": 0.5,
-      "pY": 0.5,
-      "plistFile": ""
-    },
-    {
-      "name": "joker_shache.psd_Psd.Dir/joker_shache4",
-      "width": 64.0,
-      "height": 102.0,
-      "pX": 0.5,
-      "pY": 0.5,
-      "plistFile": ""
-    },
-    {
-      "name": "joker_shache.psd_Psd.Dir/joker_zhanli",
-      "width": 54.0,
-      "height": 110.0,
       "pX": 0.5,
       "pY": 0.5,
       "plistFile": ""

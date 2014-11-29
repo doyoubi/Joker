@@ -18,6 +18,7 @@ namespace joker
         BattleDirector(BattleScene * battleScene);
         void sendCommand(Role * role, RoleAction command);
         Role * getPlayer();
+
     private:
         BattleScene * _battleScene = nullptr;   // weak reference
 

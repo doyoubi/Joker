@@ -111,15 +111,12 @@ namespace joker
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
         role->setDirection(_direction);
-        // let player slow down
         role->getSimplePhysics()->setResistanceX(SimplePhysics::getResistance());
     }
 
     void SlowDownState::execute(Role * role)
     {
-        // update physical body
-        if (!role->getArmature()->getAnimation()->isPlaying()
-            && role->getSimplePhysics()->getVelocityX() == 0)
+        if (role->getSimplePhysics()->getVelocityX() == 0)
         {
             role->getStateManager()->changeState(IdleState::create());
         }

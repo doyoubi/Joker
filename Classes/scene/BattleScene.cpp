@@ -50,9 +50,10 @@ namespace joker
         if (!Layer::init()) return false;
 
         _player = Role::create("joker");
-        _player->getSimplePhysics()->setX(200);
-        _player->getSimplePhysics()->setY(200);
+        _player->setPosition(200, 200);
         addChild(_player);
+
+        addEnemy(Vec2(200, 200));
         return true;
     }
 
@@ -99,6 +100,15 @@ namespace joker
                 director->sendCommand(director->getPlayer(), RoleAction::STOP);
         });
         return true;
+    }
+
+    Role * BattleLayer::addEnemy(const Vec2 & position)
+    {
+        Role * enemy = Role::create("enemy");
+        enemy->setPosition(position);
+        _enemyArray.push_back(enemy);
+        addChild(enemy);
+        return enemy;
     }
 
 }

@@ -38,9 +38,13 @@ namespace joker
     public:
         CREATE_FUNC(BattleLayer);
         Role * getPlayer() { return _player; }
+        Role * addEnemy(const cocos2d::Vec2 & position);
+        vector<Role*> & getEnemyArray() { return _enemyArray; }
+
     private:
         bool init() override;
 
+        vector<Role*> _enemyArray;  // weak reference
         Role * _player = nullptr;   // weak reference
     };
 
