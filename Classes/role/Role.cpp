@@ -39,7 +39,7 @@ namespace joker
     }
 
     Role::Role(Armature * armature)
-        : _armature(armature)
+        : _armature(armature), _simplePhysics(0,0,0,0)
     {
         CHECKNULL(_armature);
         addChild(_armature);

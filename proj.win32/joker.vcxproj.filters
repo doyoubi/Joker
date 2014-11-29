@@ -22,7 +22,10 @@
     <Filter Include="Classes\utils">
       <UniqueIdentifier>{fb656fcc-1955-49ce-b672-e44dc2d2440f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\gameplay">
+    <Filter Include="Classes\SimplePhysics">
+      <UniqueIdentifier>{51334148-956c-4680-8551-338e470d8180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\role\gameplay">
       <UniqueIdentifier>{485d583c-ac41-439c-b30b-9f8c12dc2947}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -44,17 +47,20 @@
     <ClCompile Include="..\Classes\role\state.cpp">
       <Filter>Classes\role</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SimplePhysics\SimplePhysics.cpp">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\metronome.cpp">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,20 +81,23 @@
     <ClInclude Include="..\Classes\role\state.h">
       <Filter>Classes\role</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\SimplePhysics\SimplePhysics.h">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\role\RoleEnumType.h">
       <Filter>Classes\role</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\metronome.h">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\RhythmScript.h">
-      <Filter>Classes\gameplay</Filter>
+      <Filter>Classes\role\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
