@@ -58,6 +58,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::JUMP)
+            role->getStateManager()->changeState(JumpState::create());
     }
 
     // RunState
@@ -105,6 +107,8 @@ namespace joker
             ));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::JUMP)
+            role->getStateManager()->changeState(JumpState::create());
     }
 
     // SlowDownState
@@ -145,6 +149,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::JUMP)
+            role->getStateManager()->changeState(JumpState::create());
     }
 
     // AttackState
@@ -163,15 +169,31 @@ namespace joker
     }
 
     // AttackedState
-    void enterState(Role * role)
+    void AttackedState::enterState(Role * role)
     {
         cout << "enter attacked state" << endl;
         role->getArmature()->getAnimation()->play("attacked");
     }
 
-    void execute(Role * role)
+    void AttackedState::execute(Role * role)
     {
         if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    // JumpState
+    void JumpState::enterState(Role * role)
+    {
+        cout << "enter jump state" << endl;
+        role->getArmature()->getAnimation()->play("jump");
+        role->getSimplePhysics()->jump();
+    }
+
+    void JumpState::execute(Role * role)
+    {
+        if (!role->getSimplePhysics()->isJumping())
         {
             role->getStateManager()->changeState(IdleState::create());
         }

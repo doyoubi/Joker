@@ -47,7 +47,7 @@ namespace joker {
     void SimplePhysics::jump() {
         if (isJumping())
             return;
-        _vy = 20;
+        _vy = 150;
 
         if (_jumpCallback)
             _jumpCallback();

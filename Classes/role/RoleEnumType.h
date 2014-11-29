@@ -11,6 +11,7 @@ namespace joker
         LEFT_RUN,
         RIGHT_RUN,
         STOP,
+        JUMP,
     };
 
     enum class RoleDirection

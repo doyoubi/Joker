@@ -100,6 +100,16 @@ namespace joker
         void executeCommand(Role * role, RoleAction command) override {};
     };
 
+    class JumpState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new JumpState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override {};
+    };
+
 }
 
 #endif

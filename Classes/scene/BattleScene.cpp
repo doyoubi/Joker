@@ -82,9 +82,11 @@ namespace joker
         using namespace cocos2d::ui;
         auto battleUI = GUIReader::getInstance()->widgetFromJsonFile("battleUI/battleUI.json");
         addChild(battleUI);
+
         auto leftRun = Helper::seekWidgetByName(battleUI, "leftRun");
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
         auto attack = Helper::seekWidgetByName(battleUI, "attack");
+        auto jump = Helper::seekWidgetByName(battleUI, "jump");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -105,6 +107,12 @@ namespace joker
             if (touchEvent == Widget::TouchEventType::BEGAN)
                 director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
         });
+
+        jump->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            if (touchEvent == Widget::TouchEventType::BEGAN)
+                director->sendCommand(director->getPlayer(), RoleAction::JUMP);
+        });
+
         return true;
     }
 

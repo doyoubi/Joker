@@ -429,7 +429,7 @@
         },
         {
           "name": "slowDown",
-          "dr": 21,
+          "dr": 20,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -553,7 +553,7 @@
         },
         {
           "name": "attack",
-          "dr": 6,
+          "dr": 5,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -600,7 +600,7 @@
         },
         {
           "name": "attacked",
-          "dr": 11,
+          "dr": 10,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -651,6 +651,38 @@
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 10,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "jump",
+          "dr": 1,
+          "lp": true,
+          "to": 0,
+          "drTW": 0,
+          "twE": 0,
+          "sc": 1.0,
+          "mov_bone_data": [
+            {
+              "name": "Layer1",
+              "dl": 0.0,
+              "frame_data": [
+                {
+                  "dI": 0,
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 0,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,
