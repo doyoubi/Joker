@@ -29,14 +29,14 @@ namespace joker
         cocostudio::Armature * getArmature() { return _armature; }
         std::unique_ptr<StateManager> & getStateManager() { return _stateManager; }
 
-        SimplePhysics * getPhysicalBody() { return &_physicalBody; }
+        SimplePhysics * getSimplePhysics() { return &_simplePhysics; }
 
     private:
         Role(cocostudio::Armature * armature);
 
         std::unique_ptr<StateManager> _stateManager;
         cocostudio::Armature * _armature;
-        SimplePhysics _physicalBody;
+        SimplePhysics _simplePhysics;
     };
 
 

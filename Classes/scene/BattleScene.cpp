@@ -50,8 +50,8 @@ namespace joker
         if (!Layer::init()) return false;
 
         _player = Role::create("joker");
-        _player->getPhysicalBody()->setX(200);
-        _player->getPhysicalBody()->setY(200);
+        _player->getSimplePhysics()->setX(200);
+        _player->getSimplePhysics()->setY(200);
         addChild(_player);
         return true;
     }
