@@ -19,7 +19,7 @@ namespace joker
         void sendCommand(Role * role, RoleAction command);
         Role * getPlayer();
 
-        void restartMetronome(){ _metronome.reset(); _metronome.start(); } // only for debug
+        void restartMetronome();
 
         void tagMetronome();
         Role * getClosestEnemy();

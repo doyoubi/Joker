@@ -28,6 +28,9 @@
     <Filter Include="Classes\gameplay">
       <UniqueIdentifier>{485d583c-ac41-439c-b30b-9f8c12dc2947}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\sound">
+      <UniqueIdentifier>{11428822-2e4b-4405-a442-c062717f7219}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp">
       <Filter>Classes\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\sound\SoundManager.cpp">
+      <Filter>Classes\sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\RhythmScript.h">
       <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\sound\SoundManager.h">
+      <Filter>Classes\sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

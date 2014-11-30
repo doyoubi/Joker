@@ -57,6 +57,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create());
     }
@@ -104,6 +106,8 @@ namespace joker
             ));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create());
     }
@@ -145,6 +149,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create());
     }

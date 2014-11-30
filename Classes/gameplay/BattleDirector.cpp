@@ -32,15 +32,12 @@ namespace joker
 
         _hitEventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [this](){
             attack(getPlayer(), getClosestEnemy());
+            _battleScene->getSoundManager()->playSound("hit");
         });
 
         _missEventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [this](){
             attack(getClosestEnemy(), getPlayer());
         });
-
-
-        _metronome.reset();
-        _metronome.start();
     }
 
     void BattleDirector::sendCommand(Role * role, RoleAction command)
@@ -83,6 +80,13 @@ namespace joker
     void BattleDirector::tagMetronome()
     {
         _metronome.tab();
+    }
+
+    void BattleDirector::restartMetronome()
+    {
+        _metronome.reset();
+        _metronome.start();
+        _battleScene->getSoundManager()->playSound("badapple");
     }
 
 

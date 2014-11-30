@@ -27,6 +27,9 @@ namespace joker
         auto uiLayer = BattleUILayer::create(getBattleDirector());
         uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
+
+        getSoundManager()->loadSound("badapple", "music/badapple.wav");
+        getSoundManager()->loadSound("hit", "music/knock.wav");
         return true;
     }
 
