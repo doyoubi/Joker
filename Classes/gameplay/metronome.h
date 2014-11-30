@@ -19,7 +19,7 @@ namespace joker
         void tab();
 
         typedef std::function<void(int)> MissCallBack;
-        typedef std::function<void(int, float)> TabCallBack; // accept the delta time of rhythm point and tag point
+        typedef std::function<void(int, float)> TabCallBack; // accept index of tag point and delta time of rhythm point
         typedef std::function<void(int)> RhythmCallBack;
 
         void setMissCallBack(MissCallBack missCallBack);

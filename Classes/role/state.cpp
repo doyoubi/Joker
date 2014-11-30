@@ -45,7 +45,6 @@ namespace joker
     // IdleState
     void IdleState::enterState(Role * role)
     {
-        cout << "enter idle state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
         role->getArmature()->getAnimation()->play("static");
     }
@@ -70,7 +69,6 @@ namespace joker
 
     void RunState::enterState(Role * role)
     {
-        cout << "enter run state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
         role->getArmature()->getAnimation()->play("run");
         role->setDirection(_direction);
@@ -89,7 +87,6 @@ namespace joker
 
     void RunState::execute(Role * role)
     {
-        // update physical body
     }
 
     void RunState::executeCommand(Role * role, RoleAction command)
@@ -119,7 +116,6 @@ namespace joker
 
     void SlowDownState::enterState(Role * role)
     {
-        cout << "enter slow down state" << endl;
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
         role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
@@ -156,7 +152,6 @@ namespace joker
     // AttackState
     void AttackState::enterState(Role * role)
     {
-        cout << "enter attack state" << endl;
         role->getArmature()->getAnimation()->play("attack");
     }
 
@@ -171,7 +166,6 @@ namespace joker
     // AttackedState
     void AttackedState::enterState(Role * role)
     {
-        cout << "enter attacked state" << endl;
         role->getArmature()->getAnimation()->play("attacked");
     }
 
@@ -186,7 +180,6 @@ namespace joker
     // JumpState
     void JumpState::enterState(Role * role)
     {
-        cout << "enter jump state" << endl;
         role->getArmature()->getAnimation()->play("jump");
         role->getSimplePhysics()->jump();
     }
@@ -194,6 +187,21 @@ namespace joker
     void JumpState::execute(Role * role)
     {
         if (!role->getSimplePhysics()->isJumping())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    // NodState
+    void NodState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
+        role->getArmature()->getAnimation()->play("nod");
+    }
+
+    void NodState::execute(Role * role)
+    {
+        if (!role->getArmature()->getAnimation()->isPlaying())
         {
             role->getStateManager()->changeState(IdleState::create());
         }

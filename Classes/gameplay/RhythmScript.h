@@ -14,7 +14,7 @@ namespace joker
     public:
         RhythmScript(const char * scriptFile);
         std::vector<float> getOffsetRhythmScript(float putOff);   // putOff can be negative
-        std::vector<int> & getEvent(std::string eventName);
+        std::vector<int> & getEvent(const std::string & eventName);
         int getScriptLength() const { return _rhythmScript.size(); }
 
     private:

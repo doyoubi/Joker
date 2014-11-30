@@ -87,6 +87,7 @@ namespace joker
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
         auto attack = Helper::seekWidgetByName(battleUI, "attack");
         auto jump = Helper::seekWidgetByName(battleUI, "jump");
+        auto rhythmStart = Helper::seekWidgetByName(battleUI, "rhythmStart");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -105,12 +106,16 @@ namespace joker
 
         attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
-                director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
+                director->tagMetronome();
         });
 
         jump->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
                 director->sendCommand(director->getPlayer(), RoleAction::JUMP);
+        });
+
+        rhythmStart->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            director->restartMetronome();
         });
 
         return true;

@@ -19,6 +19,12 @@ namespace joker
         void sendCommand(Role * role, RoleAction command);
         Role * getPlayer();
 
+        void restartMetronome(){ _metronome.reset(); _metronome.start(); } // only for debug
+
+        void tagMetronome();
+        Role * getClosestEnemy();
+        void attack(Role * attacker, Role * sufferer);
+
     private:
         BattleScene * _battleScene = nullptr;   // weak reference
 
@@ -31,7 +37,9 @@ namespace joker
         // So we have to declare RhythmScript member first.
         RhythmScript _rhythmScript;
         Metronome _metronome;
-        RhythmEventDispatcher _eventDispatcher;
+        RhythmEventDispatcher _nodEventDispatcher;
+        RhythmEventDispatcher _hitEventDispatcher;   // player attack enemy
+        RhythmEventDispatcher _missEventDispatcher; // enemy attack player
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;
