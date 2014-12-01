@@ -38,9 +38,15 @@ namespace joker
     public:
         CREATE_FUNC(BattleLayer);
         Role * getPlayer() { return _player; }
+
+        ~BattleLayer();
+
     private:
         bool init() override;
 
+        void updateBackgroud(float dt);
+
+        cocos2d::Sprite * _background;
         Role * _player = nullptr;   // weak reference
     };
 

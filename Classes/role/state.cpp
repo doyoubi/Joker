@@ -56,6 +56,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
         else if (command == RoleAction::RIGHT_RUN)
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        else if (command == RoleAction::JUMP)
+            role->getStateManager()->changeState(JumpState::create(false));
     }
 
     // RunState
@@ -97,6 +99,8 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::STOP)
             role->getStateManager()->changeState(SlowDownState::create(_direction));
+        else if (command == RoleAction::JUMP)
+            role->getStateManager()->changeState(JumpState::create(true));
     }
 
     // SlowDownState
@@ -133,5 +137,31 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
     }
 
+    // JumpState
+    JumpState::JumpState(bool running):
+        _running(running)
+    {
+    }
 
+    void JumpState::enterState(Role * role)
+    {
+        cout << "enter jump state" << endl;
+        role->getSimplePhysics()->setVelocityY(300);
+    }
+
+    void JumpState::execute(Role * role)
+    {
+        // update physical body
+        if (role->getSimplePhysics()->getY() == SimplePhysics::getGroundHeight())
+        {
+            if (_running)
+                role->getStateManager()->changeState(SlowDownState::create(role->getDirection()));
+            else
+                role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    void JumpState::executeCommand(Role * role, RoleAction command)
+    {
+    }
 }

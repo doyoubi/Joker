@@ -25,7 +25,7 @@
     <Filter Include="Classes\SimplePhysics">
       <UniqueIdentifier>{51334148-956c-4680-8551-338e470d8180}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\role\gameplay">
+    <Filter Include="Classes\gameplay">
       <UniqueIdentifier>{485d583c-ac41-439c-b30b-9f8c12dc2947}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -51,16 +51,16 @@
       <Filter>Classes\SimplePhysics</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\metronome.cpp">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,16 +88,16 @@
       <Filter>Classes\role</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\metronome.h">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\RhythmScript.h">
-      <Filter>Classes\role\gameplay</Filter>
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

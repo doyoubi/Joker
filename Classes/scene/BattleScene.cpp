@@ -52,8 +52,39 @@ namespace joker
         _player = Role::create("joker");
         _player->getSimplePhysics()->setX(200);
         _player->getSimplePhysics()->setY(200);
+
+        _background = Sprite::create("background/background.png");
+        _background->setAnchorPoint(Point(0,0));
+
+        addChild(_background);
         addChild(_player);
+
+        schedule(schedule_selector(BattleLayer::updateBackgroud));
+
+        SimplePhysics::setWorldWidth(_background->getContentSize().width);
+
         return true;
+    }
+
+    BattleLayer::~BattleLayer() {
+        unschedule(schedule_selector(BattleLayer::updateBackgroud));
+    }
+
+    void BattleLayer::updateBackgroud(float dt) {
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+
+        float bgLeft = 0, x = _player->getSimplePhysics()->getX();
+
+        if (x <= visibleSize.width / 2) {
+            bgLeft = 0;
+        }
+        else {
+            bgLeft = visibleSize.width / 2 - x;
+        }
+        if (bgLeft + _background->getContentSize().width < visibleSize.width) {
+            bgLeft = visibleSize.width - _background->getContentSize().width;
+        }
+        setPosition(bgLeft,0);
     }
 
     // BattleUILayer
@@ -83,6 +114,7 @@ namespace joker
         addChild(battleUI);
         auto leftRun = Helper::seekWidgetByName(battleUI, "leftRun");
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
+        auto attack = Helper::seekWidgetByName(battleUI, "attack");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -97,6 +129,11 @@ namespace joker
                 director->sendCommand(director->getPlayer(), RoleAction::RIGHT_RUN);
             else if (touchEvent == Widget::TouchEventType::ENDED)
                 director->sendCommand(director->getPlayer(), RoleAction::STOP);
+        });
+
+        attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            if (touchEvent == Widget::TouchEventType::BEGAN)
+                director->sendCommand(director->getPlayer(), RoleAction::JUMP);
         });
         return true;
     }
