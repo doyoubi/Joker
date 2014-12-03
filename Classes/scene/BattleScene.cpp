@@ -47,11 +47,6 @@ namespace joker
         return ret;
     }
 
-    Role * BattleScene::addEnemy(const cocos2d::Vec2 & position)
-    {
-        return getBattleLayer()->addEnemy(position);
-    }
-
     // BattleLayer
     bool BattleLayer::init()
     {
@@ -75,6 +70,24 @@ namespace joker
 
     BattleLayer::~BattleLayer() {
         unschedule(schedule_selector(BattleLayer::updateBackgroud));
+    }
+
+    Role * BattleLayer::addEnemy(const Vec2 & position)
+    {
+        Role * enemy = Role::create("enemy");
+        enemy->setPosition(position);
+        _enemyArray.push_back(enemy);
+        addChild(enemy);
+        return enemy;
+    }
+
+    void BattleLayer::removeEnemy(Role * enemy)
+    {
+        auto it = std::find(std::begin(_enemyArray), std::end(_enemyArray), enemy);
+        DEBUGCHECK(it != std::end(_enemyArray), "enemy not exist!");
+        _enemyArray.erase(it);
+
+        removeChild(enemy, true);
     }
 
     void BattleLayer::updateBackgroud(float dt) {
@@ -158,13 +171,5 @@ namespace joker
         return true;
     }
 
-    Role * BattleLayer::addEnemy(const Vec2 & position)
-    {
-        Role * enemy = Role::create("enemy");
-        enemy->setPosition(position);
-        _enemyArray.push_back(enemy);
-        addChild(enemy);
-        return enemy;
-    }
 
 }

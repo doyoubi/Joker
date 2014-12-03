@@ -74,6 +74,9 @@
     <ClCompile Include="..\Classes\gameplay\AI\BehaviorTree.cpp">
       <Filter>Classes\gameplay\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\AI\EnemyConductor.cpp">
+      <Filter>Classes\gameplay\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -115,6 +118,9 @@
       <Filter>Classes\sound</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\AI\BehaviorTree.h">
+      <Filter>Classes\gameplay\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\AI\EnemyConductor.h">
       <Filter>Classes\gameplay\AI</Filter>
     </ClInclude>
   </ItemGroup>

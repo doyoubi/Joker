@@ -28,8 +28,6 @@ namespace joker
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
         SoundManager * getSoundManager() { return &_soundManager; }
 
-        Role * addEnemy(const cocos2d::Vec2 & position);
-
     private:
         bool init() override;
 
@@ -44,6 +42,7 @@ namespace joker
         CREATE_FUNC(BattleLayer);
         Role * getPlayer() { return _player; }
         Role * addEnemy(const cocos2d::Vec2 & position);
+        void removeEnemy(Role * enemy);
         vector<Role*> & getEnemyArray() { return _enemyArray; }
 
         ~BattleLayer();

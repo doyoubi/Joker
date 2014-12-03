@@ -39,10 +39,14 @@ namespace joker
             attack(getClosestEnemy(), getPlayer());
         });
 
-        Role * enemy = _battleScene->addEnemy(Vec2(200, 200));
+        addEnemy(Vec2(200, 200));
 
-        root = createEnemyTree(enemy);
-        Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false); // not unschedule yet in destructor
+        Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+    }
+
+    BattleDirector::~BattleDirector()
+    {
+        Director::getInstance()->getScheduler()->unscheduleUpdate(this);
     }
 
     void BattleDirector::sendCommand(Role * role, RoleAction command)
@@ -94,12 +98,19 @@ namespace joker
         _battleScene->getSoundManager()->playSound("badapple");
     }
 
+    Role * BattleDirector::addEnemy(const cocos2d::Vec2 & position)
+    {
+        auto enemy = _battleScene->getBattleLayer()->addEnemy(position);
+        _enemyConductor.addEnemy(enemy);
+        return enemy;
+    }
+
     void BattleDirector::update(float dt)
     {
         BTParam param;
         param.closest = true;
         param.distance = getClosestEnemy()->getPosition().x - getPlayer()->getPosition().x;
-        root->tick(param);
+        _enemyConductor.tick(getClosestEnemy(), param);
     }
 
 }

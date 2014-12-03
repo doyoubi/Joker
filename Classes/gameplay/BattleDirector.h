@@ -5,8 +5,7 @@
 #include "RhythmScript.h"
 #include "metronome.h"
 #include "RhythmEventDispatcher.h"
-
-#include "gameplay/AI/BehaviorTree.h"
+#include "gameplay/AI/EnemyConductor.h"
 
 
 namespace joker
@@ -19,6 +18,7 @@ namespace joker
     {
     public:
         BattleDirector(BattleScene * battleScene);
+        ~BattleDirector();
         void sendCommand(Role * role, RoleAction command);
         Role * getPlayer();
 
@@ -31,6 +31,8 @@ namespace joker
         void update(float dt);
 
     private:
+        Role * addEnemy(const cocos2d::Vec2 & position);
+
         BattleScene * _battleScene = nullptr;   // weak reference
 
         // Here we should make sure that _rhyScript init before metronome and eventDispatcher
@@ -46,7 +48,7 @@ namespace joker
         RhythmEventDispatcher _hitEventDispatcher;   // player attack enemy
         RhythmEventDispatcher _missEventDispatcher; // enemy attack player
 
-        BTNodePtr root;
+        EnemyConductor _enemyConductor;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;
