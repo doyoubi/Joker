@@ -138,6 +138,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\gameplay\AI\BehaviorTree.cpp" />
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp" />
     <ClCompile Include="..\Classes\gameplay\metronome.cpp" />
     <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp" />
@@ -147,11 +148,13 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\role\state.cpp" />
     <ClCompile Include="..\Classes\scene\BattleScene.cpp" />
     <ClCompile Include="..\Classes\SimplePhysics\SimplePhysics.cpp" />
+    <ClCompile Include="..\Classes\sound\SoundManager.cpp" />
     <ClCompile Include="..\Classes\utils\debug.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\gameplay\AI\BehaviorTree.h" />
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h" />
     <ClInclude Include="..\Classes\gameplay\metronome.h" />
     <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h" />
@@ -162,6 +165,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\role\state.h" />
     <ClInclude Include="..\Classes\scene\BattleScene.h" />
     <ClInclude Include="..\Classes\SimplePhysics\SimplePhysics.h" />
+    <ClInclude Include="..\Classes\sound\SoundManager.h" />
     <ClInclude Include="..\Classes\utils\debug.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

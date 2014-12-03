@@ -68,7 +68,7 @@ namespace joker
         return ret;
     }
 
-    vector<int> & RhythmScript::getEvent(string eventName)
+    vector<int> & RhythmScript::getEvent(const string & eventName)
     {
         DEBUGCHECK(_events.find(eventName) != end(_events),
             "event not exist for " + eventName);

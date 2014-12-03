@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "cocostudio\CocoStudio.h"
+#include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "ui/UIHelper.h"
 
@@ -27,6 +27,9 @@ namespace joker
         auto uiLayer = BattleUILayer::create(getBattleDirector());
         uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
+
+        getSoundManager()->loadSound("badapple", "music/badapple.wav");
+        getSoundManager()->loadSound("hit", "music/knock.wav");
         return true;
     }
 
@@ -44,6 +47,11 @@ namespace joker
         return ret;
     }
 
+    Role * BattleScene::addEnemy(const cocos2d::Vec2 & position)
+    {
+        return getBattleLayer()->addEnemy(position);
+    }
+
     // BattleLayer
     bool BattleLayer::init()
     {
@@ -52,8 +60,6 @@ namespace joker
         _player = Role::create("joker");
         _player->setPosition(200, 200);
         addChild(_player);
-
-        addEnemy(Vec2(200, 200));
 
         _background = Sprite::create("background/background.png");
         _background->setAnchorPoint(Point(0,0));
@@ -118,6 +124,7 @@ namespace joker
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
         auto attack = Helper::seekWidgetByName(battleUI, "attack");
         auto jump = Helper::seekWidgetByName(battleUI, "jump");
+        auto rhythmStart = Helper::seekWidgetByName(battleUI, "rhythmStart");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -136,12 +143,16 @@ namespace joker
 
         attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
-                director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
+                director->tagMetronome();
         });
 
         jump->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
                 director->sendCommand(director->getPlayer(), RoleAction::JUMP);
+        });
+
+        rhythmStart->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
+            director->restartMetronome();
         });
 
         return true;

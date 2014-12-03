@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 
 #include "gameplay/BattleDirector.h"
+#include "sound/SoundManager.h"
 
 namespace joker
 {
@@ -25,11 +26,15 @@ namespace joker
         BattleLayer * getBattleLayer();
         BattleUILayer * getUIBattleLayer();
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
+        SoundManager * getSoundManager() { return &_soundManager; }
+
+        Role * addEnemy(const cocos2d::Vec2 & position);
 
     private:
         bool init() override;
 
         unique_ptr<BattleDirector> _battleDirector;
+        SoundManager  _soundManager;
     };
 
 
