@@ -80,6 +80,18 @@ namespace joker
         RoleDirection _direction;
     };
 
+    class JumpState : public State
+    {
+    public:
+        static StatePtr create(bool running) { return StatePtr(new JumpState(running)); }
+        JumpState(bool running);
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override;
+    private:
+        bool _running;
+    };
 }
 
 #endif

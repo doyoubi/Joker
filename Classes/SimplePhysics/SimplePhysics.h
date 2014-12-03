@@ -12,6 +12,8 @@ namespace joker {
 
         static void setGravity(float newGravity);
         static void setGroundHeight(float newGroundHeight);
+        static void setWorldWidth(float worldWidth);
+        static float getGroundHeight()  { return _groundHeight; }
 
         inline bool isJumping();
 
@@ -60,6 +62,7 @@ namespace joker {
         static float _groundHeight;
         static float _groundResistance;
         static float _defaultSpeed;
+        static float _worldWidth;
 
         float _r;
         float _x;
