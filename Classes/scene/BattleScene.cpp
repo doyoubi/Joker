@@ -54,7 +54,38 @@ namespace joker
         addChild(_player);
 
         addEnemy(Vec2(200, 200));
+
+        _background = Sprite::create("background/background.png");
+        _background->setAnchorPoint(Point(0,0));
+
+        addChild(_background, -1);
+
+        schedule(schedule_selector(BattleLayer::updateBackgroud));
+
+        SimplePhysics::setWorldWidth(_background->getContentSize().width);
+
         return true;
+    }
+
+    BattleLayer::~BattleLayer() {
+        unschedule(schedule_selector(BattleLayer::updateBackgroud));
+    }
+
+    void BattleLayer::updateBackgroud(float dt) {
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+
+        float bgLeft = 0, x = _player->getSimplePhysics()->getX();
+
+        if (x <= visibleSize.width / 2) {
+            bgLeft = 0;
+        }
+        else {
+            bgLeft = visibleSize.width / 2 - x;
+        }
+        if (bgLeft + _background->getContentSize().width < visibleSize.width) {
+            bgLeft = visibleSize.width - _background->getContentSize().width;
+        }
+        setPosition(bgLeft,0);
     }
 
     // BattleUILayer

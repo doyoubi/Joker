@@ -59,7 +59,7 @@ namespace joker
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::JUMP)
-            role->getStateManager()->changeState(JumpState::create());
+            role->getStateManager()->changeState(JumpState::create(0.0f));
     }
 
     // RunState
@@ -108,7 +108,9 @@ namespace joker
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::JUMP)
-            role->getStateManager()->changeState(JumpState::create());
+            role->getStateManager()->changeState(JumpState::create(
+            role->getSimplePhysics()->getVelocityX()
+            ));
     }
 
     // SlowDownState
@@ -150,7 +152,9 @@ namespace joker
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::JUMP)
-            role->getStateManager()->changeState(JumpState::create());
+            role->getStateManager()->changeState(JumpState::create(
+                role->getSimplePhysics()->getVelocityX()
+            ));
     }
 
     // AttackState
@@ -184,6 +188,11 @@ namespace joker
     }
 
     // JumpState
+    JumpState::JumpState(float velocityX)
+        : _velocityX(velocityX)
+    {
+    }
+
     void JumpState::enterState(Role * role)
     {
         cout << "enter jump state" << endl;
@@ -191,13 +200,20 @@ namespace joker
         role->getSimplePhysics()->jump();
     }
 
-    void JumpState::execute(Role * role)
+    void JumpState::exitState(Role * role)
     {
-        if (!role->getSimplePhysics()->isJumping())
-        {
-            role->getStateManager()->changeState(IdleState::create());
-        }
+        role->getSimplePhysics()->setVelocityX(0);
     }
 
+    void JumpState::execute(Role * role)
+    {
+        if (role->getSimplePhysics()->getY() == SimplePhysics::getGroundHeight())
+        {
+            if (abs(_velocityX) > 0)
+                role->getStateManager()->changeState(SlowDownState::create(_velocityX));
+            else
+                role->getStateManager()->changeState(IdleState::create());
+        }
+    }
 
 }

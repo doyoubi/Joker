@@ -13,6 +13,7 @@ namespace joker {
     float SimplePhysics::_gravity(120.0f);
     float SimplePhysics::_groundResistance(480.0f);
     float SimplePhysics::_defaultSpeed(160.0f);
+    float SimplePhysics::_worldWidth(960.0f);
 
     SimplePhysics::SimplePhysics(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
@@ -44,6 +45,10 @@ namespace joker {
         _groundHeight = newGroundHeight;
     }
 
+    void SimplePhysics::setWorldWidth(float worldWidth) {
+        _worldWidth = worldWidth;
+    }
+
     void SimplePhysics::jump() {
         if (isJumping())
             return;
@@ -66,6 +71,11 @@ namespace joker {
         if (_y > _groundHeight) {
             _vy -= _gravity  * dt;
         }
+
+        if (_x - _w / 2 < 0)
+            _x = _w / 2;
+        if (_x + _w / 2 > _worldWidth)
+            _x = _worldWidth - _w / 2;
 
         if (_y < _groundHeight) {
             _y = _groundHeight;

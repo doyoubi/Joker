@@ -41,11 +41,15 @@ namespace joker
         Role * addEnemy(const cocos2d::Vec2 & position);
         vector<Role*> & getEnemyArray() { return _enemyArray; }
 
+        ~BattleLayer();
+
     private:
         bool init() override;
+        void updateBackgroud(float dt);
 
         vector<Role*> _enemyArray;  // weak reference
         Role * _player = nullptr;   // weak reference
+        cocos2d::Sprite * _background;  // weak reference
     };
 
 

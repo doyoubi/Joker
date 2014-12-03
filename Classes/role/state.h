@@ -103,11 +103,14 @@ namespace joker
     class JumpState : public State
     {
     public:
-        static StatePtr create() { return StatePtr(new JumpState()); }
+        static StatePtr create(float velocityX) { return StatePtr(new JumpState(velocityX)); }
+        JumpState(float velocityX);
         void enterState(Role * role) override;
-        void exitState(Role * role) override {};
+        void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, RoleAction command) override {};
+    private:
+        float _velocityX;
     };
 
 }
