@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "cocostudio\CocoStudio.h"
+#include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "ui/UIHelper.h"
 
@@ -47,6 +47,11 @@ namespace joker
         return ret;
     }
 
+    Role * BattleScene::addEnemy(const cocos2d::Vec2 & position)
+    {
+        return getBattleLayer()->addEnemy(position);
+    }
+
     // BattleLayer
     bool BattleLayer::init()
     {
@@ -55,8 +60,6 @@ namespace joker
         _player = Role::create("joker");
         _player->setPosition(200, 200);
         addChild(_player);
-
-        addEnemy(Vec2(200, 200));
         return true;
     }
 

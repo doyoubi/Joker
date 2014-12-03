@@ -38,6 +38,11 @@ namespace joker
         _missEventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [this](){
             attack(getClosestEnemy(), getPlayer());
         });
+
+        Role * enemy = _battleScene->addEnemy(Vec2(200, 200));
+
+        root = createEnemyTree(enemy);
+        Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false); // not unschedule yet in destructor
     }
 
     void BattleDirector::sendCommand(Role * role, RoleAction command)
@@ -89,5 +94,12 @@ namespace joker
         _battleScene->getSoundManager()->playSound("badapple");
     }
 
+    void BattleDirector::update(float dt)
+    {
+        BTParam param;
+        param.closest = true;
+        param.distance = getClosestEnemy()->getPosition().x - getPlayer()->getPosition().x;
+        root->tick(param);
+    }
 
 }

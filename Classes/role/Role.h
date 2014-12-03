@@ -5,7 +5,7 @@
 #include <string>
 
 #include "cocos2d.h"
-#include "cocostudio\CCArmature.h"
+#include "cocostudio/CCArmature.h"
 
 #include "state.h"
 #include "RoleEnumType.h"

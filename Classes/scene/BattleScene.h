@@ -28,6 +28,8 @@ namespace joker
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
         SoundManager * getSoundManager() { return &_soundManager; }
 
+        Role * addEnemy(const cocos2d::Vec2 & position);
+
     private:
         bool init() override;
 

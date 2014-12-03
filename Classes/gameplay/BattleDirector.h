@@ -6,6 +6,9 @@
 #include "metronome.h"
 #include "RhythmEventDispatcher.h"
 
+#include "gameplay/AI/BehaviorTree.h"
+
+
 namespace joker
 {
 
@@ -25,6 +28,8 @@ namespace joker
         Role * getClosestEnemy();
         void attack(Role * attacker, Role * sufferer);
 
+        void update(float dt);
+
     private:
         BattleScene * _battleScene = nullptr;   // weak reference
 
@@ -40,6 +45,8 @@ namespace joker
         RhythmEventDispatcher _nodEventDispatcher;
         RhythmEventDispatcher _hitEventDispatcher;   // player attack enemy
         RhythmEventDispatcher _missEventDispatcher; // enemy attack player
+
+        BTNodePtr root;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;
