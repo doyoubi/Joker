@@ -12,7 +12,8 @@ namespace joker
         _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
         _nodEventDispatcher(_rhythmScript),
         _hitEventDispatcher(_rhythmScript),
-        _missEventDispatcher(_rhythmScript)
+        _missEventDispatcher(_rhythmScript),
+        _getCloseDispatcher(_rhythmScript)
     {
         CHECKNULL(battleScene);
 
@@ -39,7 +40,17 @@ namespace joker
             attack(getClosestEnemy(), getPlayer());
         });
 
-        addEnemy(Vec2(200, 200));
+        addEnemy(Vec2(500, 200));
+        _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
+        getPlayer()->setSpeed(200, 100);
+
+        _missEventDispatcher.addEvent(_rhythmScript.getEvent("getClose"), [this](){
+            this->setBTEvent(BTEvent::ROLE_GET_CLOSE);
+            RoleDirection d = getClosestEnemy()->getPosition().x < getPlayer()->getPosition().x ?
+                RoleDirection::LEFT : RoleDirection::RIGHT;
+            getPlayer()->setDirection(d);
+            getPlayer()->executeCommand(RoleAction::READY);
+        });
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
     }
@@ -66,12 +77,9 @@ namespace joker
     void BattleDirector::attack(Role * attacker, Role * sufferer)
     {
         int d = attacker->getPosition().x - sufferer->getPosition().x;
-        if (abs(d) < 300)
-        {
-            attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-            attacker->executeCommand(RoleAction::ATTACK);
-            sufferer->executeCommand(RoleAction::ATTACKED);
-        }
+        attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
+        attacker->executeCommand(RoleAction::ATTACK);
+        sufferer->executeCommand(RoleAction::ATTACKED);
     }
 
     Role * BattleDirector::getClosestEnemy()
@@ -108,9 +116,11 @@ namespace joker
     void BattleDirector::update(float dt)
     {
         BTParam param;
+        param.event = _behaviorTreeEvent;
         param.closest = true;
-        param.distance = getClosestEnemy()->getPosition().x - getPlayer()->getPosition().x;
+        param.playerPosition = getPlayer()->getPosition().x;
         _enemyConductor.tick(getClosestEnemy(), param);
+        _behaviorTreeEvent = BTEvent::NO_EVENT;
     }
 
 }

@@ -83,7 +83,7 @@ namespace joker
         for (auto & ptr : _children)
         {
             BTNodeStatus status = ptr->tick(param);
-            if (status == BTNodeStatus::RUNNING)
+            if (status == BTNodeStatus::RUNNING || status == BTNodeStatus::SUCCESS)
             {
                 return status;
             }
@@ -100,13 +100,14 @@ namespace joker
     BTNodeStatus KeepDistance::execute(const BTParam & param)
     {
         using std::abs;
-        if (param.distance < 0 && abs(param.distance) < rangeNear
-            || param.distance >= 0 && abs(param.distance) >= rangeFar)
+        int distance = getRole()->getPosition().x - param.playerPosition;
+        if (distance < 0 && abs(distance) < rangeNear
+            || distance >= 0 && abs(distance) >= rangeFar)
         {
             getRole()->executeCommand(RoleAction::LEFT_RUN);
         }
-        if (param.distance < 0 && abs(param.distance) >= rangeFar
-            || param.distance >= 0 && abs(param.distance) <= rangeNear)
+        if (distance < 0 && abs(distance) >= rangeFar
+            || distance >= 0 && abs(distance) <= rangeNear)
         {
             getRole()->executeCommand(RoleAction::RIGHT_RUN);
         }
@@ -114,18 +115,70 @@ namespace joker
     }
 
 
+    // GetClose
+    GetClose::GetClose(BTprecondition && precondition, Role * role)
+        : RoleActionNode(std::move(precondition), role)
+    {
+    }
+
+    BTNodeStatus GetClose::execute(const BTParam & param)
+    {
+        DEBUGCHECK(param.event == BTEvent::ROLE_GET_CLOSE, "event should be role get close");
+        int distance = (Role::EnemyAttackScope - Role::PlayerShortAttackScope) / 2.0f + Role::PlayerShortAttackScope;
+        int direction = getRole()->getPosition().x > param.playerPosition ? 1 : -1;
+        int position = direction * distance + param.playerPosition;
+        getRole()->setPosition(position, getRole()->getPosition().y);
+        return BTNodeStatus::SUCCESS;
+    }
+
+    // AvoidToOtherSide
+    AvoidToOtherSide::AvoidToOtherSide(BTprecondition && precondition, Role * role)
+        : RoleActionNode(std::move(precondition), role)
+    {
+    }
+
+    BTNodeStatus AvoidToOtherSide::execute(const BTParam & param)
+    {
+        int distance = std::abs(getRole()->getPosition().x - param.playerPosition) * 2;
+        int direction = getRole()->getPosition().x > param.playerPosition ? -1 : 1;
+        int position = direction * distance + param.playerPosition;
+        getRole()->setPosition(position, getRole()->getPosition().y);
+        return BTNodeStatus::SUCCESS;
+    }
+
+    // create behavior tree
     BTNodePtr createEnemyTree(Role * enemy)
     {
         CHECKNULL(enemy);
         auto root = BTNodePtr(new Selector([](const BTParam & param){
             return true;
         }));
+
+        auto eventHappen = BTNodePtr(new Selector([](const BTParam & param){
+            return param.event != BTEvent::NO_EVENT;
+        }));
+        auto eventNotHappen = BTNodePtr(new Selector([](const BTParam & param){
+            return param.event == BTEvent::NO_EVENT;
+        }));
+
+        auto getClose = BTNodePtr(new GetClose([](const BTParam & param){
+            return param.event == BTEvent::ROLE_GET_CLOSE;
+        }, enemy));
+
+        auto avoid = BTNodePtr(new AvoidToOtherSide([enemy](const BTParam & param){
+            return std::abs(enemy->getPosition().x - param.playerPosition) < Role::PlayerShortAttackScope;
+        }, enemy));
         auto keepDistance = BTNodePtr(new KeepDistance([](const BTParam & param){
             return param.closest;
         }, enemy));
-        root->addChild(std::move(keepDistance));
+
+        eventHappen->addChild(std::move(getClose));
+        eventNotHappen->addChild(std::move(avoid));
+        eventNotHappen->addChild(std::move(keepDistance));
+        root->addChild(std::move(eventHappen));
+        root->addChild(std::move(eventNotHappen));
+
         return root;
     }
-
 
 }

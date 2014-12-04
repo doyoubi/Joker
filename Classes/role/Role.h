@@ -17,6 +17,10 @@ namespace joker
     class Role : public cocos2d::Node
     {
     public:
+        const static int PlayerShortAttackScope = 50;
+        const static int PlayerLongAttackScope = 300;
+        const static int EnemyAttackScope = 300;
+
         // load animation project to ArmatureDataManager
         // should be called once before using Role::create
         static void loadAnimationSource();
@@ -34,12 +38,19 @@ namespace joker
 
         SimplePhysics * getSimplePhysics() { return &_simplePhysics; }
 
+        void setSpeed(float normalSpeed, float slowSpeed){ _normalSpeed = normalSpeed; _slowSpeed = slowSpeed; }
+        float getNormalSpeed() const { return _normalSpeed; }
+        float getSlowSpeed() const { return _slowSpeed; }
+
     private:
         Role(cocostudio::Armature * armature);
 
         std::unique_ptr<StateManager> _stateManager;
         cocostudio::Armature * _armature;
         SimplePhysics _simplePhysics;
+
+        float _normalSpeed = 0;
+        float _slowSpeed = 0;
     };
 
 

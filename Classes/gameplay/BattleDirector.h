@@ -29,6 +29,7 @@ namespace joker
         void attack(Role * attacker, Role * sufferer);
 
         void update(float dt);
+        void setBTEvent(BTEvent event) { _behaviorTreeEvent = event; }
 
     private:
         Role * addEnemy(const cocos2d::Vec2 & position);
@@ -47,8 +48,10 @@ namespace joker
         RhythmEventDispatcher _nodEventDispatcher;
         RhythmEventDispatcher _hitEventDispatcher;   // player attack enemy
         RhythmEventDispatcher _missEventDispatcher; // enemy attack player
+        RhythmEventDispatcher _getCloseDispatcher;
 
         EnemyConductor _enemyConductor;
+        BTEvent _behaviorTreeEvent = BTEvent::NO_EVENT;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;

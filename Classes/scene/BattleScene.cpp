@@ -52,10 +52,6 @@ namespace joker
     {
         if (!Layer::init()) return false;
 
-        _player = Role::create("joker");
-        _player->setPosition(200, 200);
-        addChild(_player);
-
         _background = Sprite::create("background/background.png");
         _background->setAnchorPoint(Point(0,0));
 
@@ -75,6 +71,7 @@ namespace joker
     Role * BattleLayer::addEnemy(const Vec2 & position)
     {
         Role * enemy = Role::create("enemy");
+        enemy->setSpeed(100, 10);
         enemy->setPosition(position);
         _enemyArray.push_back(enemy);
         addChild(enemy);
@@ -88,6 +85,15 @@ namespace joker
         _enemyArray.erase(it);
 
         removeChild(enemy, true);
+    }
+
+    Role * BattleLayer::addPlayer(const cocos2d::Vec2 & position)
+    {
+        DEBUGCHECK(_player == nullptr, "player already exist");
+        _player = Role::create("joker");
+        _player->setPosition(200, 200);
+        addChild(_player);
+        return _player;
     }
 
     void BattleLayer::updateBackgroud(float dt) {

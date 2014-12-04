@@ -42,6 +42,7 @@ namespace joker
         CREATE_FUNC(BattleLayer);
         Role * getPlayer() { return _player; }
         Role * addEnemy(const cocos2d::Vec2 & position);
+        Role * addPlayer(const cocos2d::Vec2 & position);
         void removeEnemy(Role * enemy);
         vector<Role*> & getEnemyArray() { return _enemyArray; }
 
@@ -53,7 +54,7 @@ namespace joker
 
         vector<Role*> _enemyArray;  // weak reference
         Role * _player = nullptr;   // weak reference
-        cocos2d::Sprite * _background;  // weak reference
+        cocos2d::Sprite * _background = nullptr;  // weak reference
     };
 
 

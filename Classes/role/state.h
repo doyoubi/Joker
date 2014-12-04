@@ -123,6 +123,30 @@ namespace joker
         void executeCommand(Role * role, RoleAction command) override {};
     };
 
+
+    class ReadyState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new ReadyState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override {};
+        void executeCommand(Role * role, RoleAction command) override;
+    };
+
+    class CrawlState : public State
+    {
+    public:
+        static StatePtr create(RoleDirection direction) { return StatePtr(new CrawlState(direction)); }
+        CrawlState(RoleDirection direction);
+        void enterState(Role * role) override;
+        void exitState(Role * role) override;
+        void execute(Role * role) override {};
+        void executeCommand(Role * role, RoleAction command) override;
+    private:
+        RoleDirection _direction;
+    };
+
 }
 
 #endif

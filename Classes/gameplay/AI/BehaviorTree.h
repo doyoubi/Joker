@@ -9,9 +9,16 @@ namespace joker
 {
     class BTNode;
 
+    enum class BTEvent
+    {
+        NO_EVENT,
+        ROLE_GET_CLOSE,
+    };
+
     struct BTParam
     {
-        int distance;
+        BTEvent event;
+        int playerPosition;
         bool closest;
     };
 
@@ -104,6 +111,22 @@ namespace joker
 
         const int rangeNear = 150;
         const int rangeFar = 200;
+    };
+
+    class GetClose : public RoleActionNode
+    {
+    public:
+        GetClose(BTprecondition && precondition, Role * role);
+    private:
+        BTNodeStatus execute(const BTParam & param) override;
+    };
+
+    class AvoidToOtherSide : public RoleActionNode
+    {
+    public:
+        AvoidToOtherSide(BTprecondition && precondition, Role * role);
+    private:
+        BTNodeStatus execute(const BTParam & param) override;
     };
 
 

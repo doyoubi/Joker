@@ -61,6 +61,8 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(0.0f));
+        else if (command == RoleAction::READY)
+            role->getStateManager()->changeState(ReadyState::create());
     }
 
     // RunState
@@ -75,7 +77,7 @@ namespace joker
         role->getArmature()->getAnimation()->play("run");
         role->setDirection(_direction);
         
-        float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * SimplePhysics::getDefaultSpeed();
+        float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getNormalSpeed();
 
         role->getSimplePhysics()->setVelocityX(speed);
         role->getSimplePhysics()->setResistanceX(0);
@@ -110,7 +112,11 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(
-                role->getSimplePhysics()->getVelocityX()
+            role->getSimplePhysics()->getVelocityX()
+            ));
+        else if (command == RoleAction::READY)
+            role->getStateManager()->changeState(CrawlState::create(
+                role->getSimplePhysics()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
             ));
     }
 
@@ -157,6 +163,8 @@ namespace joker
             role->getStateManager()->changeState(JumpState::create(
                 role->getSimplePhysics()->getVelocityX()
             ));
+        else if (command == RoleAction::READY)
+            role->getStateManager()->changeState(ReadyState::create());
     }
 
     // AttackState
@@ -218,7 +226,7 @@ namespace joker
     // NodState
     void NodState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("nod"));
         role->getArmature()->getAnimation()->play("nod");
     }
 
@@ -229,5 +237,65 @@ namespace joker
             role->getStateManager()->changeState(IdleState::create());
         }
     }
+
+    // ReadyState
+    void ReadyState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
+        role->getArmature()->getAnimation()->play("static");
+    }
+
+    void ReadyState::executeCommand(Role * role, RoleAction command)
+    {
+        if (command == RoleAction::LEFT_RUN)
+            role->getStateManager()->changeState(CrawlState::create(RoleDirection::LEFT));
+        else if (command == RoleAction::RIGHT_RUN)
+            role->getStateManager()->changeState(CrawlState::create(RoleDirection::RIGHT));
+        else if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
+    }
+
+    // CrawlState
+    CrawlState::CrawlState(RoleDirection direction)
+        : _direction(direction)
+    {
+    }
+
+    void CrawlState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
+        role->getArmature()->getAnimation()->play("run");
+
+        float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getSlowSpeed();
+
+        role->getSimplePhysics()->setVelocityX(speed);
+        role->getSimplePhysics()->setResistanceX(0);
+    }
+
+    void CrawlState::exitState(Role * role)
+    {
+        role->getSimplePhysics()->setVelocityX(0);
+        role->getSimplePhysics()->setResistanceX(0);
+    }
+
+    void CrawlState::executeCommand(Role * role, RoleAction command)
+    {
+        if (_direction == RoleDirection::LEFT && command == RoleAction::LEFT_RUN) return;
+        if (_direction == RoleDirection::RIGHT && command == RoleAction::RIGHT_RUN) return;
+
+        if (command == RoleAction::LEFT_RUN)
+            role->getStateManager()->changeState(CrawlState::create(RoleDirection::LEFT));
+        else if (command == RoleAction::RIGHT_RUN)
+            role->getStateManager()->changeState(CrawlState::create(RoleDirection::RIGHT));
+        else if (command == RoleAction::STOP)
+            role->getStateManager()->changeState(ReadyState::create());
+        else if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
+    }
+
 
 }
