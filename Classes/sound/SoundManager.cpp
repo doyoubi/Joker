@@ -13,15 +13,21 @@ namespace joker
     void SoundManager::loadSound(const char * soundName, const char * soundFile)
     {
         SimpleAudioEngine::getInstance()->preloadEffect(soundFile);
-        _map.emplace(soundName, soundFile);
+        _name2file.emplace(soundName, soundFile);
     }
 
     void SoundManager::playSound(const char * soundName)
     {
-        DEBUGCHECK(_map.count(soundName) != 0, string(soundName) + " not exist");
-        const char * soundFile = _map.at(soundName);
+        DEBUGCHECK(_name2file.count(soundName) != 0, string(soundName) + " not exist");
+        const char * soundFile = _name2file.at(soundName);
         CHECKNULL(soundFile);
-        SimpleAudioEngine::getInstance()->playEffect(soundFile);
+        if (_name2id.count(soundName) != 0)
+        {
+            SimpleAudioEngine::getInstance()->stopEffect(_name2id.at(soundName));
+            _name2id.erase(soundName);
+        }
+        unsigned int id = SimpleAudioEngine::getInstance()->playEffect(soundFile);
+        _name2id.emplace(soundName, id);
     }
 
 }
