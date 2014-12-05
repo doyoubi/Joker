@@ -9,42 +9,44 @@ namespace joker
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene),
         _rhythmScript("music/badapple.json"),   // rhythmScript should init first before metronome and eventDispatcher
-        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
-        _nodEventDispatcher(_rhythmScript),
-        _hitEventDispatcher(_rhythmScript),
-        _missEventDispatcher(_rhythmScript),
-        _getCloseDispatcher(_rhythmScript)
+        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f)
     {
         CHECKNULL(battleScene);
 
+        _eventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
+        _eventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
+        _eventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
+        _eventDispaters.emplace("getClose", RhythmEventDispatcher(_rhythmScript));
+
         _metronome.setRhythmCallBack([this](int i){
-            _nodEventDispatcher.runEvent(i);
+            getEventDispather("nod").runEvent(i);
+            getEventDispather("getClose").runEvent(i);
         });
         _metronome.setHitCallBack([this](int index, float dt){
-            _hitEventDispatcher.runEvent(index);
+            getEventDispather("hit").runEvent(index);
         });
         _metronome.setMissCallBack([this](int index){
-            _missEventDispatcher.runEvent(index);
+            getEventDispather("miss").runEvent(index);
         });
 
-        _nodEventDispatcher.addEvent(_rhythmScript.getEvent("nod"), [this](){
+        getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
             sendCommand(getClosestEnemy(), RoleAction::NOD);
         });
 
-        _hitEventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [this](){
+        getEventDispather("hit").addEvent(_rhythmScript.getEvent("attack"), [this](){
             attack(getPlayer(), getClosestEnemy());
             _battleScene->getSoundManager()->playSound("hit");
         });
 
-        _missEventDispatcher.addEvent(_rhythmScript.getEvent("attack"), [this](){
+        getEventDispather("miss").addEvent(_rhythmScript.getEvent("attack"), [this](){
             attack(getClosestEnemy(), getPlayer());
         });
 
         addEnemy(Vec2(500, 200));
         _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
-        getPlayer()->setSpeed(200, 100);
+        getPlayer()->setSpeed(200, 20);
 
-        _missEventDispatcher.addEvent(_rhythmScript.getEvent("getClose"), [this](){
+        getEventDispather("getClose").addEvent(_rhythmScript.getEvent("getClose"), [this](){
             this->setBTEvent(BTEvent::ROLE_GET_CLOSE);
             RoleDirection d = getClosestEnemy()->getPosition().x < getPlayer()->getPosition().x ?
                 RoleDirection::LEFT : RoleDirection::RIGHT;
@@ -111,6 +113,12 @@ namespace joker
         auto enemy = _battleScene->getBattleLayer()->addEnemy(position);
         _enemyConductor.addEnemy(enemy);
         return enemy;
+    }
+
+    RhythmEventDispatcher & BattleDirector::getEventDispather(const char * eventName)
+    {
+        DEBUGCHECK(_eventDispaters.count(eventName) == 1, string("event: ") + eventName + " not exist");
+        return _eventDispaters.at(eventName);
     }
 
     void BattleDirector::update(float dt)

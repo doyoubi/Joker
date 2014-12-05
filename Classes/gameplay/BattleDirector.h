@@ -1,6 +1,8 @@
 #ifndef JOKER_BATTLE_DIRECTOR
 #define JOKER_BATTLE_DIRECTOR
 
+#include <unordered_map>
+
 #include "role/RoleEnumType.h"
 #include "RhythmScript.h"
 #include "metronome.h"
@@ -28,6 +30,8 @@ namespace joker
         Role * getClosestEnemy();
         void attack(Role * attacker, Role * sufferer);
 
+        RhythmEventDispatcher & getEventDispather(const char * eventName);
+
         void update(float dt);
         void setBTEvent(BTEvent event) { _behaviorTreeEvent = event; }
 
@@ -45,10 +49,7 @@ namespace joker
         // So we have to declare RhythmScript member first.
         RhythmScript _rhythmScript;
         Metronome _metronome;
-        RhythmEventDispatcher _nodEventDispatcher;
-        RhythmEventDispatcher _hitEventDispatcher;   // player attack enemy
-        RhythmEventDispatcher _missEventDispatcher; // enemy attack player
-        RhythmEventDispatcher _getCloseDispatcher;
+        std::unordered_map<const char*, RhythmEventDispatcher> _eventDispaters;
 
         EnemyConductor _enemyConductor;
         BTEvent _behaviorTreeEvent = BTEvent::NO_EVENT;
