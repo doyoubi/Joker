@@ -61,8 +61,8 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(0.0f));
-        else if (command == RoleAction::READY)
-            role->getStateManager()->changeState(ReadyState::create());
+        else if (command == RoleAction::DEFENCE)
+            role->getStateManager()->changeState(DefenceState::create());
     }
 
     // RunState
@@ -114,7 +114,7 @@ namespace joker
             role->getStateManager()->changeState(JumpState::create(
             role->getSimplePhysics()->getVelocityX()
             ));
-        else if (command == RoleAction::READY)
+        else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(CrawlState::create(
                 role->getSimplePhysics()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
             ));
@@ -163,8 +163,8 @@ namespace joker
             role->getStateManager()->changeState(JumpState::create(
                 role->getSimplePhysics()->getVelocityX()
             ));
-        else if (command == RoleAction::READY)
-            role->getStateManager()->changeState(ReadyState::create());
+        else if (command == RoleAction::DEFENCE)
+            role->getStateManager()->changeState(DefenceState::create());
     }
 
     // AttackState
@@ -238,14 +238,14 @@ namespace joker
         }
     }
 
-    // ReadyState
-    void ReadyState::enterState(Role * role)
+    // DefenceState
+    void DefenceState::enterState(Role * role)
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
         role->getArmature()->getAnimation()->play("static");
     }
 
-    void ReadyState::executeCommand(Role * role, RoleAction command)
+    void DefenceState::executeCommand(Role * role, RoleAction command)
     {
         if (command == RoleAction::LEFT_RUN)
             role->getStateManager()->changeState(CrawlState::create(RoleDirection::LEFT));
@@ -265,8 +265,8 @@ namespace joker
 
     void CrawlState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
-        role->getArmature()->getAnimation()->play("run");
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
+        role->getArmature()->getAnimation()->play("static");
 
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getSlowSpeed();
 
@@ -290,7 +290,7 @@ namespace joker
         else if (command == RoleAction::RIGHT_RUN)
             role->getStateManager()->changeState(CrawlState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::STOP)
-            role->getStateManager()->changeState(ReadyState::create());
+            role->getStateManager()->changeState(DefenceState::create());
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::ATTACKED)

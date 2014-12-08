@@ -16,11 +16,9 @@ namespace joker
         _eventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
         _eventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
         _eventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
-        _eventDispaters.emplace("getClose", RhythmEventDispatcher(_rhythmScript));
 
         _metronome.setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
-            getEventDispather("getClose").runEvent(i);
         });
         _metronome.setHitCallBack([this](int index, float dt){
             getEventDispather("hit").runEvent(index);
@@ -45,14 +43,6 @@ namespace joker
         addEnemy(Vec2(500, 200));
         _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
         getPlayer()->setSpeed(200, 20);
-
-        getEventDispather("getClose").addEvent(_rhythmScript.getEvent("getClose"), [this](){
-            this->setBTEvent(BTEvent::ROLE_GET_CLOSE);
-            RoleDirection d = getClosestEnemy()->getPosition().x < getPlayer()->getPosition().x ?
-                RoleDirection::LEFT : RoleDirection::RIGHT;
-            getPlayer()->setDirection(d);
-            getPlayer()->executeCommand(RoleAction::READY);
-        });
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
     }
@@ -124,11 +114,9 @@ namespace joker
     void BattleDirector::update(float dt)
     {
         BTParam param;
-        param.event = _behaviorTreeEvent;
         param.closest = true;
         param.playerPosition = getPlayer()->getPosition().x;
         _enemyConductor.tick(getClosestEnemy(), param);
-        _behaviorTreeEvent = BTEvent::NO_EVENT;
     }
 
 }

@@ -9,15 +9,8 @@ namespace joker
 {
     class BTNode;
 
-    enum class BTEvent
-    {
-        NO_EVENT,
-        ROLE_GET_CLOSE,
-    };
-
     struct BTParam
     {
-        BTEvent event;
         int playerPosition;
         bool closest;
     };

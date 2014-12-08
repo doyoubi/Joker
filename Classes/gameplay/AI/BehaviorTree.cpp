@@ -115,37 +115,6 @@ namespace joker
     }
 
 
-    // GetClose
-    GetClose::GetClose(BTprecondition && precondition, Role * role)
-        : RoleActionNode(std::move(precondition), role)
-    {
-    }
-
-    BTNodeStatus GetClose::execute(const BTParam & param)
-    {
-        DEBUGCHECK(param.event == BTEvent::ROLE_GET_CLOSE, "event should be role get close");
-        int distance = (Role::EnemyAttackScope - Role::PlayerShortAttackScope) / 2.0f + Role::PlayerShortAttackScope;
-        int direction = getRole()->getPosition().x > param.playerPosition ? 1 : -1;
-        int position = direction * distance + param.playerPosition;
-        getRole()->setPosition(position, getRole()->getPosition().y);
-        return BTNodeStatus::SUCCESS;
-    }
-
-    // AvoidToOtherSide
-    AvoidToOtherSide::AvoidToOtherSide(BTprecondition && precondition, Role * role)
-        : RoleActionNode(std::move(precondition), role)
-    {
-    }
-
-    BTNodeStatus AvoidToOtherSide::execute(const BTParam & param)
-    {
-        int distance = std::abs(getRole()->getPosition().x - param.playerPosition) * 2;
-        int direction = getRole()->getPosition().x > param.playerPosition ? -1 : 1;
-        int position = direction * distance + param.playerPosition;
-        getRole()->setPosition(position, getRole()->getPosition().y);
-        return BTNodeStatus::SUCCESS;
-    }
-
     // create behavior tree
     BTNodePtr createEnemyTree(Role * enemy)
     {
@@ -154,29 +123,11 @@ namespace joker
             return true;
         }));
 
-        auto eventHappen = BTNodePtr(new Selector([](const BTParam & param){
-            return param.event != BTEvent::NO_EVENT;
-        }));
-        auto eventNotHappen = BTNodePtr(new Selector([](const BTParam & param){
-            return param.event == BTEvent::NO_EVENT;
-        }));
-
-        auto getClose = BTNodePtr(new GetClose([](const BTParam & param){
-            return param.event == BTEvent::ROLE_GET_CLOSE;
-        }, enemy));
-
-        auto avoid = BTNodePtr(new AvoidToOtherSide([enemy](const BTParam & param){
-            return std::abs(enemy->getPosition().x - param.playerPosition) < Role::PlayerShortAttackScope;
-        }, enemy));
         auto keepDistance = BTNodePtr(new KeepDistance([](const BTParam & param){
             return param.closest;
         }, enemy));
 
-        eventHappen->addChild(std::move(getClose));
-        eventNotHappen->addChild(std::move(avoid));
-        eventNotHappen->addChild(std::move(keepDistance));
-        root->addChild(std::move(eventHappen));
-        root->addChild(std::move(eventNotHappen));
+        root->addChild(std::move(keepDistance));
 
         return root;
     }

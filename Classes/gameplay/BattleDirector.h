@@ -33,7 +33,6 @@ namespace joker
         RhythmEventDispatcher & getEventDispather(const char * eventName);
 
         void update(float dt);
-        void setBTEvent(BTEvent event) { _behaviorTreeEvent = event; }
 
     private:
         Role * addEnemy(const cocos2d::Vec2 & position);
@@ -52,7 +51,6 @@ namespace joker
         std::unordered_map<const char*, RhythmEventDispatcher> _eventDispaters;
 
         EnemyConductor _enemyConductor;
-        BTEvent _behaviorTreeEvent = BTEvent::NO_EVENT;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;
