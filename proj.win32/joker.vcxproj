@@ -141,6 +141,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\gameplay\AI\BehaviorTree.cpp" />
     <ClCompile Include="..\Classes\gameplay\AI\EnemyConductor.cpp" />
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp" />
+    <ClCompile Include="..\Classes\gameplay\Event.cpp" />
     <ClCompile Include="..\Classes\gameplay\metronome.cpp" />
     <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp" />
     <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp" />
@@ -158,6 +159,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\gameplay\AI\BehaviorTree.h" />
     <ClInclude Include="..\Classes\gameplay\AI\EnemyConductor.h" />
     <ClInclude Include="..\Classes\gameplay\BattleDirector.h" />
+    <ClInclude Include="..\Classes\gameplay\Event.h" />
     <ClInclude Include="..\Classes\gameplay\metronome.h" />
     <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h" />
     <ClInclude Include="..\Classes\gameplay\RhythmScript.h" />

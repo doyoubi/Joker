@@ -6,6 +6,7 @@ namespace joker
 
     enum class RoleAction
     {
+        IDLE,
         ATTACK,
         ATTACKED,
         LEFT_RUN,
@@ -14,6 +15,7 @@ namespace joker
         JUMP,
         NOD,
         DEFENCE,
+        DEFENCE_NOD,
     };
 
     enum class RoleDirection

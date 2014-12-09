@@ -77,6 +77,9 @@
     <ClCompile Include="..\Classes\gameplay\AI\EnemyConductor.cpp">
       <Filter>Classes\gameplay\AI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\Event.cpp">
+      <Filter>Classes\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\AI\EnemyConductor.h">
       <Filter>Classes\gameplay\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\Event.h">
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

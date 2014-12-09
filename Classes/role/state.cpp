@@ -26,6 +26,7 @@ namespace joker
         _currState->exitState(_role);
         _currState = std::move(nextState);
         _currState->enterState(_role);
+        printCurrState(); // for debug
     }
 
     void StateManager::update(float dt)
@@ -39,6 +40,33 @@ namespace joker
     void StateManager::executeCommand(RoleAction command)
     {
         _currState->executeCommand(_role, command);
+    }
+
+    void StateManager::printCurrState()
+    {
+        State * p = _currState.get();
+        if (dynamic_cast<IdleState*>(p))
+            cout << "idle state" << endl;
+        else if (dynamic_cast<RunState*>(p))
+            cout << "run state" << endl;
+        else if (dynamic_cast<SlowDownState*>(p))
+            cout << "slow down state" << endl;
+        else if (dynamic_cast<AttackState*>(p))
+            cout << "attack state" << endl;
+        else if (dynamic_cast<AttackedState*>(p))
+            cout << "attacked state" << endl;
+        else if (dynamic_cast<JumpState*>(p))
+            cout << "jump state" << endl;
+        else if (dynamic_cast<NodState*>(p))
+            cout << "nod state" << endl;
+        else if (dynamic_cast<DefenceState*>(p))
+            cout << "defence state" << endl;
+        else if (dynamic_cast<DefenceNodState*>(p))
+            cout << "defence nod state" << endl;
+        else if (dynamic_cast<CrawlState*>(p))
+            cout << "crawl state" << endl;
+        else
+            cout << "error: no match state" << endl;
     }
 
 
@@ -61,6 +89,8 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(0.0f));
+        else if (command == RoleAction::NOD)
+            role->getStateManager()->changeState(NodState::create());
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
     }
@@ -114,6 +144,8 @@ namespace joker
             role->getStateManager()->changeState(JumpState::create(
             role->getSimplePhysics()->getVelocityX()
             ));
+        else if (command == RoleAction::NOD)
+            role->getStateManager()->changeState(NodState::create());
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(CrawlState::create(
                 role->getSimplePhysics()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
@@ -165,6 +197,8 @@ namespace joker
             ));
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
+        else if (command == RoleAction::NOD)
+            role->getStateManager()->changeState(NodState::create());
     }
 
     // AttackState
@@ -241,8 +275,8 @@ namespace joker
     // DefenceState
     void DefenceState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
-        role->getArmature()->getAnimation()->play("static");
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
+        role->getArmature()->getAnimation()->play("defence");
     }
 
     void DefenceState::executeCommand(Role * role, RoleAction command)
@@ -255,6 +289,25 @@ namespace joker
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::ATTACKED)
             role->getStateManager()->changeState(AttackedState::create());
+        else if (command == RoleAction::NOD)
+            role->getStateManager()->changeState(DefenceNodState::create());
+        else if (command == RoleAction::IDLE)
+            role->getStateManager()->changeState(IdleState::create());
+    }
+
+    // DefenceNodState
+    void DefenceNodState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defenceNod"));
+        role->getArmature()->getAnimation()->play("defenceNod");
+    }
+
+    void DefenceNodState::execute(Role * role)
+    {
+        if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(DefenceState::create());
+        }
     }
 
     // CrawlState
@@ -265,8 +318,8 @@ namespace joker
 
     void CrawlState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
-        role->getArmature()->getAnimation()->play("static");
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
+        role->getArmature()->getAnimation()->play("defence");
 
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getSlowSpeed();
 
@@ -295,6 +348,8 @@ namespace joker
             role->getStateManager()->changeState(AttackState::create());
         else if (command == RoleAction::ATTACKED)
             role->getStateManager()->changeState(AttackedState::create());
+        else if (command == RoleAction::NOD)
+            role->getStateManager()->changeState(DefenceNodState::create());
     }
 
 

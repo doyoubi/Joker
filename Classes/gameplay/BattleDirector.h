@@ -2,12 +2,14 @@
 #define JOKER_BATTLE_DIRECTOR
 
 #include <unordered_map>
+#include <vector>
 
 #include "role/RoleEnumType.h"
 #include "RhythmScript.h"
 #include "metronome.h"
 #include "RhythmEventDispatcher.h"
 #include "gameplay/AI/EnemyConductor.h"
+#include "Event.h"
 
 
 namespace joker
@@ -21,6 +23,7 @@ namespace joker
     public:
         BattleDirector(BattleScene * battleScene);
         ~BattleDirector();
+        BattleScene * getScene() { return _battleScene; }
         void sendCommand(Role * role, RoleAction command);
         Role * getPlayer();
 
@@ -28,11 +31,12 @@ namespace joker
 
         void tagMetronome();
         Role * getClosestEnemy();
-        void attack(Role * attacker, Role * sufferer);
 
         RhythmEventDispatcher & getEventDispather(const char * eventName);
 
         void update(float dt);
+        DirectorEventManager & getEventManager() { return _eventManager; }
+        void addEvent(DirectorEventType event){ _eventManager.activateEvent(event); }
 
     private:
         Role * addEnemy(const cocos2d::Vec2 & position);
@@ -51,6 +55,7 @@ namespace joker
         std::unordered_map<const char*, RhythmEventDispatcher> _eventDispaters;
 
         EnemyConductor _enemyConductor;
+        DirectorEventManager _eventManager;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;

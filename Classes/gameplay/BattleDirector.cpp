@@ -28,19 +28,19 @@ namespace joker
         });
 
         getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
-            sendCommand(getClosestEnemy(), RoleAction::NOD);
+            this->addEvent(DirectorEventType::NOD);
         });
 
         getEventDispather("hit").addEvent(_rhythmScript.getEvent("attack"), [this](){
-            attack(getPlayer(), getClosestEnemy());
-            _battleScene->getSoundManager()->playSound("hit");
+            this->addEvent(DirectorEventType::ATTACK);
         });
 
         getEventDispather("miss").addEvent(_rhythmScript.getEvent("attack"), [this](){
-            attack(getClosestEnemy(), getPlayer());
+            this->addEvent(DirectorEventType::ATTACKED);
         });
 
-        addEnemy(Vec2(500, 200));
+        auto enemy = addEnemy(Vec2(500, 200));
+        enemy->getStateManager()->executeCommand(RoleAction::DEFENCE);
         _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
         getPlayer()->setSpeed(200, 20);
 
@@ -55,23 +55,12 @@ namespace joker
     void BattleDirector::sendCommand(Role * role, RoleAction command)
     {
         CHECKNULL(role);
-        if (command == RoleAction::NOD)
-            role->getStateManager()->changeState(NodState::create());
-        else
-            role->executeCommand(command);
+        role->executeCommand(command);
     }
 
     Role * BattleDirector::getPlayer()
     {
         return _battleScene->getBattleLayer()->getPlayer();
-    }
-
-    void BattleDirector::attack(Role * attacker, Role * sufferer)
-    {
-        int d = attacker->getPosition().x - sufferer->getPosition().x;
-        attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        attacker->executeCommand(RoleAction::ATTACK);
-        sufferer->executeCommand(RoleAction::ATTACKED);
     }
 
     Role * BattleDirector::getClosestEnemy()
@@ -101,6 +90,7 @@ namespace joker
     Role * BattleDirector::addEnemy(const cocos2d::Vec2 & position)
     {
         auto enemy = _battleScene->getBattleLayer()->addEnemy(position);
+        enemy->setSpeed(100, 10);
         _enemyConductor.addEnemy(enemy);
         return enemy;
     }
@@ -116,6 +106,8 @@ namespace joker
         BTParam param;
         param.closest = true;
         param.playerPosition = getPlayer()->getPosition().x;
+
+        _eventManager.executeEvent(this);
         _enemyConductor.tick(getClosestEnemy(), param);
     }
 

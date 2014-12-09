@@ -71,7 +71,6 @@ namespace joker
     Role * BattleLayer::addEnemy(const Vec2 & position)
     {
         Role * enemy = Role::create("enemy");
-        enemy->setSpeed(100, 10);
         enemy->setPosition(position);
         _enemyArray.push_back(enemy);
         addChild(enemy);

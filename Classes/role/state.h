@@ -25,6 +25,8 @@ namespace joker
         void changeState(StatePtr && nextState);
         void executeCommand(RoleAction command);
         void update(float dt);
+
+        void printCurrState();   // for debug
     private:
         Role * _role;   // weak reference
         StatePtr _currState;
@@ -132,6 +134,17 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override {};
         void executeCommand(Role * role, RoleAction command) override;
+    };
+
+    // for enemy
+    class DefenceNodState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new DefenceNodState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override {};
     };
 
     // for enemy

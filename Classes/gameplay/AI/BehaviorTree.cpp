@@ -97,6 +97,14 @@ namespace joker
     {
     }
 
+    void KeepDistance::onEnter()
+    {
+    }
+
+    void KeepDistance::onExit()
+    {
+    }
+
     BTNodeStatus KeepDistance::execute(const BTParam & param)
     {
         using std::abs;
@@ -106,10 +114,14 @@ namespace joker
         {
             getRole()->executeCommand(RoleAction::LEFT_RUN);
         }
-        if (distance < 0 && abs(distance) >= rangeFar
+        else if (distance < 0 && abs(distance) >= rangeFar
             || distance >= 0 && abs(distance) <= rangeNear)
         {
             getRole()->executeCommand(RoleAction::RIGHT_RUN);
+        }
+        else
+        {
+            getRole()->executeCommand(RoleAction::STOP);
         }
         return BTNodeStatus::RUNNING;
     }

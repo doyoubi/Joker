@@ -100,6 +100,8 @@ namespace joker
     public:
         KeepDistance(BTprecondition && precondition, Role * role);
     private:
+        virtual void onEnter() override;
+        virtual void onExit() override;
         BTNodeStatus execute(const BTParam & param) override;
 
         const int rangeNear = 150;
