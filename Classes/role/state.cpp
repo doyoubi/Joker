@@ -26,7 +26,6 @@ namespace joker
         _currState->exitState(_role);
         _currState = std::move(nextState);
         _currState->enterState(_role);
-        printCurrState(); // for debug
     }
 
     void StateManager::update(float dt)
@@ -350,6 +349,8 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::NOD)
             role->getStateManager()->changeState(DefenceNodState::create());
+        else if (command == RoleAction::IDLE)
+            role->getStateManager()->changeState(IdleState::create());
     }
 
 

@@ -91,6 +91,26 @@ namespace joker
         return BTNodeStatus::FAILURE; // return failure when there is not running node
     }
 
+    // Parallel
+    BTNodeStatus Parallel::traverse(const BTParam & param)
+    {
+        BTNodeStatus status = BTNodeStatus::FAILURE;
+        for (auto & ptr : _children)
+        {
+            status = ptr->tick(param);
+            if (status == BTNodeStatus::RUNNING)
+            {
+                status = BTNodeStatus::RUNNING;
+            }
+            else if (status != BTNodeStatus::RUNNING 
+                && status == BTNodeStatus::SUCCESS)
+            {
+                status = BTNodeStatus::SUCCESS;
+            }
+        }
+        return status;
+    }
+
     // KeepDistance
     KeepDistance::KeepDistance(BTprecondition && precondition, Role * role)
         : RoleActionNode(std::move(precondition), role)
@@ -109,6 +129,10 @@ namespace joker
     {
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
+
+        if (abs(distance) > rangeFar) getRole()->executeCommand(RoleAction::IDLE);
+        else getRole()->executeCommand(RoleAction::DEFENCE);
+
         if (distance < 0 && abs(distance) < rangeNear
             || distance >= 0 && abs(distance) >= rangeFar)
         {
@@ -119,10 +143,21 @@ namespace joker
         {
             getRole()->executeCommand(RoleAction::RIGHT_RUN);
         }
+        return BTNodeStatus::RUNNING;
+    }
+
+    // FaceToPlayer
+    FaceToPlayer::FaceToPlayer(BTprecondition && precondition, Role * role)
+        : RoleActionNode(std::move(precondition), role)
+    {
+    }
+
+    BTNodeStatus FaceToPlayer::execute(const BTParam & param)
+    {
+        if (param.playerPosition < getRole()->getPosition().x)
+            getRole()->setDirection(RoleDirection::LEFT);
         else
-        {
-            getRole()->executeCommand(RoleAction::STOP);
-        }
+            getRole()->setDirection(RoleDirection::RIGHT);
         return BTNodeStatus::RUNNING;
     }
 
@@ -131,17 +166,27 @@ namespace joker
     BTNodePtr createEnemyTree(Role * enemy)
     {
         CHECKNULL(enemy);
-        auto root = BTNodePtr(new Selector([](const BTParam & param){
+        auto sel = BTNodePtr(new Selector([](const BTParam & param){
             return true;
         }));
+
+        auto par = BTNodePtr(new Parallel([](const BTParam & param){
+            return true;
+        }));
+
+        auto faceToPlayer = BTNodePtr(new FaceToPlayer([](const BTParam & param){
+            return true;
+        }, enemy));
 
         auto keepDistance = BTNodePtr(new KeepDistance([](const BTParam & param){
             return param.closest;
         }, enemy));
 
-        root->addChild(std::move(keepDistance));
+        sel->addChild(std::move(keepDistance));
+        par->addChild(std::move(faceToPlayer));
+        par->addChild(std::move(sel));
 
-        return root;
+        return par;
     }
 
 }

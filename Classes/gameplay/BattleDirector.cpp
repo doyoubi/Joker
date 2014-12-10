@@ -13,9 +13,9 @@ namespace joker
     {
         CHECKNULL(battleScene);
 
-        _eventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
-        _eventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
-        _eventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
 
         _metronome.setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
@@ -97,8 +97,8 @@ namespace joker
 
     RhythmEventDispatcher & BattleDirector::getEventDispather(const char * eventName)
     {
-        DEBUGCHECK(_eventDispaters.count(eventName) == 1, string("event: ") + eventName + " not exist");
-        return _eventDispaters.at(eventName);
+        DEBUGCHECK(_rhythmEventDispaters.count(eventName) == 1, string("event: ") + eventName + " not exist");
+        return _rhythmEventDispaters.at(eventName);
     }
 
     void BattleDirector::update(float dt)

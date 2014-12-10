@@ -94,6 +94,14 @@ namespace joker
         BTNodeStatus traverse(const BTParam & param) override;
     };
 
+    class Parallel : public ControlNode
+    {
+    public:
+        Parallel(BTprecondition && precondition) : ControlNode(std::move(precondition)) {};
+    private:
+        BTNodeStatus traverse(const BTParam & param) override;
+    };
+
 
     class KeepDistance : public RoleActionNode
     {
@@ -108,18 +116,10 @@ namespace joker
         const int rangeFar = 200;
     };
 
-    class GetClose : public RoleActionNode
+    class FaceToPlayer : public RoleActionNode
     {
     public:
-        GetClose(BTprecondition && precondition, Role * role);
-    private:
-        BTNodeStatus execute(const BTParam & param) override;
-    };
-
-    class AvoidToOtherSide : public RoleActionNode
-    {
-    public:
-        AvoidToOtherSide(BTprecondition && precondition, Role * role);
+        FaceToPlayer(BTprecondition && precondition, Role * role);
     private:
         BTNodeStatus execute(const BTParam & param) override;
     };

@@ -52,7 +52,7 @@ namespace joker
         // So we have to declare RhythmScript member first.
         RhythmScript _rhythmScript;
         Metronome _metronome;
-        std::unordered_map<const char*, RhythmEventDispatcher> _eventDispaters;
+        std::unordered_map<const char*, RhythmEventDispatcher> _rhythmEventDispaters;
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
