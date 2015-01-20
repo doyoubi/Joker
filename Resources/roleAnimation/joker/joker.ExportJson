@@ -9,7 +9,7 @@
         {
           "name": "Layer1",
           "parent": "",
-          "dI": 0,
+          "dI": 3,
           "x": -5.1481475830078125,
           "y": 54.851852416992188,
           "z": 3,
@@ -24,6 +24,48 @@
           "display_data": [
             {
               "name": "joker_shache.psd_Psd.Dir/joker_zhanli.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_attack/0.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_attack/1.png",
+              "displayType": 0,
+              "skin_data": [
+                {
+                  "x": 0.0,
+                  "y": 0.0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0
+                }
+              ]
+            },
+            {
+              "name": "joker_attack/2.png",
               "displayType": 0,
               "skin_data": [
                 {
@@ -553,7 +595,7 @@
         },
         {
           "name": "attack",
-          "dr": 5,
+          "dr": 12,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -565,9 +607,9 @@
               "dl": 0.0,
               "frame_data": [
                 {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
+                  "dI": 1,
+                  "x": 14.0,
+                  "y": -11.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
@@ -580,15 +622,45 @@
                   "bd_dst": 771
                 },
                 {
-                  "dI": 0,
-                  "x": 67.0,
-                  "y": -1.0,
+                  "dI": 2,
+                  "x": 14.0,
+                  "y": -11.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 5,
+                  "fi": 3,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 3,
+                  "x": 14.0,
+                  "y": -11.0,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 7,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 3,
+                  "x": 14.0,
+                  "y": -11.0,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 11,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,
@@ -662,7 +734,7 @@
         },
         {
           "name": "jump",
-          "dr": 1,
+          "dr": 0,
           "lp": true,
           "to": 0,
           "drTW": 0,
@@ -779,6 +851,30 @@
     {
       "name": "joker_shache.psd_Psd.Dir/joker_shache1",
       "width": 86.0,
+      "height": 90.0,
+      "pX": 0.5,
+      "pY": 0.5,
+      "plistFile": ""
+    },
+    {
+      "name": "joker_attack/0",
+      "width": 138.0,
+      "height": 90.0,
+      "pX": 0.5,
+      "pY": 0.5,
+      "plistFile": ""
+    },
+    {
+      "name": "joker_attack/1",
+      "width": 138.0,
+      "height": 90.0,
+      "pX": 0.5,
+      "pY": 0.5,
+      "plistFile": ""
+    },
+    {
+      "name": "joker_attack/2",
+      "width": 138.0,
       "height": 90.0,
       "pX": 0.5,
       "pY": 0.5,

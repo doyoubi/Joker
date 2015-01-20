@@ -12,8 +12,33 @@ namespace joker
         ATTACK,
         ATTACKED,
         NOD,
+        APPEAR,
+        MOVE,
     };
 
+}
+
+// g++ does not support hash for enum class
+#if defined(__GNUC__)
+namespace std
+{
+    using joker::DirectorEventType;
+
+    template<>
+    struct hash<DirectorEventType>
+    {
+        typedef DirectorEventType argument_type;
+        typedef std::size_t result_type;
+        std::size_t operator() (const DirectorEventType & arg) const
+        {
+            return size_t(arg);
+        }
+    };
+}
+#endif
+
+namespace joker
+{
     class DirectorEvent;
     class BattleDirector;
     typedef std::unique_ptr<DirectorEvent> EventPtr;

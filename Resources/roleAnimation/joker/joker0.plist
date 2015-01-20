@@ -23,6 +23,63 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
+			<key>joker_attack/0.png</key>
+			<dict>
+				<key>width</key>
+				<integer>138</integer>
+				<key>height</key>
+				<integer>90</integer>
+				<key>originalWidth</key>
+				<integer>138</integer>
+				<key>originalHeight</key>
+				<integer>90</integer>
+				<key>x</key>
+				<integer>56</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>joker_attack/1.png</key>
+			<dict>
+				<key>width</key>
+				<integer>138</integer>
+				<key>height</key>
+				<integer>90</integer>
+				<key>originalWidth</key>
+				<integer>138</integer>
+				<key>originalHeight</key>
+				<integer>90</integer>
+				<key>x</key>
+				<integer>196</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>joker_attack/2.png</key>
+			<dict>
+				<key>width</key>
+				<integer>138</integer>
+				<key>height</key>
+				<integer>90</integer>
+				<key>originalWidth</key>
+				<integer>138</integer>
+				<key>originalHeight</key>
+				<integer>90</integer>
+				<key>x</key>
+				<integer>336</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
 			<key>joker_shache.psd_Psd.Dir/joker_shache1.png</key>
 			<dict>
 				<key>width</key>
@@ -34,7 +91,7 @@
 				<key>originalHeight</key>
 				<integer>90</integer>
 				<key>x</key>
-				<integer>56</integer>
+				<integer>476</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -53,7 +110,7 @@
 				<key>originalHeight</key>
 				<integer>91</integer>
 				<key>x</key>
-				<integer>144</integer>
+				<integer>564</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -72,7 +129,7 @@
 				<key>originalHeight</key>
 				<integer>90</integer>
 				<key>x</key>
-				<integer>220</integer>
+				<integer>640</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -91,7 +148,7 @@
 				<key>originalHeight</key>
 				<integer>102</integer>
 				<key>x</key>
-				<integer>308</integer>
+				<integer>728</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -110,7 +167,7 @@
 				<key>originalHeight</key>
 				<integer>85</integer>
 				<key>x</key>
-				<integer>374</integer>
+				<integer>794</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -129,7 +186,7 @@
 				<key>originalHeight</key>
 				<integer>83</integer>
 				<key>x</key>
-				<integer>459</integer>
+				<integer>879</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -148,9 +205,9 @@
 				<key>originalHeight</key>
 				<integer>86</integer>
 				<key>x</key>
-				<integer>543</integer>
-				<key>y</key>
 				<integer>0</integer>
+				<key>y</key>
+				<integer>112</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -167,9 +224,9 @@
 				<key>originalHeight</key>
 				<integer>85</integer>
 				<key>x</key>
-				<integer>613</integer>
+				<integer>70</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>112</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -186,9 +243,9 @@
 				<key>originalHeight</key>
 				<integer>86</integer>
 				<key>x</key>
-				<integer>711</integer>
+				<integer>168</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>112</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -205,9 +262,9 @@
 				<key>originalHeight</key>
 				<integer>96</integer>
 				<key>x</key>
-				<integer>809</integer>
+				<integer>266</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>112</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
