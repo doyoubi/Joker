@@ -1,7 +1,10 @@
-#include "PhysicsBody.h"
+#include <iostream>
+#include <cmath>
+
 #include "cocos2d.h"
-#include "cmath"
-#include "iostream"
+
+#include "PhysicsBody.h"
+#include "PhysicsWorld.h"
 
 USING_NS_CC;
 
@@ -9,24 +12,16 @@ USING_NS_CC;
 
 namespace joker {
 
-    float PhysicsBody::_groundHeight(200);
-    float PhysicsBody::_gravity(120.0f);
-    float PhysicsBody::_groundResistance(480.0f);
     float PhysicsBody::_defaultSpeed(160.0f);
-    float PhysicsBody::_worldWidth(960.0f);
 
     PhysicsBody::PhysicsBody(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
         _landCallback(nullptr), _jumpCallback(nullptr) {
-        Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
+        PhysicsWorld::getInstance()->addPhysicsBody(this);
     }
 
     PhysicsBody::~PhysicsBody() {
-        Director::getInstance()->getScheduler()->unscheduleUpdate(this);
-    }
-
-    void PhysicsBody::setGravity(float newGravity) {
-        _gravity = newGravity;
+        PhysicsWorld::getInstance()->removePhysicsBody(this);
     }
 
     float PhysicsBody::setVelocityX(float vx) {
@@ -41,14 +36,6 @@ namespace joker {
         return _r = r;
     }
 
-    void PhysicsBody::setGroundHeight(float newGroundHeight) {
-        _groundHeight = newGroundHeight;
-    }
-
-    void PhysicsBody::setWorldWidth(float worldWidth) {
-        _worldWidth = worldWidth;
-    }
-
     void PhysicsBody::jump() {
         if (isJumping())
             return;
@@ -59,7 +46,7 @@ namespace joker {
     }
 
     bool PhysicsBody::isJumping() {
-        return _y > _groundHeight;
+        return _y > PhysicsWorld::getInstance()->getGroundHeight();
     }
 
     void PhysicsBody::update(float dt) {
@@ -68,17 +55,17 @@ namespace joker {
 
         _vx = SIGN(_vx) * std::max(std::abs(_vx) - _r * dt, 0.0f);
 
-        if (_y > _groundHeight) {
-            _vy -= _gravity  * dt;
+        if (_y > PhysicsWorld::getInstance()->getGroundHeight()) {
+            _vy -= PhysicsWorld::getInstance()->getGravity()  * dt;
         }
 
         if (_x - _w / 2 < 0)
             _x = _w / 2;
-        if (_x + _w / 2 > _worldWidth)
-            _x = _worldWidth - _w / 2;
+        if (_x + _w / 2 > PhysicsWorld::getInstance()->getWorldWidth())
+            _x = PhysicsWorld::getInstance()->getWorldWidth() - _w / 2;
 
-        if (_y < _groundHeight) {
-            _y = _groundHeight;
+        if (_y < PhysicsWorld::getInstance()->getGroundHeight()) {
+            _y = PhysicsWorld::getInstance()->getGroundHeight();
             _vy = 0;
             if (_landCallback)
                 _landCallback();

@@ -8,6 +8,7 @@
 #include "role/Role.h"
 #include "gameplay/BattleDirector.h"
 #include "utils/debug.h"
+#include "SimplePhysics/PhysicsWorld.h"
 
 namespace joker
 {
@@ -59,7 +60,11 @@ namespace joker
 
         schedule(schedule_selector(BattleLayer::updateBackgroud));
 
-        PhysicsBody::setWorldWidth(_background->getContentSize().width);
+        auto physicsWorld = joker::PhysicsWorld::getInstance();
+        physicsWorld->setWorldWidth(_background->getContentSize().width);
+        physicsWorld->setGravity(120.0f);
+        physicsWorld->setGroundHeight(200.0f);
+        physicsWorld->setResistance(480.0f);
 
         return true;
     }

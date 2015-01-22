@@ -80,6 +80,9 @@
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsBody.cpp">
       <Filter>Classes\SimplePhysics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SimplePhysics\PhysicsWorld.cpp">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -127,6 +130,9 @@
       <Filter>Classes\gameplay</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsBody.h">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SimplePhysics\PhysicsWorld.h">
       <Filter>Classes\SimplePhysics</Filter>
     </ClInclude>
   </ItemGroup>

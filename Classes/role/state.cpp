@@ -3,6 +3,7 @@
 #include "state.h"
 #include "Role.h"
 #include "utils/debug.h"
+#include "SimplePhysics/PhysicsWorld.h"
 
 namespace joker
 {
@@ -163,7 +164,7 @@ namespace joker
         role->getArmature()->getAnimation()->play("slowDown");
         role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         role->getPhysicsBody()->setVelocityX(_velocityX);
-        role->getPhysicsBody()->setResistanceX(PhysicsBody::getResistance());
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }
 
     void SlowDownState::execute(Role * role)
@@ -247,7 +248,7 @@ namespace joker
 
     void JumpState::execute(Role * role)
     {
-        if (role->getPhysicsBody()->getY() == PhysicsBody::getGroundHeight())
+        if (role->getPhysicsBody()->getY() == joker::PhysicsWorld::getInstance()->getGroundHeight())
         {
             if (abs(_velocityX) > 0)
                 role->getStateManager()->changeState(SlowDownState::create(_velocityX));

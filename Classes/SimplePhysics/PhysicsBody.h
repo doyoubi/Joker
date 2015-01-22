@@ -1,5 +1,5 @@
-#ifndef _SIMPLE_PHYSICS_H_
-#define _SIMPLE_PHYSICS_H_
+#ifndef JOKER_PHYSICS_BODY
+#define JOKER_PHYSICS_BODY
 
 #include <functional>
 
@@ -9,11 +9,6 @@ namespace joker {
     public:
         PhysicsBody(float x, float y, float w, float h);
         ~PhysicsBody();
-
-        static void setGravity(float newGravity);
-        static void setGroundHeight(float newGroundHeight);
-        static void setWorldWidth(float worldWidth);
-        static float getGroundHeight()  { return _groundHeight; }
 
         inline bool isJumping();
 
@@ -48,7 +43,6 @@ namespace joker {
         float getWidth()            { return _w; }
         float getHeight()           { return _h; }
 
-        static float getResistance() { return _groundResistance; }
         static float getDefaultSpeed() { return _defaultSpeed; }
 
         void update(float);
@@ -56,13 +50,10 @@ namespace joker {
         // callback functions
         std::function <void(void)> _landCallback;
         std::function <void(void)> _jumpCallback;
-    protected:
 
-        static float _gravity;
-        static float _groundHeight;
-        static float _groundResistance;
+    private:
+
         static float _defaultSpeed;
-        static float _worldWidth;
 
         float _r;
         float _x;
