@@ -5,7 +5,7 @@
 
 namespace joker {
 
-    struct collideInfo
+    struct CollideInfo
     {
         int selfPosition;
         int oppositePosition;
@@ -53,9 +53,9 @@ namespace joker {
 
         void update(float);
 
-        typedef std::function<void(const collideInfo & collideInfo)> CollideCallback;
+        typedef std::function<void(const CollideInfo & CollideInfo)> CollideCallback;
         void setCollideCallback(CollideCallback && collideCallback);
-        void collide(const collideInfo & collideInfo);
+        void collide(const CollideInfo & CollideInfo);
 
         // callback functions
         std::function <void(void)> _landCallback;

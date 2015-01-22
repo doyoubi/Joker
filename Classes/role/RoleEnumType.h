@@ -16,6 +16,8 @@ namespace joker
         NOD,
         DEFENCE,
         DEFENCE_NOD,
+        COLLIDE_TO_LEFT,
+        COLLIDE_TO_RIGHT,
     };
 
     enum class RoleDirection

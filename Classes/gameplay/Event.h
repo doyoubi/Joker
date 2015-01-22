@@ -14,7 +14,8 @@ namespace joker
         NOD,
         APPEAR,
         MOVE,
-        COLLIDE,
+        COLLIDE_TO_LEFT,
+        COLLIDE_TO_RIGHT,
     };
 
 }
@@ -87,7 +88,13 @@ namespace joker
         virtual void execute(BattleDirector * director) override;
     };
 
-    class CollideEvent : public DirectorEvent
+    class CollideToLeftEvent : public DirectorEvent
+    {
+    public:
+        virtual void execute(BattleDirector * director) override;
+    };
+
+    class CollideToRightEvent : public DirectorEvent
     {
     public:
         virtual void execute(BattleDirector * director) override;

@@ -44,8 +44,10 @@ namespace joker
         _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
         getPlayer()->setSpeed(200, 20);
 
-        getPlayer()->setCollideCallbak([this](const collideInfo & collideInfo){
-            this->addEvent(DirectorEventType::COLLIDE);
+        getPlayer()->setCollideCallbak([this](const CollideInfo & collideInfo){
+            auto eventType = collideInfo.selfPosition < collideInfo.oppositePosition ?
+                DirectorEventType::COLLIDE_TO_LEFT : DirectorEventType::COLLIDE_TO_RIGHT;
+            this->addEvent(eventType);
         });
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);

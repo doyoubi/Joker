@@ -13,11 +13,14 @@ namespace joker
         _eventPool.emplace(DirectorEventType::ATTACK, EventPtr(new AttackEvent()));
         _eventPool.emplace(DirectorEventType::ATTACKED, EventPtr(new AttackedEvent()));
         _eventPool.emplace(DirectorEventType::NOD, EventPtr(new NodEvent()));
-        _eventPool.emplace(DirectorEventType::COLLIDE, EventPtr(new CollideEvent()));
+        _eventPool.emplace(DirectorEventType::COLLIDE_TO_LEFT, EventPtr(new CollideToLeftEvent()));
+        _eventPool.emplace(DirectorEventType::COLLIDE_TO_RIGHT, EventPtr(new CollideToRightEvent()));
     }
 
     void DirectorEventManager::activateEvent(DirectorEventType event)
     {
+        DEBUGCHECK(_eventPool.count(event) == 1,
+            "event not register in DirectorEventManager conctructor");
         _eventPool.at(event)->activate();
     }
 
@@ -78,10 +81,15 @@ namespace joker
         director->sendCommand(director->getClosestEnemy(), RoleAction::NOD);
     }
 
-    // CollideEvent
-    void CollideEvent::execute(BattleDirector * director)
+    // Collide Event
+    void CollideToLeftEvent::execute(BattleDirector * director)
     {
-        cout << "collide happen" << endl;
+        director->sendCommand(director->getPlayer(), RoleAction::COLLIDE_TO_LEFT);
+    }
+
+    void CollideToRightEvent::execute(BattleDirector * director)
+    {
+        director->sendCommand(director->getPlayer(), RoleAction::COLLIDE_TO_RIGHT);
     }
 
 }

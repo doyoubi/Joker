@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 
 #include "RoleEnumType.h"
+#include "SimplePhysics/PhysicsBody.h"
 
 namespace joker
 {
@@ -159,6 +160,19 @@ namespace joker
         void executeCommand(Role * role, RoleAction command) override;
     private:
         RoleDirection _direction;
+    };
+
+    class CollideState : public State
+    {
+    public:
+        static StatePtr create(RoleAction collide_direction) { return StatePtr(new CollideState(collide_direction)); }
+        CollideState(RoleAction collide_direction);
+        void enterState(Role * role) override;
+        void exitState(Role * role) override;
+        void execute(Role * role) override;
+        void executeCommand(Role * role, RoleAction command) override;
+    private:
+        RoleAction _collide_direction;
     };
 
 }

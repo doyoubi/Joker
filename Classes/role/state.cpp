@@ -93,6 +93,9 @@ namespace joker
             role->getStateManager()->changeState(NodState::create());
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
+        else if (command == RoleAction::COLLIDE_TO_LEFT
+            || command == RoleAction::COLLIDE_TO_RIGHT)
+            role->getStateManager()->changeState(CollideState::create(command));
     }
 
     // RunState
@@ -150,6 +153,9 @@ namespace joker
             role->getStateManager()->changeState(CrawlState::create(
                 role->getPhysicsBody()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
             ));
+        else if (command == RoleAction::COLLIDE_TO_LEFT
+            || command == RoleAction::COLLIDE_TO_RIGHT)
+            role->getStateManager()->changeState(CollideState::create(command));
     }
 
     // SlowDownState
@@ -199,6 +205,9 @@ namespace joker
             role->getStateManager()->changeState(DefenceState::create());
         else if (command == RoleAction::NOD)
             role->getStateManager()->changeState(NodState::create());
+        else if (command == RoleAction::COLLIDE_TO_LEFT
+            || command == RoleAction::COLLIDE_TO_RIGHT)
+            role->getStateManager()->changeState(CollideState::create(command));
     }
 
     // AttackState
@@ -354,5 +363,43 @@ namespace joker
             role->getStateManager()->changeState(IdleState::create());
     }
 
+
+    // CollideState
+    CollideState::CollideState(RoleAction collide_direction)
+        : _collide_direction(collide_direction)
+    {
+    }
+
+    void CollideState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
+        role->getArmature()->getAnimation()->play("slowDown");
+        role->setDirection(_collide_direction == RoleAction::COLLIDE_TO_LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
+        float v = (_collide_direction == RoleAction::COLLIDE_TO_LEFT ? -1 : 1) * PhysicsBody::getDefaultSpeed();
+        role->getPhysicsBody()->setVelocityX(v);
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
+    }
+
+    void CollideState::exitState(Role * role)
+    {
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
+    }
+
+    void CollideState::execute(Role * role)
+    {
+        if (role->getPhysicsBody()->getVelocityX() == 0)
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    void CollideState::executeCommand(Role * role, RoleAction command)
+    {
+        if (command == RoleAction::ATTACK)
+            role->getStateManager()->changeState(AttackState::create());
+        else if (command == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(AttackedState::create());
+    }
 
 }

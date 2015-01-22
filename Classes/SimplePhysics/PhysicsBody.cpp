@@ -31,10 +31,10 @@ namespace joker {
         _collideCallback = collideCallback;
     }
 
-    void PhysicsBody::collide(const collideInfo & collideInfo)
+    void PhysicsBody::collide(const CollideInfo & CollideInfo)
     { 
         if (_collideCallback)
-            _collideCallback(collideInfo);
+            _collideCallback(CollideInfo);
     }
 
     float PhysicsBody::setVelocityX(float vx) {

@@ -26,6 +26,7 @@ namespace joker
     void PhysicsWorld::addPhysicsBody(PhysicsBody * physicsBody)
     {
         using namespace std;
+        CHECKNULL(physicsBody);
         DEBUGCHECK(end(_physicsBodyList) == find(begin(_physicsBodyList), end(_physicsBodyList), physicsBody),
             "physics body already exist in physics world");
         _physicsBodyList.push_back(physicsBody);
@@ -34,6 +35,7 @@ namespace joker
     void PhysicsWorld::removePhysicsBody(PhysicsBody * physicsBody)
     {
         using namespace std;
+        CHECKNULL(physicsBody);
         auto iter = find(begin(_physicsBodyList), end(_physicsBodyList), physicsBody);
         DEBUGCHECK(iter != end(_physicsBodyList), "physics body not exist");
         _physicsBodyList.erase(iter);
@@ -83,8 +85,8 @@ namespace joker
             float distance = right->getX() - left->getX();
             if (distance >= (left->getWidth() + right->getWidth()) / 2.0f)
                 continue;
-            collideInfo leftInfo{ left->getX(), right->getX() };
-            collideInfo rightInfo{ right->getX(), left->getX() };
+            CollideInfo leftInfo{ left->getX(), right->getX() };
+            CollideInfo rightInfo{ right->getX(), left->getX() };
             left->collide(leftInfo);
             right->collide(rightInfo);
         }
