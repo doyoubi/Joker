@@ -1,4 +1,4 @@
-#include "SimplePhysics.h"
+#include "PhysicsBody.h"
 #include "cocos2d.h"
 #include "cmath"
 #include "iostream"
@@ -9,47 +9,47 @@ USING_NS_CC;
 
 namespace joker {
 
-    float SimplePhysics::_groundHeight(200);
-    float SimplePhysics::_gravity(120.0f);
-    float SimplePhysics::_groundResistance(480.0f);
-    float SimplePhysics::_defaultSpeed(160.0f);
-    float SimplePhysics::_worldWidth(960.0f);
+    float PhysicsBody::_groundHeight(200);
+    float PhysicsBody::_gravity(120.0f);
+    float PhysicsBody::_groundResistance(480.0f);
+    float PhysicsBody::_defaultSpeed(160.0f);
+    float PhysicsBody::_worldWidth(960.0f);
 
-    SimplePhysics::SimplePhysics(float x, float y, float w, float h) :
+    PhysicsBody::PhysicsBody(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
         _landCallback(nullptr), _jumpCallback(nullptr) {
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
     }
 
-    SimplePhysics::~SimplePhysics() {
+    PhysicsBody::~PhysicsBody() {
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
     }
 
-    void SimplePhysics::setGravity(float newGravity) {
+    void PhysicsBody::setGravity(float newGravity) {
         _gravity = newGravity;
     }
 
-    float SimplePhysics::setVelocityX(float vx) {
+    float PhysicsBody::setVelocityX(float vx) {
         return _vx = vx;
     }
 
-    float SimplePhysics::setVelocityY(float vy) {
+    float PhysicsBody::setVelocityY(float vy) {
         return _vy = vy;
     }
 
-    float SimplePhysics::setResistanceX(float r) {
+    float PhysicsBody::setResistanceX(float r) {
         return _r = r;
     }
 
-    void SimplePhysics::setGroundHeight(float newGroundHeight) {
+    void PhysicsBody::setGroundHeight(float newGroundHeight) {
         _groundHeight = newGroundHeight;
     }
 
-    void SimplePhysics::setWorldWidth(float worldWidth) {
+    void PhysicsBody::setWorldWidth(float worldWidth) {
         _worldWidth = worldWidth;
     }
 
-    void SimplePhysics::jump() {
+    void PhysicsBody::jump() {
         if (isJumping())
             return;
         _vy = 150;
@@ -58,11 +58,11 @@ namespace joker {
             _jumpCallback();
     }
 
-    bool SimplePhysics::isJumping() {
+    bool PhysicsBody::isJumping() {
         return _y > _groundHeight;
     }
 
-    void SimplePhysics::update(float dt) {
+    void PhysicsBody::update(float dt) {
         _x += _vx * dt;
         _y += _vy * dt;
 

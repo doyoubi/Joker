@@ -33,7 +33,7 @@ namespace joker
         _currState->execute(_role);
 
         // update role with Physics position
-        _role->setPosition(_role->getSimplePhysics()->getX(), _role->getSimplePhysics()->getY());
+        _role->setPosition(_role->getPhysicsBody()->getX(), _role->getPhysicsBody()->getY());
     }
 
     void StateManager::executeCommand(RoleAction command)
@@ -108,14 +108,14 @@ namespace joker
         
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getNormalSpeed();
 
-        role->getSimplePhysics()->setVelocityX(speed);
-        role->getSimplePhysics()->setResistanceX(0);
+        role->getPhysicsBody()->setVelocityX(speed);
+        role->getPhysicsBody()->setResistanceX(0);
     }
 
     void RunState::exitState(Role * role)
     {
-        role->getSimplePhysics()->setVelocityX(0);
-        role->getSimplePhysics()->setResistanceX(0);
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
     }
 
     void RunState::execute(Role * role)
@@ -133,7 +133,7 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
         else if (command == RoleAction::STOP)
             role->getStateManager()->changeState(SlowDownState::create(
-                    role->getSimplePhysics()->getVelocityX()
+                    role->getPhysicsBody()->getVelocityX()
             ));
         else if (command == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
@@ -141,13 +141,13 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(
-            role->getSimplePhysics()->getVelocityX()
+            role->getPhysicsBody()->getVelocityX()
             ));
         else if (command == RoleAction::NOD)
             role->getStateManager()->changeState(NodState::create());
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(CrawlState::create(
-                role->getSimplePhysics()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
+                role->getPhysicsBody()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
             ));
     }
 
@@ -162,13 +162,13 @@ namespace joker
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
         role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        role->getSimplePhysics()->setVelocityX(_velocityX);
-        role->getSimplePhysics()->setResistanceX(SimplePhysics::getResistance());
+        role->getPhysicsBody()->setVelocityX(_velocityX);
+        role->getPhysicsBody()->setResistanceX(PhysicsBody::getResistance());
     }
 
     void SlowDownState::execute(Role * role)
     {
-        if (role->getSimplePhysics()->getVelocityX() == 0)
+        if (role->getPhysicsBody()->getVelocityX() == 0)
         {
             role->getStateManager()->changeState(IdleState::create());
         }
@@ -176,8 +176,8 @@ namespace joker
 
     void SlowDownState::exitState(Role * role)
     {
-        role->getSimplePhysics()->setVelocityX(0);
-        role->getSimplePhysics()->setResistanceX(0);
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
     }
 
     void SlowDownState::executeCommand(Role * role, RoleAction command)
@@ -192,7 +192,7 @@ namespace joker
             role->getStateManager()->changeState(AttackedState::create());
         else if (command == RoleAction::JUMP)
             role->getStateManager()->changeState(JumpState::create(
-                role->getSimplePhysics()->getVelocityX()
+                role->getPhysicsBody()->getVelocityX()
             ));
         else if (command == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
@@ -237,17 +237,17 @@ namespace joker
     void JumpState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("jump");
-        role->getSimplePhysics()->jump();
+        role->getPhysicsBody()->jump();
     }
 
     void JumpState::exitState(Role * role)
     {
-        role->getSimplePhysics()->setVelocityX(0);
+        role->getPhysicsBody()->setVelocityX(0);
     }
 
     void JumpState::execute(Role * role)
     {
-        if (role->getSimplePhysics()->getY() == SimplePhysics::getGroundHeight())
+        if (role->getPhysicsBody()->getY() == PhysicsBody::getGroundHeight())
         {
             if (abs(_velocityX) > 0)
                 role->getStateManager()->changeState(SlowDownState::create(_velocityX));
@@ -322,14 +322,14 @@ namespace joker
 
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getSlowSpeed();
 
-        role->getSimplePhysics()->setVelocityX(speed);
-        role->getSimplePhysics()->setResistanceX(0);
+        role->getPhysicsBody()->setVelocityX(speed);
+        role->getPhysicsBody()->setResistanceX(0);
     }
 
     void CrawlState::exitState(Role * role)
     {
-        role->getSimplePhysics()->setVelocityX(0);
-        role->getSimplePhysics()->setResistanceX(0);
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
     }
 
     void CrawlState::executeCommand(Role * role, RoleAction command)

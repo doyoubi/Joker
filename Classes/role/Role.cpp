@@ -80,8 +80,8 @@ namespace joker
     void Role::setPosition(float x, float y)
     {
         Node::setPosition(x, y);
-        getSimplePhysics()->setX(x);
-        getSimplePhysics()->setY(y);
+        getPhysicsBody()->setX(x);
+        getPhysicsBody()->setY(y);
     }
 
 

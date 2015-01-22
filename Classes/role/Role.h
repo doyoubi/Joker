@@ -9,7 +9,7 @@
 
 #include "state.h"
 #include "RoleEnumType.h"
-#include "SimplePhysics/SimplePhysics.h"
+#include "SimplePhysics/PhysicsBody.h"
 
 namespace joker
 {
@@ -36,7 +36,7 @@ namespace joker
         void setPosition(const cocos2d::Vec2 & position) override;
         void setPosition(float x, float y) override;
 
-        SimplePhysics * getSimplePhysics() { return &_simplePhysics; }
+        PhysicsBody * getPhysicsBody() { return &_simplePhysics; }
 
         void setSpeed(float normalSpeed, float slowSpeed){ _normalSpeed = normalSpeed; _slowSpeed = slowSpeed; }
         float getNormalSpeed() const { return _normalSpeed; }
@@ -47,7 +47,7 @@ namespace joker
 
         std::unique_ptr<StateManager> _stateManager;
         cocostudio::Armature * _armature;
-        SimplePhysics _simplePhysics;
+        PhysicsBody _simplePhysics;
 
         float _normalSpeed = 0;
         float _slowSpeed = 0;

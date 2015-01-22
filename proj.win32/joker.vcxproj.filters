@@ -53,9 +53,6 @@
     <ClCompile Include="..\Classes\role\state.cpp">
       <Filter>Classes\role</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\SimplePhysics\SimplePhysics.cpp">
-      <Filter>Classes\SimplePhysics</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\gameplay\BattleDirector.cpp">
       <Filter>Classes\gameplay</Filter>
     </ClCompile>
@@ -80,6 +77,9 @@
     <ClCompile Include="..\Classes\gameplay\Event.cpp">
       <Filter>Classes\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\SimplePhysics\PhysicsBody.cpp">
+      <Filter>Classes\SimplePhysics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -98,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\role\state.h">
       <Filter>Classes\role</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SimplePhysics\SimplePhysics.h">
-      <Filter>Classes\SimplePhysics</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\role\RoleEnumType.h">
       <Filter>Classes\role</Filter>
@@ -128,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\Event.h">
       <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SimplePhysics\PhysicsBody.h">
+      <Filter>Classes\SimplePhysics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

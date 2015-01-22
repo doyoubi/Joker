@@ -5,10 +5,10 @@
 
 namespace joker {
 
-    class SimplePhysics {
+    class PhysicsBody {
     public:
-        SimplePhysics(float x, float y, float w, float h);
-        ~SimplePhysics();
+        PhysicsBody(float x, float y, float w, float h);
+        ~PhysicsBody();
 
         static void setGravity(float newGravity);
         static void setGroundHeight(float newGroundHeight);

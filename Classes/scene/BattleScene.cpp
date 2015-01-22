@@ -59,7 +59,7 @@ namespace joker
 
         schedule(schedule_selector(BattleLayer::updateBackgroud));
 
-        SimplePhysics::setWorldWidth(_background->getContentSize().width);
+        PhysicsBody::setWorldWidth(_background->getContentSize().width);
 
         return true;
     }
@@ -98,7 +98,7 @@ namespace joker
     void BattleLayer::updateBackgroud(float dt) {
         Size visibleSize = Director::getInstance()->getVisibleSize();
 
-        float bgLeft = 0, x = _player->getSimplePhysics()->getX();
+        float bgLeft = 0, x = _player->getPhysicsBody()->getX();
 
         if (x <= visibleSize.width / 2) {
             bgLeft = 0;
