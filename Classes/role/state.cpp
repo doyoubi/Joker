@@ -214,6 +214,9 @@ namespace joker
     void AttackState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attack");
+        const float changedDistance = 200;
+        float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
+        role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
     }
 
     void AttackState::execute(Role * role)
@@ -286,6 +289,12 @@ namespace joker
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
         role->getArmature()->getAnimation()->play("defence");
+        role->getPhysicsBody()->setCollidable(true);
+    }
+
+    void DefenceState::exitState(Role * role)
+    {
+        role->getPhysicsBody()->setCollidable(false);
     }
 
     void DefenceState::executeCommand(Role * role, RoleAction command)
@@ -309,6 +318,12 @@ namespace joker
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defenceNod"));
         role->getArmature()->getAnimation()->play("defenceNod");
+        role->getPhysicsBody()->setCollidable(true);
+    }
+
+    void DefenceNodState::exitState(Role * role)
+    {
+        role->getPhysicsBody()->setCollidable(false);
     }
 
     void DefenceNodState::execute(Role * role)
@@ -334,12 +349,14 @@ namespace joker
 
         role->getPhysicsBody()->setVelocityX(speed);
         role->getPhysicsBody()->setResistanceX(0);
+        role->getPhysicsBody()->setCollidable(true);
     }
 
     void CrawlState::exitState(Role * role)
     {
         role->getPhysicsBody()->setVelocityX(0);
         role->getPhysicsBody()->setResistanceX(0);
+        role->getPhysicsBody()->setCollidable(false);
     }
 
     void CrawlState::executeCommand(Role * role, RoleAction command)

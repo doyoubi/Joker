@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <cmath>
 
@@ -35,6 +36,19 @@ namespace joker {
     { 
         if (_collideCallback)
             _collideCallback(CollideInfo);
+    }
+
+    float PhysicsBody::setX(float x)
+    {
+        x = std::max(x, 0.0f);
+        x = std::min(x, PhysicsWorld::getInstance()->getWorldWidth());
+        return _x = x;
+    }
+
+    float PhysicsBody::setY(float y)
+    {
+        y = std::max(y, 0.0f);
+        return _y = y;
     }
 
     float PhysicsBody::setVelocityX(float vx) {

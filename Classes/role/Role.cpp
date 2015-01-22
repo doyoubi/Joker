@@ -52,6 +52,7 @@ namespace joker
         
         _simplePhysicsBody.setWidth(50);
         _simplePhysicsBody.setHeight(150);
+        _simplePhysicsBody.setCollidable(false);
 
         // require this->_armature initialized
         _stateManager = std::move(std::unique_ptr<StateManager>(

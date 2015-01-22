@@ -114,7 +114,9 @@ namespace joker
         if (bgLeft + _background->getContentSize().width < visibleSize.width) {
             bgLeft = visibleSize.width - _background->getContentSize().width;
         }
-        setPosition(bgLeft,0);
+        float formerBgLeft = getPositionX();
+        float delta = bgLeft - formerBgLeft;
+        setPosition(formerBgLeft + delta / 10.0f, 0);
     }
 
     // BattleUILayer
