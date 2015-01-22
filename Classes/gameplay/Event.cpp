@@ -13,6 +13,7 @@ namespace joker
         _eventPool.emplace(DirectorEventType::ATTACK, EventPtr(new AttackEvent()));
         _eventPool.emplace(DirectorEventType::ATTACKED, EventPtr(new AttackedEvent()));
         _eventPool.emplace(DirectorEventType::NOD, EventPtr(new NodEvent()));
+        _eventPool.emplace(DirectorEventType::COLLIDE, EventPtr(new CollideEvent()));
     }
 
     void DirectorEventManager::activateEvent(DirectorEventType event)
@@ -75,6 +76,12 @@ namespace joker
     void NodEvent::execute(BattleDirector * director)
     {
         director->sendCommand(director->getClosestEnemy(), RoleAction::NOD);
+    }
+
+    // CollideEvent
+    void CollideEvent::execute(BattleDirector * director)
+    {
+        cout << "collide happen" << endl;
     }
 
 }

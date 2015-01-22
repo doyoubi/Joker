@@ -44,12 +44,15 @@ namespace joker
     }
 
     Role::Role(Armature * armature)
-        : _armature(armature), _simplePhysics(0,0,0,0)
+        : _armature(armature), _simplePhysicsBody(0,0,0,0)
     {
         CHECKNULL(_armature);
         addChild(_armature);
         _armature->retain();
         
+        _simplePhysicsBody.setWidth(50);
+        _simplePhysicsBody.setHeight(150);
+
         // require this->_armature initialized
         _stateManager = std::move(std::unique_ptr<StateManager>(
             new StateManager(this, IdleState::create())

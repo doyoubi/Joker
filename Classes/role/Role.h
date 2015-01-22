@@ -26,6 +26,9 @@ namespace joker
         static void loadAnimationSource();
         static Role * create(const std::string & animationName);
 
+        void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)
+        { _simplePhysicsBody.setCollideCallback(std::move(collideCallback)); }
+
         void executeCommand(RoleAction command);
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
@@ -36,7 +39,7 @@ namespace joker
         void setPosition(const cocos2d::Vec2 & position) override;
         void setPosition(float x, float y) override;
 
-        PhysicsBody * getPhysicsBody() { return &_simplePhysics; }
+        PhysicsBody * getPhysicsBody() { return &_simplePhysicsBody; }
 
         void setSpeed(float normalSpeed, float slowSpeed){ _normalSpeed = normalSpeed; _slowSpeed = slowSpeed; }
         float getNormalSpeed() const { return _normalSpeed; }
@@ -47,7 +50,7 @@ namespace joker
 
         std::unique_ptr<StateManager> _stateManager;
         cocostudio::Armature * _armature;
-        PhysicsBody _simplePhysics;
+        PhysicsBody _simplePhysicsBody;
 
         float _normalSpeed = 0;
         float _slowSpeed = 0;

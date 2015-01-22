@@ -5,6 +5,7 @@
 
 #include "PhysicsBody.h"
 #include "PhysicsWorld.h"
+#include "utils/debug.h"
 
 USING_NS_CC;
 
@@ -22,6 +23,18 @@ namespace joker {
 
     PhysicsBody::~PhysicsBody() {
         PhysicsWorld::getInstance()->removePhysicsBody(this);
+    }
+
+    void PhysicsBody::setCollideCallback(CollideCallback && collideCallback)
+    {
+        CHECKNULL(collideCallback);
+        _collideCallback = collideCallback;
+    }
+
+    void PhysicsBody::collide(const collideInfo & collideInfo)
+    { 
+        if (_collideCallback)
+            _collideCallback(collideInfo);
     }
 
     float PhysicsBody::setVelocityX(float vx) {

@@ -5,6 +5,12 @@
 
 namespace joker {
 
+    struct collideInfo
+    {
+        int selfPosition;
+        int oppositePosition;
+    };
+
     class PhysicsBody {
     public:
         PhysicsBody(float x, float y, float w, float h);
@@ -47,13 +53,18 @@ namespace joker {
 
         void update(float);
 
+        typedef std::function<void(const collideInfo & collideInfo)> CollideCallback;
+        void setCollideCallback(CollideCallback && collideCallback);
+        void collide(const collideInfo & collideInfo);
+
         // callback functions
         std::function <void(void)> _landCallback;
         std::function <void(void)> _jumpCallback;
 
     private:
-
         static float _defaultSpeed;
+
+        CollideCallback _collideCallback;
 
         float _r;
         float _x;

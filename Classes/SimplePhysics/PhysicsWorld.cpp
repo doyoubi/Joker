@@ -63,12 +63,30 @@ namespace joker
         _groundResistance = resistance;
     }
 
-
     void PhysicsWorld::update(float dt)
     {
         for (auto * body : _physicsBodyList)
         {
             body->update(dt);
+        }
+
+        using namespace std;
+        auto phyList = _physicsBodyList;
+        sort(begin(phyList), end(phyList), [](PhysicsBody * lhs, PhysicsBody * rhs){
+            return lhs->getX() < rhs->getX();
+        });
+
+        for (int i = 0; i < phyList.size() - 1; i++)
+        {
+            auto left = phyList[i];
+            auto right = phyList[i + 1];
+            float distance = right->getX() - left->getX();
+            if (distance >= (left->getWidth() + right->getWidth()) / 2.0f)
+                continue;
+            collideInfo leftInfo{ left->getX(), right->getX() };
+            collideInfo rightInfo{ right->getX(), left->getX() };
+            left->collide(leftInfo);
+            right->collide(rightInfo);
         }
     }
 }
