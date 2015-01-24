@@ -40,7 +40,7 @@ namespace joker
         });
 
         auto enemy = addEnemy(Vec2(500, 200));
-        enemy->getStateManager()->executeCommand(RoleAction::DEFENCE);
+        enemy->getStateManager()->executeCommand(RoleCommand(RoleAction::DEFENCE));
         _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
         getPlayer()->setSpeed(200, 20);
 
@@ -58,7 +58,7 @@ namespace joker
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
     }
 
-    void BattleDirector::sendCommand(Role * role, RoleAction command)
+    void BattleDirector::sendCommand(Role * role, const RoleCommand & command)
     {
         CHECKNULL(role);
         role->executeCommand(command);

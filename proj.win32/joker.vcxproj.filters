@@ -135,6 +135,9 @@
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsWorld.h">
       <Filter>Classes\SimplePhysics</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\utils\VarParams.h">
+      <Filter>Classes\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

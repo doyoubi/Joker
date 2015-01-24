@@ -16,6 +16,7 @@ namespace joker
 {
 
     class Role;
+    struct RoleCommand;
     class BattleScene;
 
     class BattleDirector
@@ -24,7 +25,7 @@ namespace joker
         BattleDirector(BattleScene * battleScene);
         ~BattleDirector();
         BattleScene * getScene() { return _battleScene; }
-        void sendCommand(Role * role, RoleAction command);
+        void sendCommand(Role * role, const RoleCommand & command);
         Role * getPlayer();
 
         void restartMetronome();

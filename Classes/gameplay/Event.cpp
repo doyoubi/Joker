@@ -58,8 +58,8 @@ namespace joker
         Role * sufferer = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        attacker->executeCommand(RoleAction::ATTACK);
-        sufferer->executeCommand(RoleAction::ATTACKED);
+        attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
+        sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
 
         director->getScene()->getSoundManager()->playSound("hit");
     }
@@ -71,8 +71,8 @@ namespace joker
         Role * attacker = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        attacker->executeCommand(RoleAction::ATTACK);
-        sufferer->executeCommand(RoleAction::ATTACKED);
+        attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
+        sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
     }
 
     // NodEvent

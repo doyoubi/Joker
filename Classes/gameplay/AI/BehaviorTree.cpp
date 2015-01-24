@@ -130,18 +130,18 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
-        if (abs(distance) > rangeFar) getRole()->executeCommand(RoleAction::IDLE);
-        else getRole()->executeCommand(RoleAction::DEFENCE);
+        if (abs(distance) > rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
+        else getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
 
         if (distance < 0 && abs(distance) < rangeNear
             || distance >= 0 && abs(distance) >= rangeFar)
         {
-            getRole()->executeCommand(RoleAction::LEFT_RUN);
+            getRole()->executeCommand(RoleCommand(RoleAction::LEFT_RUN));
         }
         else if (distance < 0 && abs(distance) >= rangeFar
             || distance >= 0 && abs(distance) <= rangeNear)
         {
-            getRole()->executeCommand(RoleAction::RIGHT_RUN);
+            getRole()->executeCommand(RoleCommand(RoleAction::RIGHT_RUN));
         }
         return BTNodeStatus::RUNNING;
     }

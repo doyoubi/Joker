@@ -10,9 +10,18 @@
 #include "state.h"
 #include "RoleEnumType.h"
 #include "SimplePhysics/PhysicsBody.h"
+#include "utils/VarParams.h"
+
 
 namespace joker
 {
+    struct RoleCommand : VarParams
+    {
+        RoleCommand(RoleAction action)
+        : roleAction(action) {}
+
+        RoleAction roleAction;
+    };
 
     class Role : public cocos2d::Node
     {
@@ -29,7 +38,7 @@ namespace joker
         void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)
         { _simplePhysicsBody.setCollideCallback(std::move(collideCallback)); }
 
-        void executeCommand(RoleAction command);
+        void executeCommand(const RoleCommand & command);
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
 

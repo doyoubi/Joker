@@ -16,6 +16,7 @@ namespace joker
     typedef unique_ptr<State> StatePtr;
 
     class Role;
+    struct RoleCommand;
 
     class StateManager
     {
@@ -24,7 +25,7 @@ namespace joker
         StateManager(Role * role, StatePtr initState);
         ~StateManager();
         void changeState(StatePtr && nextState);
-        void executeCommand(RoleAction command);
+        void executeCommand(const RoleCommand & command);
         void update(float dt);
 
         void printCurrState();   // for debug
@@ -42,7 +43,7 @@ namespace joker
         virtual void enterState(Role * role) = 0;
         virtual void exitState(Role * role) = 0;
         virtual void execute(Role * role) = 0;
-        virtual void executeCommand(Role * role, RoleAction command) = 0;
+        virtual void executeCommand(Role * role, const RoleCommand & command) = 0;
     private:
         CC_DISALLOW_COPY_AND_ASSIGN(State);
     };
@@ -54,7 +55,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override {};
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     };
 
     class RunState : public State
@@ -65,7 +66,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         RoleDirection _direction;
     };
@@ -78,7 +79,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         float _velocityX;
     };
@@ -90,7 +91,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override {};
     };
 
     class AttackedState : public State
@@ -100,7 +101,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override {};
     };
 
     class JumpState : public State
@@ -111,7 +112,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override {};
     private:
         float _velocityX;
     };
@@ -123,7 +124,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override {};
     };
 
     // for enemy
@@ -134,7 +135,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override {};
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     };
 
     // for enemy
@@ -145,7 +146,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override {};
     };
 
     // for enemy
@@ -157,7 +158,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override {};
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         RoleDirection _direction;
     };
@@ -170,7 +171,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, RoleAction command) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         RoleAction _collide_direction;
     };
