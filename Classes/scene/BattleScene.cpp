@@ -96,6 +96,7 @@ namespace joker
         DEBUGCHECK(_player == nullptr, "player already exist");
         _player = Role::create("joker");
         _player->setPosition(200, 200);
+        _player->setIsPlayer();
         addChild(_player);
         return _player;
     }

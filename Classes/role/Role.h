@@ -54,6 +54,9 @@ namespace joker
         float getNormalSpeed() const { return _normalSpeed; }
         float getSlowSpeed() const { return _slowSpeed; }
 
+        bool isPlayer() const { return _isPlayer; }
+        void setIsPlayer() { _isPlayer = true; }
+
     private:
         Role(cocostudio::Armature * armature);
 
@@ -63,6 +66,8 @@ namespace joker
 
         float _normalSpeed = 0;
         float _slowSpeed = 0;
+
+        bool _isPlayer = false;
     };
 
 

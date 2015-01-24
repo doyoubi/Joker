@@ -83,6 +83,12 @@
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsWorld.cpp">
       <Filter>Classes\SimplePhysics</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\role\enemyState.cpp">
+      <Filter>Classes\role</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\role\playerState.cpp">
+      <Filter>Classes\role</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -137,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\utils\VarParams.h">
       <Filter>Classes\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\role\enemyState.h">
+      <Filter>Classes\role</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\role\playerState.h">
+      <Filter>Classes\role</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
