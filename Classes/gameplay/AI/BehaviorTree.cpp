@@ -133,15 +133,18 @@ namespace joker
         if (abs(distance) > rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
         else getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
 
+        RoleCommand command(RoleAction::RUN);
         if (distance < 0 && abs(distance) < rangeNear
             || distance >= 0 && abs(distance) >= rangeFar)
         {
-            getRole()->executeCommand(RoleCommand(RoleAction::LEFT_RUN));
+            command.add<RoleDirection>("direction", RoleDirection::LEFT);
+            getRole()->executeCommand(command);
         }
         else if (distance < 0 && abs(distance) >= rangeFar
             || distance >= 0 && abs(distance) <= rangeNear)
         {
-            getRole()->executeCommand(RoleCommand(RoleAction::RIGHT_RUN));
+            command.add("direction", RoleDirection::RIGHT);
+            getRole()->executeCommand(command);
         }
         return BTNodeStatus::RUNNING;
     }

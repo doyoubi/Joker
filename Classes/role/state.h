@@ -166,14 +166,14 @@ namespace joker
     class CollideState : public State
     {
     public:
-        static StatePtr create(RoleAction collide_direction) { return StatePtr(new CollideState(collide_direction)); }
-        CollideState(RoleAction collide_direction);
+        static StatePtr create(RoleDirection direction) { return StatePtr(new CollideState(direction)); }
+        CollideState(RoleDirection direction);
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override;
     private:
-        RoleAction _collide_direction;
+        RoleDirection _direction;
     };
 
 }

@@ -80,10 +80,8 @@ namespace joker
     void IdleState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
-        if (roleAction == RoleAction::LEFT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
-        else if (roleAction == RoleAction::RIGHT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
@@ -94,9 +92,8 @@ namespace joker
             role->getStateManager()->changeState(NodState::create());
         else if (roleAction == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
-        else if (roleAction == RoleAction::COLLIDE_TO_LEFT
-            || roleAction == RoleAction::COLLIDE_TO_RIGHT)
-            role->getStateManager()->changeState(CollideState::create(roleAction));
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
     }
 
     // RunState
@@ -130,13 +127,14 @@ namespace joker
     void RunState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
-        if (_direction == RoleDirection::LEFT && roleAction == RoleAction::LEFT_RUN) return;
-        if (_direction == RoleDirection::RIGHT && roleAction == RoleAction::RIGHT_RUN) return;
+        if (roleAction == RoleAction::RUN
+            && _direction == command.get<RoleDirection>("direction"))
+        {
+            return;
+        }
 
-        if (roleAction == RoleAction::LEFT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
-        else if (roleAction == RoleAction::RIGHT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::STOP)
             role->getStateManager()->changeState(SlowDownState::create(
                     role->getPhysicsBody()->getVelocityX()
@@ -155,9 +153,8 @@ namespace joker
             role->getStateManager()->changeState(CrawlState::create(
                 role->getPhysicsBody()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
             ));
-        else if (roleAction == RoleAction::COLLIDE_TO_LEFT
-            || roleAction == RoleAction::COLLIDE_TO_RIGHT)
-            role->getStateManager()->changeState(CollideState::create(roleAction));
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
     }
 
     // SlowDownState
@@ -192,10 +189,8 @@ namespace joker
     void SlowDownState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
-        if (roleAction == RoleAction::LEFT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::LEFT));
-        else if (roleAction == RoleAction::RIGHT_RUN)
-            role->getStateManager()->changeState(RunState::create(RoleDirection::RIGHT));
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
@@ -208,9 +203,8 @@ namespace joker
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::NOD)
             role->getStateManager()->changeState(NodState::create());
-        else if (roleAction == RoleAction::COLLIDE_TO_LEFT
-            || roleAction == RoleAction::COLLIDE_TO_RIGHT)
-            role->getStateManager()->changeState(CollideState::create(roleAction));
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
     }
 
     // AttackState
@@ -303,10 +297,8 @@ namespace joker
     void DefenceState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
-        if (roleAction == RoleAction::LEFT_RUN)
-            role->getStateManager()->changeState(CrawlState::create(RoleDirection::LEFT));
-        else if (roleAction == RoleAction::RIGHT_RUN)
-            role->getStateManager()->changeState(CrawlState::create(RoleDirection::RIGHT));
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(AttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
@@ -366,13 +358,14 @@ namespace joker
     void CrawlState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
-        if (_direction == RoleDirection::LEFT && roleAction == RoleAction::LEFT_RUN) return;
-        if (_direction == RoleDirection::RIGHT && roleAction == RoleAction::RIGHT_RUN) return;
+        if (roleAction == RoleAction::RUN
+            && command.get<RoleDirection>("direction") == _direction)
+        {
+            return;
+        }
 
-        if (roleAction == RoleAction::LEFT_RUN)
-            role->getStateManager()->changeState(CrawlState::create(RoleDirection::LEFT));
-        else if (roleAction == RoleAction::RIGHT_RUN)
-            role->getStateManager()->changeState(CrawlState::create(RoleDirection::RIGHT));
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::STOP)
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::ATTACK)
@@ -387,8 +380,8 @@ namespace joker
 
 
     // CollideState
-    CollideState::CollideState(RoleAction collide_direction)
-        : _collide_direction(collide_direction)
+    CollideState::CollideState(RoleDirection direction)
+        : _direction(direction)
     {
     }
 
@@ -396,8 +389,8 @@ namespace joker
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
         role->getArmature()->getAnimation()->play("slowDown");
-        role->setDirection(_collide_direction == RoleAction::COLLIDE_TO_LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        float v = (_collide_direction == RoleAction::COLLIDE_TO_LEFT ? -1 : 1) * PhysicsBody::getDefaultSpeed();
+        role->setDirection(_direction == RoleDirection::LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
+        float v = (_direction == RoleDirection::LEFT ? -1 : 1) * PhysicsBody::getDefaultSpeed();
         role->getPhysicsBody()->setVelocityX(v);
         role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }

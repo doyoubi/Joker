@@ -154,14 +154,22 @@ namespace joker
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
-                director->sendCommand(director->getPlayer(), RoleAction::LEFT_RUN);
+            {
+                RoleCommand command(RoleAction::RUN);
+                command.add<RoleDirection>("direction", RoleDirection::LEFT);
+                director->sendCommand(director->getPlayer(), command);
+            }
             else if (touchEvent == Widget::TouchEventType::ENDED)
                 director->sendCommand(director->getPlayer(), RoleAction::STOP);
         });
 
         rightRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
-                director->sendCommand(director->getPlayer(), RoleAction::RIGHT_RUN);
+            {
+                RoleCommand command(RoleAction::RUN);
+                command.add<RoleDirection>("direction", RoleDirection::RIGHT);
+                director->sendCommand(director->getPlayer(), command);
+            }
             else if (touchEvent == Widget::TouchEventType::ENDED)
                 director->sendCommand(director->getPlayer(), RoleAction::STOP);
         });

@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "role/Role.h"
+
 namespace joker
 {
 
@@ -88,16 +90,14 @@ namespace joker
         virtual void execute(BattleDirector * director) override;
     };
 
-    class CollideToLeftEvent : public DirectorEvent
+    class CollideEvent : public DirectorEvent
     {
     public:
+        CollideEvent(RoleDirection direction)
+            : _direction(direction) {}
         virtual void execute(BattleDirector * director) override;
-    };
-
-    class CollideToRightEvent : public DirectorEvent
-    {
-    public:
-        virtual void execute(BattleDirector * director) override;
+    private:
+        RoleDirection _direction;
     };
 
 }

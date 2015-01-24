@@ -32,8 +32,8 @@ namespace joker
     template<class T>
     const T & ParameterBase::get() const
     {
-        Parameter<T> * p = dynamic_cast<Parameter<T> *>(this);
-        DEBUGCHECK(p, "incorrect type for ParameterBase::get");
+        const Parameter<T> * p = dynamic_cast<const Parameter<T> *>(this);
+        DEBUGCHECK(p != nullptr, "incorrect type for ParameterBase::get");
         return p->get();
     }
 
@@ -51,7 +51,7 @@ namespace joker
         typedef std::unique_ptr<ParameterBase> Ptr;
 
         template<class T>
-        T & get(const char * paramName) const
+        const T & get(const string & paramName) const
         {
             DEBUGCHECK(_params.count(paramName) == 1,
                 "VarParmas::get : the parameter " + string(paramName) + " not exist");
@@ -59,7 +59,7 @@ namespace joker
         }
         
         template<class T>
-        void add(const char * paramName, T & value)
+        void add(const string paramName, T value)
         {
             DEBUGCHECK(_params.count(paramName) == 0,
                 "VarParmas::get : the parameter " + string(paramName) + " already exist");

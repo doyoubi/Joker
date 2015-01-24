@@ -15,7 +15,7 @@
 
 namespace joker
 {
-    struct RoleCommand : VarParams
+    struct RoleCommand : public VarParams
     {
         RoleCommand(RoleAction action)
         : roleAction(action) {}

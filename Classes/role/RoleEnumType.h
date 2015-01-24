@@ -9,15 +9,13 @@ namespace joker
         IDLE,
         ATTACK,
         ATTACKED,
-        LEFT_RUN,
-        RIGHT_RUN,
+        RUN,
         STOP,
         JUMP,
         NOD,
         DEFENCE,
         DEFENCE_NOD,
-        COLLIDE_TO_LEFT,
-        COLLIDE_TO_RIGHT,
+        COLLIDE,
     };
 
     enum class RoleDirection
