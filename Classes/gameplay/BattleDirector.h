@@ -39,8 +39,10 @@ namespace joker
         DirectorEventManager & getEventManager() { return _eventManager; }
         void addEvent(DirectorEventType event){ _eventManager.activateEvent(event); }
 
-    private:
         Role * addEnemy(const cocos2d::Vec2 & position);
+        void removeEnemy(Role * enemy);
+
+    private:
 
         BattleScene * _battleScene = nullptr;   // weak reference
 

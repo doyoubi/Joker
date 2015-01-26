@@ -71,7 +71,7 @@ namespace joker
 
     Role * BattleDirector::getClosestEnemy()
     {
-        vector<Role*> & enemyArray = _battleScene->getBattleLayer()->getEnemyArray();
+        const vector<Role*> & enemyArray = _enemyConductor.getEnemyArray();
         DEBUGCHECK(enemyArray.size() > 0, "empty enemy array");
         auto it = std::min_element(std::begin(enemyArray), std::end(enemyArray), 
             [this](Role * r, Role * min) {
@@ -101,6 +101,12 @@ namespace joker
         return enemy;
     }
 
+    void BattleDirector::removeEnemy(Role * enemy)
+    {
+        _enemyConductor.removeEnemy(enemy);
+        _battleScene->getBattleLayer()->removeEnemy(enemy);
+    }
+
     RhythmEventDispatcher & BattleDirector::getEventDispather(const char * eventName)
     {
         DEBUGCHECK(_rhythmEventDispaters.count(eventName) == 1, string("event: ") + eventName + " not exist");
@@ -114,6 +120,7 @@ namespace joker
         param.playerPosition = getPlayer()->getPosition().x;
 
         _eventManager.executeEvent(this);
+        if (_enemyConductor.getEnemyArray().empty()) return;
         _enemyConductor.tick(getClosestEnemy(), param);
     }
 

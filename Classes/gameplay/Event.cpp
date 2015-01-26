@@ -62,6 +62,13 @@ namespace joker
         sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
 
         director->getScene()->getSoundManager()->playSound("hit");
+        director->removeEnemy(sufferer);
+
+        const int distance = 500;
+        Vec2 posi = attacker->getPosition();
+        if (posi.x < distance) posi.x += distance;
+        else posi.x -= distance;
+        director->addEnemy(posi);
     }
 
     // AttackedEvent
