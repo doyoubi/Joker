@@ -57,9 +57,9 @@ namespace joker
     {
         if (_currStatus == BTNodeStatus::RUNNING)
         {
-            _currStatus = BTNodeStatus::INIT;
             onExit();
         }
+        _currStatus = BTNodeStatus::INIT;
     }
 
     void ActionNode::addChild(BTNodePtr && node)
@@ -102,8 +102,7 @@ namespace joker
             {
                 status = BTNodeStatus::RUNNING;
             }
-            else if (status != BTNodeStatus::RUNNING 
-                && status == BTNodeStatus::SUCCESS)
+            else if (status == BTNodeStatus::SUCCESS)
             {
                 status = BTNodeStatus::SUCCESS;
             }
@@ -133,8 +132,8 @@ namespace joker
         int rangeNear = param.closest ? 150 : 300;
         int rangeFar = param.closest ? 200 : 400;
 
-        if (abs(distance) > rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
-        else getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
+        if (param.closest && abs(distance) < rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
+        else getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
 
         RoleCommand command(RoleAction::RUN);
         if (distance < 0 && abs(distance) < rangeNear
@@ -167,6 +166,24 @@ namespace joker
         return BTNodeStatus::RUNNING;
     }
 
+    // EnemyFastRunNode
+    EnemyFastRunNode::EnemyFastRunNode(BTprecondition && precondition, Role * role)
+        : RoleActionNode(std::move(precondition), role)
+    {
+    }
+
+    void EnemyFastRunNode::onEnter()
+    {
+        _formerSpeed = getRole()->getNormalSpeed();
+        getRole()->setSpeed(3 * _formerSpeed, getRole()->getSlowSpeed());
+    }
+
+    void EnemyFastRunNode::onExit()
+    {
+        const float speed = getRole()->getNormalSpeed();
+        getRole()->setSpeed(_formerSpeed, getRole()->getSlowSpeed());
+    }
+
 
     // create behavior tree
     BTNodePtr createEnemyTree(Role * enemy)
@@ -188,8 +205,13 @@ namespace joker
             return true;
         }, enemy));
 
+        auto fastRun = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){
+            return std::abs(param.playerPosition - enemy->getPosition().x) > 500;
+        } , enemy));
+
         sel->addChild(std::move(keepDistance));
         par->addChild(std::move(faceToPlayer));
+        par->addChild(std::move(fastRun));
         par->addChild(std::move(sel));
 
         return par;

@@ -121,6 +121,20 @@ namespace joker
         BTNodeStatus execute(const BTParam & param) override;
     };
 
+    class EnemyFastRunNode : public RoleActionNode
+    {
+    public:
+        EnemyFastRunNode(BTprecondition && precondition, Role * role);
+    private:
+        virtual void onEnter() override;
+        virtual void onExit() override;
+        BTNodeStatus execute(const BTParam & param) override 
+        {
+            return BTNodeStatus::RUNNING;
+        };
+        float _formerSpeed;
+    };
+
 
     BTNodePtr createEnemyTree(Role * enemy);
 

@@ -145,4 +145,5 @@ namespace joker
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
     }
+
 }

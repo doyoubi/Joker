@@ -2,6 +2,7 @@
 #include "scene/BattleScene.h"
 #include "role/Role.h"
 #include "utils/debug.h"
+#include "SimplePhysics/PhysicsWorld.h"
 
 namespace joker
 {
@@ -142,10 +143,23 @@ namespace joker
     {
         if (_enemyConductor.getEnemyArray().size() > 1) return;
         const int distance = 500;
-        Vec2 posi = getPlayer()->getPosition();
-        if (posi.x < distance) posi.x += distance;
-        else posi.x -= distance;
-        addEnemy(posi);
+        float posi = getPlayer()->getPosition().x;
+        float delta = distance;
+        if (_enemyConductor.getEnemyArray().empty())
+        {
+            if (posi > distance) delta *= -1;
+        }
+        else
+        {
+            RolePtr & closest = getClosestEnemy();
+            if (closest->getPosition().x > getPlayer()->getPosition().x)
+                delta *= -1;
+        }
+        const int width = joker::PhysicsWorld::getInstance()->getWorldWidth();
+        if (posi + delta < 1.5 * Role::PlayerShortAttackScope
+            || posi + delta > width - Role::PlayerShortAttackScope)
+            delta *= -1;
+        addEnemy(Vec2(posi + delta, 0));
     }
 
 }
