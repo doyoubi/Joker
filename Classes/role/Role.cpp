@@ -5,59 +5,27 @@
 
 namespace joker
 {
-    using namespace cocos2d;
-    using namespace cocostudio;
     using std::string;
 
     // Role
-    void Role::loadAnimationSource()
+    Role::Role(RoleSprite * roleSprite)
+        : _simplePhysicsBody(0, 0, 0, 0), _roleSprite(roleSprite)
     {
-        ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "roleAnimation/joker/joker0.png",
-            "roleAnimation/joker/joker0.plist",
-            "roleAnimation/joker/joker.ExportJson"
-            );
-        ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "roleAnimation/enemy/enemy0.png",
-            "roleAnimation/enemy/enemy0.plist",
-            "roleAnimation/enemy/enemy.ExportJson"
-            );
-    }
+        CHECKNULL(roleSprite);
 
-    Role * Role::create(const string & animationName)
-    {
-        // check if animation has been loaded
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName));
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"));
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"));
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"));
-        Armature * armature = Armature::create(animationName);
-
-        Role * role = new (std::nothrow) Role(armature);
-        if (!role || !role->init())
-        {
-            CC_SAFE_DELETE(role);
-            return nullptr;
-        }
-        role->autorelease();
-        return role;
-    }
-
-    Role::Role(Armature * armature)
-        : _armature(armature), _simplePhysicsBody(0,0,0,0)
-    {
-        CHECKNULL(_armature);
-        addChild(_armature);
-        _armature->retain();
-        
         _simplePhysicsBody.setWidth(50);
         _simplePhysicsBody.setHeight(150);
         _simplePhysicsBody.setCollidable(false);
 
-        // require this->_armature initialized
+        // require roleSprite->_armature initialized
         _stateManager = std::move(std::unique_ptr<StateManager>(
             new StateManager(this, IdleState::create())
             ));
+    }
+
+    Role::~Role()
+    {
+        _roleSprite->removeFromParent();
     }
 
     void Role::executeCommand(const RoleCommand & command)
@@ -67,13 +35,13 @@ namespace joker
 
     RoleDirection Role::getDirection() const
     {
-        DEBUGCHECK(std::abs(getScaleX()) == 1.0f, "abs of scale x must be 1");
-        return getScaleX() == 1 ? RoleDirection::RIGHT : RoleDirection::LEFT;
+        DEBUGCHECK(std::abs(_roleSprite->getScaleX()) == 1.0f, "abs of scale x must be 1");
+        return _roleSprite->getScaleX() == 1 ? RoleDirection::RIGHT : RoleDirection::LEFT;
     }
 
     void Role::setDirection(RoleDirection direction)
     {
-        setScaleX(direction == RoleDirection::RIGHT ? 1 : -1);
+        _roleSprite->setScaleX(direction == RoleDirection::RIGHT ? 1 : -1);
     }
 
     void Role::setPosition(const Vec2 & position)
@@ -83,10 +51,16 @@ namespace joker
 
     void Role::setPosition(float x, float y)
     {
-        Node::setPosition(x, y);
+        _roleSprite->setPosition(x, y);
         getPhysicsBody()->setX(x);
         getPhysicsBody()->setY(y);
     }
 
+    Vec2 Role::getPosition() const
+    {
+        float x = _simplePhysicsBody.getX();
+        float y = _simplePhysicsBody.getY();
+        return Vec2(x, y);
+    }
 
 }

@@ -7,35 +7,35 @@ namespace joker
 {
 
     // EnemyConductor
-    const std::vector<Role*> & EnemyConductor::getEnemyArray() const
+    std::vector<RolePtr> & EnemyConductor::getEnemyArray()
     {
         return _enemyArray;
     }
 
-    void EnemyConductor::addEnemy(Role * enemy)
+    void EnemyConductor::addEnemy(RolePtr && enemy)
     {
         CHECKNULL(enemy);
-        _tree.emplace(enemy, createEnemyTree(enemy));
-        _enemyArray.push_back(enemy);
+        _tree.emplace(enemy.get(), createEnemyTree(enemy.get()));
+        _enemyArray.push_back(std::move(enemy));
     }
 
-    void EnemyConductor::removeEnemy(Role * enemy)
+    void EnemyConductor::removeEnemy(RolePtr & enemy)
     {
         CHECKNULL(enemy);
-        DEBUGCHECK(_tree.count(enemy) == 1, "enemy not exist in EnemyConductor");
+        DEBUGCHECK(_tree.count(enemy.get()) == 1, "enemy not exist in EnemyConductor");
         auto it = std::find(begin(_enemyArray), end(_enemyArray), enemy);
         DEBUGCHECK(end(_enemyArray) != it, "enemy not exist in EnemyConductor");
-        _tree.erase(enemy);
+        _tree.erase(enemy.get());
         _enemyArray.erase(it);
     }
 
-    void EnemyConductor::tick(Role * role, const BTParam & param)
+    void EnemyConductor::tick(RolePtr & role, const BTParam & param)
     {
         CHECKNULL(role);
         DEBUGCHECK(end(_enemyArray) != std::find(begin(_enemyArray), end(_enemyArray), role),
             "enemy not exist in EnemyConductor");
-        DEBUGCHECK(_tree.count(role) == 1, "enemy not exist in EnemyConductor");
-        _tree.at(role)->tick(param);
+        DEBUGCHECK(_tree.count(role.get()) == 1, "enemy not exist in EnemyConductor");
+        _tree.at(role.get())->tick(param);
     }
 
 }

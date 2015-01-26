@@ -5,23 +5,24 @@
 #include <vector>
 
 #include "BehaviorTree.h"
+#include "role/Role.h"
 
 namespace joker
 {
-    class Role;
 
     class EnemyConductor
     {
     public:
-        const std::vector<Role*> & getEnemyArray() const;
-        void addEnemy(Role * role);
-        void removeEnemy(Role * enemy);
-        void tick(Role * role, const BTParam & param);
+        std::vector<RolePtr> & getEnemyArray();
+        void addEnemy(RolePtr && role);
+        void removeEnemy(RolePtr & enemy);
+        void tick(RolePtr & role, const BTParam & param);
 
     private:
         std::unordered_map<Role*, BTNodePtr> _tree;
-        std::vector<Role*> _enemyArray;
+        std::vector<RolePtr> _enemyArray;
     };
+
 }
 
 #endif

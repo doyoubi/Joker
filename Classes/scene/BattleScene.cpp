@@ -5,7 +5,7 @@
 #include "ui/UIHelper.h"
 
 #include "BattleScene.h"
-#include "role/Role.h"
+#include "RoleSprite.h"
 #include "gameplay/BattleDirector.h"
 #include "utils/debug.h"
 #include "SimplePhysics/PhysicsWorld.h"
@@ -17,7 +17,7 @@ namespace joker
     {
         if (!Scene::init()) return false;
 
-        Role::loadAnimationSource();
+        RoleSprite::loadAnimationSource();
 
         auto battleLayer = BattleLayer::create();
         battleLayer->setName("BattleLayer");
@@ -73,16 +73,16 @@ namespace joker
         unschedule(schedule_selector(BattleLayer::updateBackgroud));
     }
 
-    Role * BattleLayer::addEnemy(const Vec2 & position)
+    RoleSprite * BattleLayer::addEnemySprite(const Vec2 & position)
     {
-        Role * enemy = Role::create("enemy");
+        RoleSprite * enemy = RoleSprite::create("enemy");
         enemy->setPosition(position);
         _enemyArray.push_back(enemy);
         addChild(enemy);
         return enemy;
     }
 
-    void BattleLayer::removeEnemy(Role * enemy)
+    void BattleLayer::removeEnemySprite(RoleSprite * enemy)
     {
         auto it = std::find(std::begin(_enemyArray), std::end(_enemyArray), enemy);
         DEBUGCHECK(it != std::end(_enemyArray), "enemy not exist!");
@@ -91,12 +91,11 @@ namespace joker
         removeChild(enemy, true);
     }
 
-    Role * BattleLayer::addPlayer(const cocos2d::Vec2 & position)
+    RoleSprite * BattleLayer::addPlayerSprite(const cocos2d::Vec2 & position)
     {
         DEBUGCHECK(_player == nullptr, "player already exist");
-        _player = Role::create("joker");
+        _player = RoleSprite::create("joker");
         _player->setPosition(200, 200);
-        _player->setIsPlayer();
         addChild(_player);
         return _player;
     }
@@ -104,7 +103,7 @@ namespace joker
     void BattleLayer::updateBackgroud(float dt) {
         Size visibleSize = Director::getInstance()->getVisibleSize();
 
-        float bgLeft = 0, x = _player->getPhysicsBody()->getX();
+        float bgLeft = 0, x = _player->getPositionX();
 
         if (x <= visibleSize.width / 2) {
             bgLeft = 0;

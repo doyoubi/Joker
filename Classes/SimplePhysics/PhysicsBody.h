@@ -44,12 +44,12 @@ namespace joker {
         float setY(float y);
         bool  setCollidable(bool collidable) { return _collidable = collidable; }
 
-        float getX()                { return _x; }
-        float getY()                { return _y; }
-        float getVelocityX()        { return _vx; }
-        float getWidth()            { return _w; }
-        float getHeight()           { return _h; }
-        bool  isCollidable()       { return _collidable; }
+        float getX() const               { return _x; }
+        float getY() const               { return _y; }
+        float getVelocityX() const       { return _vx; }
+        float getWidth() const           { return _w; }
+        float getHeight() const          { return _h; }
+        bool  isCollidable() const      { return _collidable; }
 
         static float getDefaultSpeed() { return _defaultSpeed; }
 

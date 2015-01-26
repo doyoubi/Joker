@@ -45,10 +45,8 @@ namespace joker
             this->supplyEnemy();
         });
 
-        auto enemy = addEnemy(Vec2(500, 200));
-        enemy->getStateManager()->executeCommand(RoleCommand(RoleAction::DEFENCE));
-        _battleScene->getBattleLayer()->addPlayer(Vec2(200, 200));
-        getPlayer()->setSpeed(200, 20);
+        addEnemy(Vec2(500, 200));
+        addPlayer(Vec2(200, 200));
 
         getPlayer()->setCollideCallbak([this](const CollideInfo & collideInfo){
             auto eventType = collideInfo.selfPosition < collideInfo.oppositePosition ?
@@ -64,23 +62,18 @@ namespace joker
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
     }
 
-    void BattleDirector::sendCommand(Role * role, const RoleCommand & command)
+    void BattleDirector::sendCommand(RolePtr & role, const RoleCommand & command)
     {
         CHECKNULL(role);
         role->executeCommand(command);
     }
 
-    Role * BattleDirector::getPlayer()
+    RolePtr & BattleDirector::getClosestEnemy()
     {
-        return _battleScene->getBattleLayer()->getPlayer();
-    }
-
-    Role * BattleDirector::getClosestEnemy()
-    {
-        const vector<Role*> & enemyArray = _enemyConductor.getEnemyArray();
+        auto & enemyArray = _enemyConductor.getEnemyArray();
         DEBUGCHECK(enemyArray.size() > 0, "empty enemy array");
         auto it = std::min_element(std::begin(enemyArray), std::end(enemyArray), 
-            [this](Role * r, Role * min) {
+            [this](RolePtr & r, RolePtr & min) {
             return abs(r->getPosition().x - getPlayer()->getPosition().x)
                 < abs(min->getPosition().x - getPlayer()->getPosition().x);
         });
@@ -99,18 +92,32 @@ namespace joker
         _battleScene->getSoundManager()->playSound("badapple");
     }
 
-    Role * BattleDirector::addEnemy(const cocos2d::Vec2 & position)
+    void BattleDirector::addPlayer(const cocos2d::Vec2 & position)
     {
-        auto enemy = _battleScene->getBattleLayer()->addEnemy(position);
-        enemy->setSpeed(100, 10);
-        _enemyConductor.addEnemy(enemy);
-        return enemy;
+        auto player = _battleScene->getBattleLayer()->addPlayerSprite(position);
+        _player = RolePtr(new Role(player));
+        _player->setIsPlayer();
+        _player->setSpeed(200, 20);
+        _player->setPosition(position);
     }
 
-    void BattleDirector::removeEnemy(Role * enemy)
+    RolePtr & BattleDirector::getPlayer()
+    {
+        return _player;
+    }
+
+    void BattleDirector::addEnemy(const cocos2d::Vec2 & position)
+    {
+        auto enemySprite = _battleScene->getBattleLayer()->addEnemySprite(position);
+        auto enemy = RolePtr(new Role(enemySprite));
+        enemy->setSpeed(100, 10);
+        enemy->setPosition(position);
+        _enemyConductor.addEnemy(std::move(enemy));
+    }
+
+    void BattleDirector::removeEnemy(RolePtr & enemy)
     {
         _enemyConductor.removeEnemy(enemy);
-        _battleScene->getBattleLayer()->removeEnemy(enemy);
     }
 
     RhythmEventDispatcher & BattleDirector::getEventDispather(const char * eventName)
@@ -124,7 +131,7 @@ namespace joker
         _eventManager.executeEvent(this);
         BTParam param;
         param.playerPosition = getPlayer()->getPosition().x;
-        for (Role * enemy : _enemyConductor.getEnemyArray())
+        for (RolePtr & enemy : _enemyConductor.getEnemyArray())
         {
             param.closest = enemy == getClosestEnemy();
             _enemyConductor.tick(enemy, param);

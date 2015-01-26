@@ -4,13 +4,11 @@
 #include <memory>
 #include <string>
 
-#include "cocos2d.h"
-#include "cocostudio/CCArmature.h"
-
 #include "state.h"
 #include "RoleEnumType.h"
 #include "SimplePhysics/PhysicsBody.h"
 #include "utils/VarParams.h"
+#include "scene/RoleSprite.h"
 
 
 namespace joker
@@ -23,17 +21,18 @@ namespace joker
         RoleAction roleAction;
     };
 
-    class Role : public cocos2d::Node
+    class Role;
+    typedef std::unique_ptr<Role> RolePtr;
+
+    class Role
     {
     public:
         const static int PlayerShortAttackScope = 50;
         const static int PlayerLongAttackScope = 300;
         const static int EnemyAttackScope = 300;
 
-        // load animation project to ArmatureDataManager
-        // should be called once before using Role::create
-        static void loadAnimationSource();
-        static Role * create(const std::string & animationName);
+        Role(RoleSprite * roleSprite);
+        ~Role();
 
         void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)
         { _simplePhysicsBody.setCollideCallback(std::move(collideCallback)); }
@@ -42,11 +41,11 @@ namespace joker
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
 
-        cocostudio::Armature * getArmature() { return _armature; }
         std::unique_ptr<StateManager> & getStateManager() { return _stateManager; }
 
-        void setPosition(const cocos2d::Vec2 & position) override;
-        void setPosition(float x, float y) override;
+        void setPosition(const cocos2d::Vec2 & position);
+        void setPosition(float x, float y);
+        Vec2 getPosition() const;
 
         PhysicsBody * getPhysicsBody() { return &_simplePhysicsBody; }
 
@@ -57,17 +56,18 @@ namespace joker
         bool isPlayer() const { return _isPlayer; }
         void setIsPlayer() { _isPlayer = true; }
 
-    private:
-        Role(cocostudio::Armature * armature);
+        cocostudio::Armature * getArmature() { return _roleSprite->getArmature(); }
 
+    private:
         std::unique_ptr<StateManager> _stateManager;
-        cocostudio::Armature * _armature;
         PhysicsBody _simplePhysicsBody;
 
         float _normalSpeed = 0;
         float _slowSpeed = 0;
 
         bool _isPlayer = false;
+
+        RoleSprite * _roleSprite; // weak reference
     };
 
 

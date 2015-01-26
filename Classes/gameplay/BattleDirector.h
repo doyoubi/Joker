@@ -2,6 +2,7 @@
 #define JOKER_BATTLE_DIRECTOR
 
 #include <unordered_map>
+#include <memory>
 #include <vector>
 
 #include "role/RoleEnumType.h"
@@ -10,28 +11,27 @@
 #include "RhythmEventDispatcher.h"
 #include "gameplay/AI/EnemyConductor.h"
 #include "Event.h"
+#include "role/Role.h"
 
 
 namespace joker
 {
 
-    class Role;
     struct RoleCommand;
     class BattleScene;
 
     class BattleDirector
     {
     public:
+
         BattleDirector(BattleScene * battleScene);
         ~BattleDirector();
         BattleScene * getScene() { return _battleScene; }
-        void sendCommand(Role * role, const RoleCommand & command);
-        Role * getPlayer();
+        void sendCommand(RolePtr & role, const RoleCommand & command);
 
         void restartMetronome();
 
         void tagMetronome();
-        Role * getClosestEnemy();
 
         RhythmEventDispatcher & getEventDispather(const char * eventName);
 
@@ -39,8 +39,12 @@ namespace joker
         DirectorEventManager & getEventManager() { return _eventManager; }
         void addEvent(DirectorEventType event){ _eventManager.activateEvent(event); }
 
-        Role * addEnemy(const cocos2d::Vec2 & position);
-        void removeEnemy(Role * enemy);
+        void addPlayer(const cocos2d::Vec2 & position);
+        RolePtr & getPlayer();
+        void addEnemy(const cocos2d::Vec2 & position);
+        void removeEnemy(RolePtr & enemy);
+        RolePtr & getClosestEnemy();
+        int getEnemyNum() { return _enemyConductor.getEnemyArray().size(); }
 
         void supplyEnemy();
 
@@ -61,6 +65,8 @@ namespace joker
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
+
+        RolePtr _player;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;

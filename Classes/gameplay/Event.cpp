@@ -54,8 +54,8 @@ namespace joker
     // AttackEvent
     void AttackEvent::execute(BattleDirector * director)
     {
-        Role * attacker = director->getPlayer();
-        Role * sufferer = director->getClosestEnemy();
+        RolePtr & attacker = director->getPlayer();
+        RolePtr & sufferer = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
@@ -70,8 +70,8 @@ namespace joker
     // AttackedEvent
     void AttackedEvent::execute(BattleDirector * director)
     {
-        Role * sufferer = director->getPlayer();
-        Role * attacker = director->getClosestEnemy();
+        RolePtr & sufferer = director->getPlayer();
+        RolePtr & attacker = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
@@ -81,6 +81,7 @@ namespace joker
     // NodEvent
     void NodEvent::execute(BattleDirector * director)
     {
+        if (director->getEnemyNum() == 0) return;
         director->sendCommand(director->getClosestEnemy(), RoleAction::NOD);
     }
 
