@@ -42,6 +42,8 @@ namespace joker
         Role * addEnemy(const cocos2d::Vec2 & position);
         void removeEnemy(Role * enemy);
 
+        void supplyEnemy();
+
     private:
 
         BattleScene * _battleScene = nullptr;   // weak reference

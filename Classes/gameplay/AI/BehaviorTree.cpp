@@ -130,6 +130,9 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
+        int rangeNear = param.closest ? 150 : 300;
+        int rangeFar = param.closest ? 200 : 400;
+
         if (abs(distance) > rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
         else getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
 
@@ -182,7 +185,7 @@ namespace joker
         }, enemy));
 
         auto keepDistance = BTNodePtr(new KeepDistance([](const BTParam & param){
-            return param.closest;
+            return true;
         }, enemy));
 
         sel->addChild(std::move(keepDistance));

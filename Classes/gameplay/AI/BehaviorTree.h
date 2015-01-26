@@ -111,9 +111,6 @@ namespace joker
         virtual void onEnter() override;
         virtual void onExit() override;
         BTNodeStatus execute(const BTParam & param) override;
-
-        const int rangeNear = 150;
-        const int rangeFar = 200;
     };
 
     class FaceToPlayer : public RoleActionNode

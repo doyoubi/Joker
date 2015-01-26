@@ -16,9 +16,11 @@ namespace joker
         _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
         _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
         _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(_rhythmScript));
 
         _metronome.setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
+            getEventDispather("addEnemy").runEvent(i);
         });
         _metronome.setHitCallBack([this](int index, float dt){
             getEventDispather("hit").runEvent(index);
@@ -37,6 +39,10 @@ namespace joker
 
         getEventDispather("miss").addEvent(_rhythmScript.getEvent("attack"), [this](){
             this->addEvent(DirectorEventType::ATTACKED);
+        });
+
+        getEventDispather("addEnemy").addEvent(_rhythmScript.getEvent("addEnemy"), [this](){
+            this->supplyEnemy();
         });
 
         auto enemy = addEnemy(Vec2(500, 200));
@@ -115,13 +121,24 @@ namespace joker
 
     void BattleDirector::update(float dt)
     {
-        BTParam param;
-        param.closest = true;
-        param.playerPosition = getPlayer()->getPosition().x;
-
         _eventManager.executeEvent(this);
-        if (_enemyConductor.getEnemyArray().empty()) return;
-        _enemyConductor.tick(getClosestEnemy(), param);
+        BTParam param;
+        param.playerPosition = getPlayer()->getPosition().x;
+        for (Role * enemy : _enemyConductor.getEnemyArray())
+        {
+            param.closest = enemy == getClosestEnemy();
+            _enemyConductor.tick(enemy, param);
+        }
+    }
+
+    void BattleDirector::supplyEnemy()
+    {
+        if (_enemyConductor.getEnemyArray().size() > 1) return;
+        const int distance = 500;
+        Vec2 posi = getPlayer()->getPosition();
+        if (posi.x < distance) posi.x += distance;
+        else posi.x -= distance;
+        addEnemy(posi);
     }
 
 }
