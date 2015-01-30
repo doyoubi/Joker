@@ -180,7 +180,6 @@ namespace joker
 
     void EnemyFastRunNode::onExit()
     {
-        const float speed = getRole()->getNormalSpeed();
         getRole()->setSpeed(_formerSpeed, getRole()->getSlowSpeed());
     }
 

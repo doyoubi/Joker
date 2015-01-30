@@ -100,6 +100,7 @@ namespace joker
         _player->setIsPlayer();
         _player->setSpeed(200, 20);
         _player->setPosition(position);
+        _player->getPhysicsBody()->setCollidable(true);
     }
 
     RolePtr & BattleDirector::getPlayer()

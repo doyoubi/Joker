@@ -84,7 +84,7 @@ namespace joker
             auto right = phyList[i + 1];
             float distance = right->getX() - left->getX();
             // if enemy is collidable(defence state), then allow collide
-            if (!left->isCollidable() && !right->isCollidable())
+            if (!(left->isCollidable() && right->isCollidable()))
                 continue;
             if (distance >= (left->getWidth() + right->getWidth()) / 2.0f)
                 continue;
