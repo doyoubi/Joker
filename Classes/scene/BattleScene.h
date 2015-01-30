@@ -7,6 +7,7 @@
 
 #include "gameplay/BattleDirector.h"
 #include "sound/SoundManager.h"
+#include "PromptBar.h"
 
 namespace joker
 {
@@ -27,11 +28,13 @@ namespace joker
         BattleUILayer * getUIBattleLayer();
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
         SoundManager * getSoundManager() { return &_soundManager; }
+        unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
 
     private:
         bool init() override;
 
         unique_ptr<BattleDirector> _battleDirector;
+        unique_ptr<PromptBar> _promptBar;
         SoundManager  _soundManager;
     };
 

@@ -63,6 +63,9 @@ namespace joker
         Metronome _metronome;
         std::unordered_map<const char*, RhythmEventDispatcher> _rhythmEventDispaters;
 
+        RhythmScript _promptScript;
+        Metronome _promptMetronome;
+
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
 

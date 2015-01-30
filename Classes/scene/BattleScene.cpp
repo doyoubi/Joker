@@ -29,6 +29,8 @@ namespace joker
         uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
 
+        _promptBar = unique_ptr<PromptBar>(new PromptBar(uiLayer));
+
         getSoundManager()->loadSound("badapple", "music/badapple.wav");
         getSoundManager()->loadSound("hit", "music/knock.wav");
         return true;

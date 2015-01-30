@@ -10,9 +10,16 @@ namespace joker
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene),
         _rhythmScript("music/badapple.json"),   // rhythmScript should init first before metronome and eventDispatcher
-        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f)
+        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
+        _promptScript("music/badapple_prompt.json"),
+        _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02)
+        // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.01
     {
         CHECKNULL(battleScene);
+
+        _promptMetronome.setRhythmCallBack([this](int){
+            this->getScene()->getPromptBar()->addPromptSprite();
+        });
 
         _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
         _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
@@ -36,10 +43,12 @@ namespace joker
 
         getEventDispather("hit").addEvent(_rhythmScript.getEvent("attack"), [this](){
             this->addEvent(DirectorEventType::ATTACK);
+            getScene()->getPromptBar()->hitSuccess();
         });
 
         getEventDispather("miss").addEvent(_rhythmScript.getEvent("attack"), [this](){
             this->addEvent(DirectorEventType::ATTACKED);
+            getScene()->getPromptBar()->miss();
         });
 
         getEventDispather("addEnemy").addEvent(_rhythmScript.getEvent("addEnemy"), [this](){
@@ -48,12 +57,6 @@ namespace joker
 
         addEnemy(Vec2(500, 200));
         addPlayer(Vec2(200, 200));
-
-        getPlayer()->setCollideCallbak([this](const CollideInfo & collideInfo){
-            auto eventType = collideInfo.selfPosition < collideInfo.oppositePosition ?
-                DirectorEventType::COLLIDE_TO_LEFT : DirectorEventType::COLLIDE_TO_RIGHT;
-            this->addEvent(eventType);
-        });
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
     }
@@ -90,7 +93,10 @@ namespace joker
     {
         _metronome.reset();
         _metronome.start();
+        _promptMetronome.reset();
+        _promptMetronome.start();
         _battleScene->getSoundManager()->playSound("badapple");
+        getScene()->getPromptBar()->clearPromptSprite();
     }
 
     void BattleDirector::addPlayer(const cocos2d::Vec2 & position)
@@ -101,6 +107,11 @@ namespace joker
         _player->setSpeed(200, 20);
         _player->setPosition(position);
         _player->getPhysicsBody()->setCollidable(true);
+        _player->setCollideCallbak([this](const CollideInfo & collideInfo){
+            auto eventType = collideInfo.selfPosition < collideInfo.oppositePosition ?
+                DirectorEventType::COLLIDE_TO_LEFT : DirectorEventType::COLLIDE_TO_RIGHT;
+            this->addEvent(eventType);
+        });
     }
 
     RolePtr & BattleDirector::getPlayer()
