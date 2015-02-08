@@ -1,16 +1,20 @@
+#include <limits>
+
 #include "PromptBar.h"
 #include "utils/debug.h"
 
 namespace joker
 {
-    PromptBar::PromptBar(Layer * layer)
+    const float PromptBar::NOT_INIT_TAG = std::numeric_limits<float>::quiet_NaN();
+
+    PromptBar::PromptBar(Node * parent)
     {
         _barBackground = Sprite::create("PromptBar/PromptBarBackground.png");
         CHECKNULL(_barBackground);
         _barBackground->setAnchorPoint(Vec2(0.5f, 0.5f));
         auto size = Director::getInstance()->getVisibleSize();
         _barBackground->setPosition(size.width / 2, 480);
-        layer->addChild(_barBackground);
+        parent->addChild(_barBackground);
 
         auto bgSize = _barBackground->getContentSize();
         _startPoint = Vec2(bgSize.width - 70, bgSize.height / 2.0f);
@@ -24,6 +28,7 @@ namespace joker
 
     void PromptBar::addPromptSprite()
     {
+        DEBUGCHECK(_moveTime != NOT_INIT_TAG, "moveToTime not init");
         auto promptSprite = Sprite::create("PromptBar/PromptSprite.png");
         CHECKNULL(promptSprite);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));

@@ -6,16 +6,35 @@
 
 namespace joker
 {
+    struct MusicScriptFile
+    {
+        MusicScriptFile(const string path, const string & name)
+        : musicName(name), musicFileName(path + name + ".wav"),
+        scriptName(path + name + ".json"), promptName(path + name + "_prompt.json")
+        {
+        }
+        const string musicName;
+        const string musicFileName;
+        const string scriptName;
+        const string promptName;
+        float moveToTime;
+    };
+    MusicScriptFile musicScript("music/", "alice");
 
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene),
-        _rhythmScript("music/badapple.json"),   // rhythmScript should init first before metronome and eventDispatcher
+        _rhythmScript(musicScript.scriptName.c_str()),   // rhythmScript should init first before metronome and eventDispatcher
         _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
-        _promptScript("music/badapple_prompt.json"),
-        _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02)
+        _promptScript(musicScript.promptName.c_str()),
+        _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02f)
         // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.01
     {
         CHECKNULL(battleScene);
+
+        getSoundManager()->loadSound(musicScript.musicName.c_str(), musicScript.musicFileName.c_str());
+        getSoundManager()->loadSound("hit", "music/knock.wav");
+
+        getScene()->getPromptBar()->setMoveToTime(2); // 2000ms, defined in Resources/music/gen_prompt.py
 
         _promptMetronome.setRhythmCallBack([this](int){
             this->getScene()->getPromptBar()->addPromptSprite();
@@ -95,7 +114,7 @@ namespace joker
         _metronome.start();
         _promptMetronome.reset();
         _promptMetronome.start();
-        _battleScene->getSoundManager()->playSound("badapple");
+        getSoundManager()->playSound(musicScript.musicName.c_str());
         getScene()->getPromptBar()->clearPromptSprite();
     }
 

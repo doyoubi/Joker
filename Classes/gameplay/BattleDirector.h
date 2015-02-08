@@ -12,6 +12,7 @@
 #include "gameplay/AI/EnemyConductor.h"
 #include "Event.h"
 #include "role/Role.h"
+#include "sound/SoundManager.h"
 
 
 namespace joker
@@ -48,7 +49,11 @@ namespace joker
 
         void supplyEnemy();
 
+        SoundManager * getSoundManager() { return &_soundManager; }
+
     private:
+
+        SoundManager  _soundManager;
 
         BattleScene * _battleScene = nullptr;   // weak reference
 

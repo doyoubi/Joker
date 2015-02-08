@@ -23,16 +23,15 @@ namespace joker
         battleLayer->setName("BattleLayer");
         addChild(battleLayer);
 
+        _promptBar = unique_ptr<PromptBar>(new PromptBar(this));
+
+        // _battleDirector should be init after _promptBar, battleLayer and before uiLayer
         _battleDirector = unique_ptr<BattleDirector>(new BattleDirector(this));
 
         auto uiLayer = BattleUILayer::create(getBattleDirector());
         uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
 
-        _promptBar = unique_ptr<PromptBar>(new PromptBar(uiLayer));
-
-        getSoundManager()->loadSound("badapple", "music/badapple.wav");
-        getSoundManager()->loadSound("hit", "music/knock.wav");
         return true;
     }
 

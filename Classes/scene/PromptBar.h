@@ -14,11 +14,13 @@ namespace joker
     class PromptBar
     {
     public:
-        PromptBar(Layer * layer);
+        PromptBar(cocos2d::Node * parent);
         void clearPromptSprite();
         // When click start metronome, sometime we will have a double click,
         // and PromptBar will generate two prompt sprite.
         // So, we should clear prompt sprite when metronome start
+
+        void setMoveToTime(float moveToTime) { _moveTime = moveToTime; }
 
         void hitSuccess();
         void hitFail();
@@ -33,7 +35,8 @@ namespace joker
 
         Vec2 _startPoint;
         Vec2 _endPoint;
-        const float _moveTime = 0.9f;
+        static const float NOT_INIT_TAG;
+        float _moveTime = NOT_INIT_TAG;
     };
 }
 

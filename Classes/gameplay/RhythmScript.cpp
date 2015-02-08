@@ -26,7 +26,7 @@ namespace joker
         DEBUGCHECK(!doc.HasParseError(),
             string(scriptFile) + ": " + (doc.GetParseError() == nullptr ? "" : doc.GetParseError())
             );
-        
+
         // get rhythm points
         rapidjson::Value & rhythmPoints = doc["rhythmPoints"];
         DEBUGCHECK(!rhythmPoints.IsNull(), "rhythmPoints parsed to null");

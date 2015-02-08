@@ -61,7 +61,7 @@ namespace joker
         attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
         sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
 
-        director->getScene()->getSoundManager()->playSound("hit");
+        director->getSoundManager()->playSound("hit");
         director->removeEnemy(sufferer);
 
         director->supplyEnemy();
