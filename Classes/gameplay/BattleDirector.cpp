@@ -1,3 +1,5 @@
+#include <string>
+
 #include "BattleDirector.h"
 #include "scene/BattleScene.h"
 #include "role/Role.h"
@@ -6,10 +8,20 @@
 
 namespace joker
 {
+    using std::string;
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    const string musicFmt = ".ogg";
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+    const string musicFmt = ".wav";
+#else
+    ERRORMSG("music for current platform is not supported");
+#endif
+
     struct MusicScriptFile
     {
         MusicScriptFile(const string path, const string & name)
-        : musicName(name), musicFileName(path + name + ".wav"),
+        : musicName(name), musicFileName(path + name + musicFmt),
         scriptName(path + name + ".json"), promptName(path + name + "_prompt.json")
         {
         }
@@ -31,7 +43,6 @@ namespace joker
     {
         CHECKNULL(battleScene);
 
-        getSoundManager()->loadSound(musicScript.musicName.c_str(), musicScript.musicFileName.c_str());
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
         _promptMetronome.setRhythmCallBack([this](int){
@@ -112,7 +123,7 @@ namespace joker
         _metronome.start();
         _promptMetronome.reset();
         _promptMetronome.start();
-        getSoundManager()->playSound(musicScript.musicName.c_str());
+        getSoundManager()->playBackGroundSound(musicScript.musicFileName.c_str());
         getScene()->getPromptBar()->clearPromptSprite();
     }
 

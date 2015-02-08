@@ -30,4 +30,9 @@ namespace joker
         _name2id.emplace(soundName, id);
     }
 
+    void SoundManager::playBackGroundSound(const char * soundName)
+    {
+        SimpleAudioEngine::getInstance()->playBackgroundMusic(soundName);
+    }
+
 }
