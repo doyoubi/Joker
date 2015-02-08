@@ -34,10 +34,8 @@ namespace joker
         getSoundManager()->loadSound(musicScript.musicName.c_str(), musicScript.musicFileName.c_str());
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
-        getScene()->getPromptBar()->setMoveToTime(2); // 2000ms, defined in Resources/music/gen_prompt.py
-
         _promptMetronome.setRhythmCallBack([this](int){
-            this->getScene()->getPromptBar()->addPromptSprite();
+            this->getScene()->getPromptBar()->addPromptSprite(2); // 2000ms, defined in Resources/music/gen_prompt.py
         });
 
         _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));

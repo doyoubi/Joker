@@ -20,13 +20,11 @@ namespace joker
         // and PromptBar will generate two prompt sprite.
         // So, we should clear prompt sprite when metronome start
 
-        void setMoveToTime(float moveToTime) { _moveTime = moveToTime; }
-
         void hitSuccess();
         void hitFail();
         void miss();
         void rhythm();
-        void addPromptSprite();
+        void addPromptSprite(float moveToTime);
 
     private:
         std::queue<Sprite*> _promptSpriteQueue;

@@ -7,8 +7,8 @@ namespace joker {
 
     struct CollideInfo
     {
-        int selfPosition;
-        int oppositePosition;
+        float selfPosition;
+        float oppositePosition;
     };
 
     class PhysicsBody {

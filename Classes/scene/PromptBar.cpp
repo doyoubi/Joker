@@ -26,9 +26,8 @@ namespace joker
         _barBackground->addChild(_goal);
     }
 
-    void PromptBar::addPromptSprite()
+    void PromptBar::addPromptSprite(float moveToTime)
     {
-        DEBUGCHECK(_moveTime != NOT_INIT_TAG, "moveToTime not init");
         auto promptSprite = Sprite::create("PromptBar/PromptSprite.png");
         CHECKNULL(promptSprite);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
@@ -37,7 +36,7 @@ namespace joker
         _promptSpriteQueue.push(promptSprite);
         _barBackground->addChild(promptSprite);
 
-        auto moveTo = cocos2d::MoveTo::create(_moveTime, _endPoint - Vec2(20, 0));
+        auto moveTo = cocos2d::MoveTo::create(moveToTime, _endPoint - Vec2(20, 0));
         promptSprite->runAction(moveTo);
     }
 
