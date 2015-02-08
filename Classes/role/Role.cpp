@@ -25,7 +25,7 @@ namespace joker
 
     Role::~Role()
     {
-        _roleSprite->removeFromParent();
+        _roleSprite->die();
     }
 
     void Role::executeCommand(const RoleCommand & command)

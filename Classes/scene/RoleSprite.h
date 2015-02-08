@@ -19,6 +19,8 @@ namespace joker
 
         cocostudio::Armature * getArmature() { return _armature; }
 
+        void die();
+
     private:
         RoleSprite(cocostudio::Armature * armature);
         cocostudio::Armature * _armature;

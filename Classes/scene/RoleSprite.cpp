@@ -47,4 +47,16 @@ namespace joker
         addChild(_armature);
         _armature->retain();
     }
+
+    void RoleSprite::die()
+    {
+        getArmature()->getAnimation()->play("attacked");
+        getArmature()->getAnimation()->setMovementEventCallFunc(
+            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE)
+            {
+                this->removeFromParent();
+            }
+        });
+    }
 }
