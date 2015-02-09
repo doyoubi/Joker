@@ -132,7 +132,6 @@ namespace joker
         {
             return BTNodeStatus::RUNNING;
         };
-        float _formerSpeed;
     };
 
 

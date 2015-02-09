@@ -9,7 +9,7 @@
         {
           "name": "shield",
           "parent": "",
-          "dI": 0,
+          "dI": -1,
           "x": 56.0,
           "y": 59.980010986328125,
           "z": 7,
@@ -41,7 +41,7 @@
         {
           "name": "arm",
           "parent": "",
-          "dI": 0,
+          "dI": -1,
           "x": 32.0,
           "y": 23.980010986328125,
           "z": 6,
@@ -454,7 +454,7 @@
         },
         {
           "name": "attacked",
-          "dr": 11,
+          "dr": 10,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -699,7 +699,7 @@
         },
         {
           "name": "attackReady",
-          "dr": 6,
+          "dr": 5,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -926,7 +926,7 @@
         },
         {
           "name": "attack",
-          "dr": 13,
+          "dr": 12,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -1243,7 +1243,7 @@
         },
         {
           "name": "static",
-          "dr": 1,
+          "dr": 0,
           "lp": true,
           "to": 0,
           "drTW": 0,
@@ -1338,7 +1338,7 @@
         },
         {
           "name": "run",
-          "dr": 31,
+          "dr": 30,
           "lp": true,
           "to": 0,
           "drTW": 0,
@@ -1493,7 +1493,7 @@
         },
         {
           "name": "slowDown",
-          "dr": 21,
+          "dr": 20,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -1648,7 +1648,7 @@
         },
         {
           "name": "defence",
-          "dr": 11,
+          "dr": 10,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -1875,7 +1875,7 @@
         },
         {
           "name": "defenceNod",
-          "dr": 11,
+          "dr": 10,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -2151,6 +2151,101 @@
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 10,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "fastRun",
+          "dr": 1,
+          "lp": true,
+          "to": 0,
+          "drTW": 0,
+          "twE": 0,
+          "sc": 1.0,
+          "mov_bone_data": [
+            {
+              "name": "head",
+              "dl": 0.0,
+              "frame_data": [
+                {
+                  "dI": 0,
+                  "x": -1.9420292377471924,
+                  "y": 28.391304016113281,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 0,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                }
+              ]
+            },
+            {
+              "name": "body",
+              "dl": 0.0,
+              "frame_data": [
+                {
+                  "dI": 0,
+                  "x": -1.9420292377471924,
+                  "y": 28.391304016113281,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 0,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                }
+              ]
+            },
+            {
+              "name": "right_leg",
+              "dl": 0.0,
+              "frame_data": [
+                {
+                  "dI": 0,
+                  "x": -8.9420289993286133,
+                  "y": 26.391304016113281,
+                  "z": 0,
+                  "cX": -1.0,
+                  "cY": 0.8666667,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 0,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                }
+              ]
+            },
+            {
+              "name": "left_leg",
+              "dl": 0.0,
+              "frame_data": [
+                {
+                  "dI": 0,
+                  "x": -1.9420292377471924,
+                  "y": 28.391304016113281,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 0,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,

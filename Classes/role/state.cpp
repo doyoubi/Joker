@@ -88,6 +88,8 @@ namespace joker
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK && role->isPlayer())
             role->getStateManager()->changeState(PlayerAttackState::create());
         else if (roleAction == RoleAction::ATTACKED && role->isPlayer())
@@ -145,6 +147,8 @@ namespace joker
 
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::STOP)
             role->getStateManager()->changeState(SlowDownState::create(
                     role->getPhysicsBody()->getVelocityX()
@@ -205,6 +209,8 @@ namespace joker
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK && role->isPlayer())
             role->getStateManager()->changeState(PlayerAttackState::create());
         else if (roleAction == RoleAction::ATTACKED && role->isPlayer())

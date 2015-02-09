@@ -67,6 +67,8 @@ namespace joker
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
@@ -134,6 +136,58 @@ namespace joker
 
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::STOP)
+            role->getStateManager()->changeState(DefenceState::create());
+        else if (roleAction == RoleAction::ATTACK)
+            role->getStateManager()->changeState(EnemyAttackState::create());
+        else if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(EnemyAttackedState::create());
+        else if (roleAction == RoleAction::NOD)
+            role->getStateManager()->changeState(DefenceNodState::create());
+        else if (roleAction == RoleAction::IDLE)
+            role->getStateManager()->changeState(IdleState::create());
+    }
+
+    // FastRunState
+    FastRunState::FastRunState(RoleDirection direction)
+        : _direction(direction)
+    {
+    }
+
+    void FastRunState::enterState(Role * role)
+    {
+        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"));
+        role->getArmature()->getAnimation()->play("fastRun");
+
+        const float fastSpeed = role->getNormalSpeed() * 3;
+        float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * fastSpeed;
+
+        role->getPhysicsBody()->setVelocityX(speed);
+        role->getPhysicsBody()->setResistanceX(0);
+        role->getPhysicsBody()->setCollidable(false);
+    }
+
+    void FastRunState::exitState(Role * role)
+    {
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
+    }
+
+    void FastRunState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::RUN
+            && command.get<RoleDirection>("direction") == _direction)
+        {
+            return;
+        }
+
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::STOP)
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::ATTACK)

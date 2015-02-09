@@ -129,25 +129,30 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
+        int defenceDis = 100;
         int rangeNear = param.closest ? 150 : 300;
         int rangeFar = param.closest ? 200 : 400;
 
-        if (param.closest && abs(distance) < rangeFar) getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
-        else getRole()->executeCommand(RoleCommand(RoleAction::IDLE));
-
-        RoleCommand command(RoleAction::RUN);
-        if (distance < 0 && abs(distance) < rangeNear
+        if (abs(distance) < defenceDis)
+            getRole()->executeCommand(RoleAction::DEFENCE);
+        if (param.closest && rangeNear <= abs(distance) && abs(distance) < rangeFar)
+            getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
+        else if (distance < 0 && abs(distance) < rangeNear
             || distance >= 0 && abs(distance) >= rangeFar)
         {
+            RoleCommand command(RoleAction::RUN);
             command.add<RoleDirection>("direction", RoleDirection::LEFT);
             getRole()->executeCommand(command);
         }
         else if (distance < 0 && abs(distance) >= rangeFar
-            || distance >= 0 && abs(distance) <= rangeNear)
+            || distance >= 0 && abs(distance) < rangeNear)
         {
+            RoleCommand command(RoleAction::RUN);
             command.add("direction", RoleDirection::RIGHT);
             getRole()->executeCommand(command);
         }
+        else
+            getRole()->executeCommand(RoleAction::IDLE);
         return BTNodeStatus::RUNNING;
     }
 
@@ -174,13 +179,13 @@ namespace joker
 
     void EnemyFastRunNode::onEnter()
     {
-        _formerSpeed = getRole()->getNormalSpeed();
-        getRole()->setSpeed(3 * _formerSpeed, getRole()->getSlowSpeed());
+        RoleCommand command(RoleAction::FAST_RUN);
+        command.add<RoleDirection>("direction", getRole()->getDirection());
+        getRole()->executeCommand(command);
     }
 
     void EnemyFastRunNode::onExit()
     {
-        getRole()->setSpeed(_formerSpeed, getRole()->getSlowSpeed());
     }
 
 

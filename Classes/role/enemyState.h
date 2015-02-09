@@ -68,6 +68,19 @@ namespace joker
         RoleDirection _direction;
     };
 
+    class FastRunState : public State
+    {
+    public:
+        static StatePtr create(RoleDirection direction) { return StatePtr(new FastRunState(direction)); }
+        FastRunState(RoleDirection direction);
+        void enterState(Role * role) override;
+        void exitState(Role * role) override;
+        void execute(Role * role) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override;
+    private:
+        RoleDirection _direction;
+    };
+
 }
 
 #endif
