@@ -39,6 +39,8 @@ namespace joker
 
 
     // JumpState
+    const float JumpState::speed = 50;
+
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)
     {
@@ -48,6 +50,11 @@ namespace joker
     {
         role->getArmature()->getAnimation()->play("jump");
         role->getPhysicsBody()->jump();
+        if (_velocityX != 0)
+        {
+            float direct = _velocityX > 0 ? 1 : -1;
+            role->getPhysicsBody()->setVelocityX(speed * direct);
+        }
     }
 
     void JumpState::exitState(Role * role)
@@ -59,12 +66,25 @@ namespace joker
     {
         if (role->getPhysicsBody()->getY() == joker::PhysicsWorld::getInstance()->getGroundHeight())
         {
-            if (abs(_velocityX) > 0)
-                role->getStateManager()->changeState(SlowDownState::create(_velocityX));
+            float v = role->getPhysicsBody()->getVelocityX();
+            if (abs(v) > 0)
+                role->getStateManager()->changeState(SlowDownState::create(v));
             else
                 role->getStateManager()->changeState(IdleState::create());
         }
     }
+
+    void JumpState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::RUN)
+        {
+            float direct = command.get<RoleDirection>("direction") == RoleDirection::LEFT ? -1 : 1;
+            role->getPhysicsBody()->setVelocityX(speed * direct);
+            role->setDirection(command.get<RoleDirection>("direction"));
+        }
+    }
+
 
     // CollideState
     CollideState::CollideState(RoleDirection direction)

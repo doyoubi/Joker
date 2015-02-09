@@ -17,7 +17,7 @@ namespace joker {
     float PhysicsBody::_defaultSpeed(160.0f);
 
     PhysicsBody::PhysicsBody(float x, float y, float w, float h) :
-        _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0),
+        _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0), _r(0), _collidable(false),
         _landCallback(nullptr), _jumpCallback(nullptr) {
         PhysicsWorld::getInstance()->addPhysicsBody(this);
     }

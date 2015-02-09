@@ -34,9 +34,10 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         float _velocityX;
+        static const float speed;
     };
 
     class CollideState : public State
