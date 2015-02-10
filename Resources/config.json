@@ -1,0 +1,39 @@
+{
+    "Metronome": {
+        "hitDeltaTime": 0.04,
+        "promptSpriteMoveTime": 2
+    },
+    "RoleProperty": {
+        "player": {
+            "width": 50,
+            "height": 150,
+            "attackChangedDistance": 200,
+            "jumpSpeedY": 50,
+            "slowSpeed": 10,
+            "normalSpeed": 200
+        },
+        "enemy": {
+            "width": 50,
+            "height": 150,
+            "slowSpeed": 10,
+            "normalSpeed": 100,
+            "fastSpeed": 300,
+            "maxQuantity": 3
+        }
+    },
+    "EnemyApearPosition": {
+        "distance": 400
+    },
+    "EnemyKeepDistance": {
+        "defenceDis": 120,
+        "closest": {
+            "rangeNear": 120,
+            "rangeFar": 200
+        },
+        "notClosest": {
+            "rangeNear": 240,
+            "rangeFar": 320
+        },
+        "FastRunDistance": 370
+    }
+}

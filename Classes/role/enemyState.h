@@ -79,6 +79,7 @@ namespace joker
         void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         RoleDirection _direction;
+        static const float fastSpeed;
     };
 
 }

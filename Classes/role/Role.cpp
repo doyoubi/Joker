@@ -8,13 +8,13 @@ namespace joker
     using std::string;
 
     // Role
-    Role::Role(RoleSprite * roleSprite)
+    Role::Role(RoleSprite * roleSprite, int width, int height)
         : _simplePhysicsBody(0, 0, 0, 0), _roleSprite(roleSprite)
     {
         CHECKNULL(roleSprite);
 
-        _simplePhysicsBody.setWidth(50);
-        _simplePhysicsBody.setHeight(150);
+        _simplePhysicsBody.setWidth(width);
+        _simplePhysicsBody.setHeight(height);
         _simplePhysicsBody.setCollidable(false);
 
         // require roleSprite->_armature initialized

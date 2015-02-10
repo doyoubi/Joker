@@ -5,6 +5,7 @@
 #include "role/Role.h"
 #include "utils/debug.h"
 #include "SimplePhysics/PhysicsWorld.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -36,17 +37,19 @@ namespace joker
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene),
         _rhythmScript(musicScript.scriptName.c_str()),   // rhythmScript should init first before metronome and eventDispatcher
-        _metronome(_rhythmScript.getOffsetRhythmScript(0), 0.04f),
+        _metronome(_rhythmScript.getOffsetRhythmScript(0), Config::getInstance().getValue({"Metronome", "hitDeltaTime"})),
         _promptScript(musicScript.promptName.c_str()),
         _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02f)
-        // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.01
+        // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
     {
         CHECKNULL(battleScene);
 
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
         _promptMetronome.setRhythmCallBack([this](int){
-            this->getScene()->getPromptBar()->addPromptSprite(2); // 2000ms, defined in Resources/music/gen_prompt.py
+            this->getScene()->getPromptBar()->addPromptSprite(
+                Config::getInstance().getValue({ "Metronome", "promptSpriteMoveTime" }));
+            // this (in second) must be equivalent to move_to_time (in millisecond) defined in Resources/music/gen_prompt.py
         });
 
         _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
@@ -131,9 +134,12 @@ namespace joker
     void BattleDirector::addPlayer(const cocos2d::Vec2 & position)
     {
         auto player = _battleScene->getBattleLayer()->addPlayerSprite(position);
-        _player = RolePtr(new Role(player));
+        int width = Config::getInstance().getValue({ "RoleProperty", "player", "width" });
+        int height = Config::getInstance().getValue({ "RoleProperty", "player", "height" });
+        _player = RolePtr(new Role(player,width, height));
         _player->setIsPlayer();
-        _player->setSpeed(200, 20);
+        _player->setSpeed(Config::getInstance().getValue({"RoleProperty", "player", "normalSpeed"}),
+            Config::getInstance().getValue({ "RoleProperty", "player", "slowSpeed" }));
         _player->setPosition(position);
         _player->getPhysicsBody()->setCollidable(true);
         _player->setCollideCallbak([this](const CollideInfo & collideInfo){
@@ -151,8 +157,11 @@ namespace joker
     void BattleDirector::addEnemy(const cocos2d::Vec2 & position)
     {
         auto enemySprite = _battleScene->getBattleLayer()->addEnemySprite(position);
-        auto enemy = RolePtr(new Role(enemySprite));
-        enemy->setSpeed(100, 10);
+        int width = Config::getInstance().getValue({ "RoleProperty", "enemy", "width" });
+        int height = Config::getInstance().getValue({ "RoleProperty", "enemy", "height" });
+        auto enemy = RolePtr(new Role(enemySprite, width, height));
+        enemy->setSpeed(Config::getInstance().getValue({"RoleProperty", "enemy", "normalSpeed"}),
+            Config::getInstance().getValue({ "RoleProperty", "enemy", "slowSpeed" }));
         enemy->setPosition(position);
         _enemyConductor.addEnemy(std::move(enemy));
     }
@@ -183,25 +192,15 @@ namespace joker
 
     void BattleDirector::supplyEnemy()
     {
-        if (_enemyConductor.getEnemyArray().size() > 1) return;
-        const int distance = 500;
-        float posi = getPlayer()->getPosition().x;
-        float delta = distance;
-        if (_enemyConductor.getEnemyArray().empty())
-        {
-            if (posi > distance) delta *= -1;
-        }
-        else
-        {
-            RolePtr & closest = getClosestEnemy();
-            if (closest->getPosition().x > getPlayer()->getPosition().x)
-                delta *= -1;
-        }
+        static int maxEnemyNum = Config::getInstance().getValue({"RoleProperty", "enemy", "maxQuantity"});
+        if (_enemyConductor.getEnemyArray().size() >= maxEnemyNum) return;
         const int width = joker::PhysicsWorld::getInstance()->getWorldWidth();
-        if (posi + delta < 1.5 * Role::PlayerShortAttackScope
-            || posi + delta > width - Role::PlayerShortAttackScope)
-            delta *= -1;
-        addEnemy(Vec2(posi + delta, 0));
+        int posi = getPlayer()->getPosition().x;
+        int randomDirection = posi % 2 == 0 ? 1 : -1;
+        int distance = randomDirection * Config::getInstance().getValue({"EnemyApearPosition", "distance"});
+        if (posi + distance <= 0 || posi + distance > width)
+            distance *= -1;
+        addEnemy(Vec2(posi + distance, 0));
     }
 
 }

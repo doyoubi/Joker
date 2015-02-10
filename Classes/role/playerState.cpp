@@ -1,15 +1,17 @@
 #include "playerState.h"
 #include "Role.h"
 #include "SimplePhysics/PhysicsWorld.h"
+#include "utils/config.h"
 
 namespace joker
 {
 
     // PlayerAttackState
+    const float PlayerAttackState::changedDistance = Config::getInstance().getValue({ "RoleProperty", "player", "attackChangedDistance" });
+
     void PlayerAttackState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attack");
-        const float changedDistance = 200;
         float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
         role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
     }
@@ -39,7 +41,7 @@ namespace joker
 
 
     // JumpState
-    const float JumpState::speedX = 50;
+    const float JumpState::speedX = Config::getInstance().getValue({"RoleProperty", "player", "jumpSpeedY"});
 
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)

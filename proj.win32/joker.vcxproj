@@ -156,6 +156,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsBody.cpp" />
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsWorld.cpp" />
     <ClCompile Include="..\Classes\sound\SoundManager.cpp" />
+    <ClCompile Include="..\Classes\utils\config.cpp" />
     <ClCompile Include="..\Classes\utils\debug.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -180,6 +181,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsBody.h" />
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsWorld.h" />
     <ClInclude Include="..\Classes\sound\SoundManager.h" />
+    <ClInclude Include="..\Classes\utils\config.h" />
     <ClInclude Include="..\Classes\utils\debug.h" />
     <ClInclude Include="..\Classes\utils\VarParams.h" />
     <ClInclude Include="main.h" />

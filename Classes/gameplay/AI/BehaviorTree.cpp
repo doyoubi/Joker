@@ -1,6 +1,7 @@
 #include "BehaviorTree.h"
 #include "role/Role.h"
 #include "utils/debug.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -129,10 +130,11 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
-        const int gap = 70;
-        int defenceDis = (getRole()->getPhysicsBody()->getWidth() + param.playerWidth) / 2 + gap;
-        int rangeNear = param.closest ? defenceDis : defenceDis + 100;
-        int rangeFar = rangeNear + 100;
+        int defenceDis = Config::getInstance().getValue({"EnemyKeepDistance", "defenceDis"});
+        int rangeNear = Config::getInstance().getValue({
+            "EnemyKeepDistance", param.closest? "closest" : "notClosest", "rangeNear"});
+        int rangeFar = Config::getInstance().getValue({ 
+            "EnemyKeepDistance", param.closest ? "closest" : "notClosest", "rangeFar"});
 
         if (abs(distance) < defenceDis)
             getRole()->executeCommand(RoleAction::DEFENCE);
@@ -173,7 +175,7 @@ namespace joker
     }
 
     // EnemyFastRunNode
-    float EnemyFastRunNode::distance = 300;
+    float EnemyFastRunNode::distance = Config::getInstance().getValue({"EnemyKeepDistance", "FastRunDistance"});
 
     EnemyFastRunNode::EnemyFastRunNode(BTprecondition && precondition, Role * role)
         : RoleActionNode(std::move(precondition), role)

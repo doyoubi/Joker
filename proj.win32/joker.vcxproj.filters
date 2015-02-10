@@ -95,6 +95,9 @@
     <ClCompile Include="..\Classes\scene\PromptBar.cpp">
       <Filter>Classes\scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\utils\config.cpp">
+      <Filter>Classes\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -161,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\scene\PromptBar.h">
       <Filter>Classes\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\utils\config.h">
+      <Filter>Classes\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "enemyState.h"
 #include "Role.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -7,8 +8,6 @@ namespace joker
     void EnemyAttackState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attack");
-        const float changedDistance = 200;
-        float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
     }
 
     void EnemyAttackState::execute(Role * role)
@@ -151,6 +150,8 @@ namespace joker
     }
 
     // FastRunState
+    const float FastRunState::fastSpeed = Config::getInstance().getValue({ "RoleProperty", "enemy", "fastSpeed" });
+
     FastRunState::FastRunState(RoleDirection direction)
         : _direction(direction)
     {
@@ -160,8 +161,6 @@ namespace joker
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"));
         role->getArmature()->getAnimation()->play("fastRun");
-
-        const float fastSpeed = role->getNormalSpeed() * 3;
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * fastSpeed;
 
         role->getPhysicsBody()->setVelocityX(speed);
