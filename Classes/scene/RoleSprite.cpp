@@ -24,7 +24,7 @@ namespace joker
     RoleSprite * RoleSprite::create(const string & animationName)
     {
         // check if animation has been loaded
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName));
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"));
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"));
         CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"));

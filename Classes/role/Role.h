@@ -27,9 +27,6 @@ namespace joker
     class Role
     {
     public:
-        //const static int PlayerShortAttackScope = 50;
-        //const static int PlayerLongAttackScope = 300;
-        //const static int EnemyAttackScope = 300;
 
         Role(RoleSprite * roleSprite, int width, int height);
         ~Role();

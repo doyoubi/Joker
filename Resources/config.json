@@ -10,7 +10,8 @@
             "attackChangedDistance": 200,
             "jumpSpeedY": 50,
             "slowSpeed": 10,
-            "normalSpeed": 200
+            "normalSpeed": 200,
+            "attackStageQuantity": 2
         },
         "enemy": {
             "width": 50,

@@ -11,10 +11,12 @@ namespace joker
     public:
         static StatePtr create() { return StatePtr(new PlayerAttackState()); }
         void enterState(Role * role) override;
-        void exitState(Role * role) override {};
+        void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
     private:
+        static int _currStage;
+        static const int attackStageQuantity;
         static const float changedDistance;
     };
 

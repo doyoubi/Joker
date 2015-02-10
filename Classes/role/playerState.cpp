@@ -1,17 +1,27 @@
+#include "cocostudio/CCArmature.h"
+
 #include "playerState.h"
 #include "Role.h"
 #include "SimplePhysics/PhysicsWorld.h"
 #include "utils/config.h"
+#include "utils/debug.h"
 
 namespace joker
 {
 
     // PlayerAttackState
     const float PlayerAttackState::changedDistance = Config::getInstance().getValue({ "RoleProperty", "player", "attackChangedDistance" });
+    const int PlayerAttackState::attackStageQuantity = Config::getInstance().getValue({ "RoleProperty", "player", "attackStageQuantity" });
+    int PlayerAttackState::_currStage = 0;
 
     void PlayerAttackState::enterState(Role * role)
     {
-        role->getArmature()->getAnimation()->play("attack");
+        for (int i = 0; i < attackStageQuantity; ++i)
+        {
+            CHECKNULL(cocostudio::ArmatureDataManager::getInstance()->getAnimationData(
+                "joker")->getMovement("attack" + std::to_string(i)));
+        }
+        role->getArmature()->getAnimation()->play("attack" + std::to_string(_currStage));
         float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
         role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
     }
@@ -22,6 +32,11 @@ namespace joker
         {
             role->getStateManager()->changeState(IdleState::create());
         }
+    }
+
+    void PlayerAttackState::exitState(Role * role)
+    {
+        _currStage = (_currStage + 1) % attackStageQuantity;
     }
 
 

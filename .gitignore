@@ -9,6 +9,7 @@ cocos2d/cocos/**/*.vcxproj.user
 cocos2d/cocos/platform/
 
 **/Debug.win32/
+**/Release.win32/
 *.suo
 proj.win32/*.sdf
 proj.win32/*.opensdf
