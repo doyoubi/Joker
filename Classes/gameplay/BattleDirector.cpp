@@ -172,6 +172,7 @@ namespace joker
     {
         _eventManager.executeEvent(this);
         BTParam param;
+        param.playerWidth = getPlayer()->getPhysicsBody()->getWidth();
         param.playerPosition = getPlayer()->getPosition().x;
         for (RolePtr & enemy : _enemyConductor.getEnemyArray())
         {

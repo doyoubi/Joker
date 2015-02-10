@@ -149,7 +149,7 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
             role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::STOP)
+        else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(SlowDownState::create(
                     role->getPhysicsBody()->getVelocityX()
             ));
@@ -165,8 +165,6 @@ namespace joker
             role->getStateManager()->changeState(JumpState::create(
             role->getPhysicsBody()->getVelocityX()
             ));
-        else if (roleAction == RoleAction::NOD)
-            role->getStateManager()->changeState(NodState::create());
         else if (roleAction == RoleAction::DEFENCE)
             role->getStateManager()->changeState(CrawlState::create(
                 role->getPhysicsBody()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT

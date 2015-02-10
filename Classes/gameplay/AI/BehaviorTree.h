@@ -13,6 +13,7 @@ namespace joker
     {
         int playerPosition;
         bool closest;
+        int playerWidth;
     };
 
     typedef std::function<bool(const BTParam &)> BTprecondition;
@@ -125,6 +126,7 @@ namespace joker
     {
     public:
         EnemyFastRunNode(BTprecondition && precondition, Role * role);
+        static float distance; // when the distance between player and enemy is larger than this distance, enemy fast run
     private:
         virtual void onEnter() override;
         virtual void onExit() override;

@@ -64,6 +64,9 @@ namespace joker
         static BattleUILayer * create(unique_ptr<BattleDirector> & director);
     private:
         bool init(unique_ptr<BattleDirector> & director);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+        void registerKeyBoard(unique_ptr<BattleDirector> & director);
+#endif
     };
 
 }

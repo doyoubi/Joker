@@ -141,6 +141,10 @@ namespace joker
         CHECKNULL(director);
         if (!Layer::init()) return false;
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+        registerKeyBoard(director);
+#endif
+
         using namespace cocostudio;
         using namespace cocos2d::ui;
         auto battleUI = GUIReader::getInstance()->widgetFromJsonFile("battleUI/battleUI.json");
@@ -161,7 +165,11 @@ namespace joker
                 director->sendCommand(director->getPlayer(), command);
             }
             else if (touchEvent == Widget::TouchEventType::ENDED)
-                director->sendCommand(director->getPlayer(), RoleAction::STOP);
+            {
+                RoleCommand command(RoleAction::STOP);
+                command.add<RoleDirection>("direction", RoleDirection::LEFT);
+                director->sendCommand(director->getPlayer(), command);
+            }
         });
 
         rightRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -172,7 +180,11 @@ namespace joker
                 director->sendCommand(director->getPlayer(), command);
             }
             else if (touchEvent == Widget::TouchEventType::ENDED)
-                director->sendCommand(director->getPlayer(), RoleAction::STOP);
+            {
+                RoleCommand command(RoleAction::STOP);
+                command.add<RoleDirection>("direction", RoleDirection::RIGHT);
+                director->sendCommand(director->getPlayer(), command);
+            }
         });
 
         attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -190,6 +202,49 @@ namespace joker
         });
 
         return true;
+    }
+
+    void BattleUILayer::registerKeyBoard(unique_ptr<BattleDirector> & director)
+    {
+        auto listener = EventListenerKeyboard::create();
+
+        listener->onKeyPressed = [&director](EventKeyboard::KeyCode keyCode, Event* event){
+            if (keyCode == EventKeyboard::KeyCode::KEY_A)
+            {
+                RoleCommand command(RoleAction::RUN);
+                command.add<RoleDirection>("direction", RoleDirection::LEFT);
+                director->sendCommand(director->getPlayer(), command);
+            }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_D)
+            {
+                RoleCommand command(RoleAction::RUN);
+                command.add<RoleDirection>("direction", RoleDirection::RIGHT);
+                director->sendCommand(director->getPlayer(), command);
+            }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_W)
+            {
+                director->sendCommand(director->getPlayer(), RoleAction::JUMP);
+            }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_J)
+            {
+                director->tagMetronome();
+            }
+        };
+        listener->onKeyReleased = [&director](EventKeyboard::KeyCode keyCode, Event* event){
+            if (keyCode == EventKeyboard::KeyCode::KEY_A)
+            {
+                RoleCommand command(RoleAction::STOP);
+                command.add<RoleDirection>("direction", RoleDirection::LEFT);
+                director->sendCommand(director->getPlayer(), command);
+            }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_D)
+            {
+                RoleCommand command(RoleAction::STOP);
+                command.add<RoleDirection>("direction", RoleDirection::RIGHT);
+                director->sendCommand(director->getPlayer(), command);
+            }
+        };
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     }
 
 

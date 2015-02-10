@@ -138,7 +138,7 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
             role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::STOP)
+        else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
@@ -188,14 +188,12 @@ namespace joker
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
             role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::STOP)
+        else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
             role->getStateManager()->changeState(EnemyAttackedState::create());
-        else if (roleAction == RoleAction::NOD)
-            role->getStateManager()->changeState(DefenceNodState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
     }

@@ -129,9 +129,10 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
-        int defenceDis = 100;
-        int rangeNear = param.closest ? 150 : 300;
-        int rangeFar = param.closest ? 200 : 400;
+        const int gap = 70;
+        int defenceDis = (getRole()->getPhysicsBody()->getWidth() + param.playerWidth) / 2 + gap;
+        int rangeNear = param.closest ? defenceDis : defenceDis + 100;
+        int rangeFar = rangeNear + 100;
 
         if (abs(distance) < defenceDis)
             getRole()->executeCommand(RoleAction::DEFENCE);
@@ -172,6 +173,8 @@ namespace joker
     }
 
     // EnemyFastRunNode
+    float EnemyFastRunNode::distance = 300;
+
     EnemyFastRunNode::EnemyFastRunNode(BTprecondition && precondition, Role * role)
         : RoleActionNode(std::move(precondition), role)
     {
@@ -210,7 +213,7 @@ namespace joker
         }, enemy));
 
         auto fastRun = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){
-            return std::abs(param.playerPosition - enemy->getPosition().x) > 500;
+            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance;
         } , enemy));
 
         sel->addChild(std::move(keepDistance));
