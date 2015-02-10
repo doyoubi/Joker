@@ -67,6 +67,13 @@ namespace joker
 
     void PromptBar::rhythm()
     {
+        if (_promptSpriteQueue.empty()) return;
+
+        Sprite * s = _promptSpriteQueue.front();
+        auto scale = cocos2d::ScaleBy::create(0.1f, 1.5f);
+        auto rev = scale->reverse();
+        auto seq = cocos2d::Sequence::create(scale, rev, nullptr);
+        s->runAction(seq);
     }
 
     void PromptBar::clearPromptSprite()

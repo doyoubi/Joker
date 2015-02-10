@@ -39,7 +39,7 @@ namespace joker
 
 
     // JumpState
-    const float JumpState::speed = 50;
+    const float JumpState::speedX = 50;
 
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)
@@ -53,7 +53,7 @@ namespace joker
         if (_velocityX != 0)
         {
             float direct = _velocityX > 0 ? 1 : -1;
-            role->getPhysicsBody()->setVelocityX(speed * direct);
+            role->getPhysicsBody()->setVelocityX(speedX * direct);
         }
     }
 
@@ -80,9 +80,11 @@ namespace joker
         if (roleAction == RoleAction::RUN)
         {
             float direct = command.get<RoleDirection>("direction") == RoleDirection::LEFT ? -1 : 1;
-            role->getPhysicsBody()->setVelocityX(speed * direct);
+            role->getPhysicsBody()->setVelocityX(speedX * direct);
             role->setDirection(command.get<RoleDirection>("direction"));
         }
+        else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
     }
 
 

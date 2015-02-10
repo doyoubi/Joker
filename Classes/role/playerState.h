@@ -37,7 +37,7 @@ namespace joker
         void executeCommand(Role * role, const RoleCommand & command) override;
     private:
         float _velocityX;
-        static const float speed;
+        static const float speedX;
     };
 
     class CollideState : public State

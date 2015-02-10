@@ -67,6 +67,7 @@ namespace joker
 
         getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
             this->addEvent(DirectorEventType::NOD);
+            getScene()->getPromptBar()->rhythm();
         });
 
         getEventDispather("hit").addEvent(_rhythmScript.getEvent("attack"), [this](){

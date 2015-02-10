@@ -13,6 +13,8 @@ namespace joker {
 
     class PhysicsBody {
     public:
+        static float JumpInitSpeedY;
+
         PhysicsBody(float x, float y, float w, float h);
         ~PhysicsBody();
 
