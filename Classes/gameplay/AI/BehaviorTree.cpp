@@ -130,10 +130,10 @@ namespace joker
         using std::abs;
         int distance = getRole()->getPosition().x - param.playerPosition;
 
-        int defenceDis = Config::getInstance().getValue({"EnemyKeepDistance", "defenceDis"});
-        int rangeNear = Config::getInstance().getValue({
+        int defenceDis = Config::getInstance().getDoubleValue({"EnemyKeepDistance", "defenceDis"});
+        int rangeNear = Config::getInstance().getDoubleValue({
             "EnemyKeepDistance", param.closest? "closest" : "notClosest", "rangeNear"});
-        int rangeFar = Config::getInstance().getValue({ 
+        int rangeFar = Config::getInstance().getDoubleValue({ 
             "EnemyKeepDistance", param.closest ? "closest" : "notClosest", "rangeFar"});
 
         if (abs(distance) < defenceDis)
@@ -175,7 +175,7 @@ namespace joker
     }
 
     // EnemyFastRunNode
-    float EnemyFastRunNode::distance = Config::getInstance().getValue({"EnemyKeepDistance", "FastRunDistance"});
+    float EnemyFastRunNode::distance = Config::getInstance().getDoubleValue({"EnemyKeepDistance", "FastRunDistance"});
 
     EnemyFastRunNode::EnemyFastRunNode(BTprecondition && precondition, Role * role)
         : RoleActionNode(std::move(precondition), role)

@@ -8,7 +8,7 @@ namespace joker
     using std::string;
 
     // Role
-    Role::Role(RoleSprite * roleSprite, int width, int height)
+    Role::Role(RoleSprite * roleSprite, int width, int height, float spriteScale)
         : _simplePhysicsBody(0, 0, 0, 0), _roleSprite(roleSprite)
     {
         CHECKNULL(roleSprite);
@@ -21,6 +21,8 @@ namespace joker
         _stateManager = std::move(std::unique_ptr<StateManager>(
             new StateManager(this, IdleState::create())
             ));
+
+        _roleSprite->setScale(spriteScale);
     }
 
     Role::~Role()
@@ -35,13 +37,15 @@ namespace joker
 
     RoleDirection Role::getDirection() const
     {
-        DEBUGCHECK(std::abs(_roleSprite->getScaleX()) == 1.0f, "abs of scale x must be 1");
-        return _roleSprite->getScaleX() == 1 ? RoleDirection::RIGHT : RoleDirection::LEFT;
+        //DEBUGCHECK(std::abs(_roleSprite->getScaleX()) == 1.0f, "abs of scale x must be 1");
+        return _roleSprite->getScaleX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT;
     }
 
     void Role::setDirection(RoleDirection direction)
     {
-        _roleSprite->setScaleX(direction == RoleDirection::RIGHT ? 1 : -1);
+        float sx = std::abs(_roleSprite->getScaleX());
+        if (direction == RoleDirection::LEFT) sx *= -1;
+        _roleSprite->setScaleX(sx);
     }
 
     void Role::setPosition(const Vec2 & position)

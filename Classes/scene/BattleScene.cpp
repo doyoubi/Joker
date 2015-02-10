@@ -9,6 +9,7 @@
 #include "gameplay/BattleDirector.h"
 #include "utils/debug.h"
 #include "SimplePhysics/PhysicsWorld.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -76,7 +77,8 @@ namespace joker
 
     RoleSprite * BattleLayer::addEnemySprite(const Vec2 & position)
     {
-        RoleSprite * enemy = RoleSprite::create("enemy");
+        RoleSprite * enemy = RoleSprite::create(
+            Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }));
         enemy->setPosition(position);
         _enemyArray.push_back(enemy);
         addChild(enemy);
@@ -95,7 +97,8 @@ namespace joker
     RoleSprite * BattleLayer::addPlayerSprite(const cocos2d::Vec2 & position)
     {
         DEBUGCHECK(_player == nullptr, "player already exist");
-        _player = RoleSprite::create("joker");
+        _player = RoleSprite::create(
+            Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}));
         _player->setPosition(200, 200);
         addChild(_player);
         return _player;

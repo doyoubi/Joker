@@ -4,6 +4,7 @@
 #include "cocostudio/CocoStudio.h"
 
 #include <initializer_list>
+#include <string>
 
 namespace joker
 {
@@ -11,7 +12,8 @@ namespace joker
     {
     public:
         static Config & getInstance();
-        float getValue(std::initializer_list<const char*> valueName);
+        float getDoubleValue(std::initializer_list<const char*> valueName);
+        std::string getStringValue(std::initializer_list<const char*> valueName);
     private:
         Config(const char * configJsonFile);
         rapidjson::Document _jsonDoc;

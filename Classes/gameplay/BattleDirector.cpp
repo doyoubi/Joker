@@ -37,7 +37,7 @@ namespace joker
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene),
         _rhythmScript(musicScript.scriptName.c_str()),   // rhythmScript should init first before metronome and eventDispatcher
-        _metronome(_rhythmScript.getOffsetRhythmScript(0), Config::getInstance().getValue({"Metronome", "hitDeltaTime"})),
+        _metronome(_rhythmScript.getOffsetRhythmScript(0), Config::getInstance().getDoubleValue({"Metronome", "hitDeltaTime"})),
         _promptScript(musicScript.promptName.c_str()),
         _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02f)
         // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
@@ -48,7 +48,7 @@ namespace joker
 
         _promptMetronome.setRhythmCallBack([this](int){
             this->getScene()->getPromptBar()->addPromptSprite(
-                Config::getInstance().getValue({ "Metronome", "promptSpriteMoveTime" }));
+                Config::getInstance().getDoubleValue({ "Metronome", "promptSpriteMoveTime" }));
             // this (in second) must be equivalent to move_to_time (in millisecond) defined in Resources/music/gen_prompt.py
         });
 
@@ -134,12 +134,13 @@ namespace joker
     void BattleDirector::addPlayer(const cocos2d::Vec2 & position)
     {
         auto player = _battleScene->getBattleLayer()->addPlayerSprite(position);
-        int width = Config::getInstance().getValue({ "RoleProperty", "player", "width" });
-        int height = Config::getInstance().getValue({ "RoleProperty", "player", "height" });
-        _player = RolePtr(new Role(player,width, height));
+        int width = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "width" });
+        int height = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "height" });
+        float scale = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "spriteScale" });
+        _player = RolePtr(new Role(player,width, height, scale));
         _player->setIsPlayer();
-        _player->setSpeed(Config::getInstance().getValue({"RoleProperty", "player", "normalSpeed"}),
-            Config::getInstance().getValue({ "RoleProperty", "player", "slowSpeed" }));
+        _player->setSpeed(Config::getInstance().getDoubleValue({"RoleProperty", "player", "normalSpeed"}),
+            Config::getInstance().getDoubleValue({ "RoleProperty", "player", "slowSpeed" }));
         _player->setPosition(position);
         _player->getPhysicsBody()->setCollidable(true);
         _player->setCollideCallbak([this](const CollideInfo & collideInfo){
@@ -157,11 +158,12 @@ namespace joker
     void BattleDirector::addEnemy(const cocos2d::Vec2 & position)
     {
         auto enemySprite = _battleScene->getBattleLayer()->addEnemySprite(position);
-        int width = Config::getInstance().getValue({ "RoleProperty", "enemy", "width" });
-        int height = Config::getInstance().getValue({ "RoleProperty", "enemy", "height" });
-        auto enemy = RolePtr(new Role(enemySprite, width, height));
-        enemy->setSpeed(Config::getInstance().getValue({"RoleProperty", "enemy", "normalSpeed"}),
-            Config::getInstance().getValue({ "RoleProperty", "enemy", "slowSpeed" }));
+        int width = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "width" });
+        int height = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "height" });
+        float scale = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "spriteScale" });
+        auto enemy = RolePtr(new Role(enemySprite, width, height, scale));
+        enemy->setSpeed(Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "normalSpeed"}),
+            Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "slowSpeed" }));
         enemy->setPosition(position);
         _enemyConductor.addEnemy(std::move(enemy));
     }
@@ -192,12 +194,12 @@ namespace joker
 
     void BattleDirector::supplyEnemy()
     {
-        static int maxEnemyNum = Config::getInstance().getValue({"RoleProperty", "enemy", "maxQuantity"});
+        static int maxEnemyNum = Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "maxQuantity"});
         if (_enemyConductor.getEnemyArray().size() >= maxEnemyNum) return;
         const int width = joker::PhysicsWorld::getInstance()->getWorldWidth();
         int posi = getPlayer()->getPosition().x;
         int randomDirection = posi % 2 == 0 ? 1 : -1;
-        int distance = randomDirection * Config::getInstance().getValue({"EnemyApearPosition", "distance"});
+        int distance = randomDirection * Config::getInstance().getDoubleValue({"EnemyApearPosition", "distance"});
         if (posi + distance <= 0 || posi + distance > width)
             distance *= -1;
         addEnemy(Vec2(posi + distance, 0));

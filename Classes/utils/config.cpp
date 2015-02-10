@@ -27,7 +27,7 @@ namespace joker
             );
     }
 
-    float Config::getValue(std::initializer_list<const char*> valueName)
+    float Config::getDoubleValue(std::initializer_list<const char*> valueName)
     {
         rapidjson::Value * v = &_jsonDoc;
         string fullPathForDebug;
@@ -54,4 +54,29 @@ namespace joker
         }
         return std::numeric_limits<float>::quiet_NaN();
     }
+
+    std::string Config::getStringValue(std::initializer_list<const char*> valueName)
+    {
+        rapidjson::Value * v = &_jsonDoc;
+        string fullPathForDebug;
+        for (const char * s : valueName)
+            fullPathForDebug += string(":") + string(s);
+        for (const char * s : valueName)
+        {
+            v = &((*v)[s]);
+            DEBUGCHECK(!v->IsNull(),
+                string("config json: no such key: ") + s + ". Required full path is: " + fullPathForDebug);
+            if (v->IsString())
+            {
+                return string(v->GetString());
+            }
+            else if (v->IsObject())
+            {
+                continue;
+            }
+            else ERRORMSG("config json: use unsupported json type, or path in programm is not complete");
+        }
+        return string();
+    }
+
 }

@@ -28,7 +28,7 @@ namespace joker
     {
     public:
 
-        Role(RoleSprite * roleSprite, int width, int height);
+        Role(RoleSprite * roleSprite, int width, int height, float SpriteScale);
         ~Role();
 
         void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)

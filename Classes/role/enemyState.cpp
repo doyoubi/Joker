@@ -150,7 +150,7 @@ namespace joker
     }
 
     // FastRunState
-    const float FastRunState::fastSpeed = Config::getInstance().getValue({ "RoleProperty", "enemy", "fastSpeed" });
+    const float FastRunState::fastSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "fastSpeed" });
 
     FastRunState::FastRunState(RoleDirection direction)
         : _direction(direction)

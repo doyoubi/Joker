@@ -5,6 +5,8 @@
     },
     "RoleProperty": {
         "player": {
+            "animationName": "joker",
+            "spriteScale": 0.6,
             "width": 50,
             "height": 150,
             "attackChangedDistance": 200,
@@ -14,12 +16,14 @@
             "attackStageQuantity": 2
         },
         "enemy": {
+            "animationName": "enemy",
+            "spriteScale": 1.2,
             "width": 50,
             "height": 150,
             "slowSpeed": 10,
             "normalSpeed": 100,
             "fastSpeed": 300,
-            "maxQuantity": 3
+            "maxQuantity": 2
         }
     },
     "EnemyApearPosition": {

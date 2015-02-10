@@ -10,8 +10,8 @@ namespace joker
 {
 
     // PlayerAttackState
-    const float PlayerAttackState::changedDistance = Config::getInstance().getValue({ "RoleProperty", "player", "attackChangedDistance" });
-    const int PlayerAttackState::attackStageQuantity = Config::getInstance().getValue({ "RoleProperty", "player", "attackStageQuantity" });
+    const float PlayerAttackState::changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
+    const int PlayerAttackState::attackStageQuantity = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
     int PlayerAttackState::_currStage = 0;
 
     void PlayerAttackState::enterState(Role * role)
@@ -56,7 +56,7 @@ namespace joker
 
 
     // JumpState
-    const float JumpState::speedX = Config::getInstance().getValue({"RoleProperty", "player", "jumpSpeedY"});
+    const float JumpState::speedX = Config::getInstance().getDoubleValue({"RoleProperty", "player", "jumpSpeedY"});
 
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)
