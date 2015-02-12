@@ -38,8 +38,9 @@ namespace joker
         : _battleScene(battleScene),
         _rhythmScript(musicScript.scriptName.c_str()),   // rhythmScript should init first before metronome and eventDispatcher
         _metronome(_rhythmScript.getOffsetRhythmScript(0), Config::getInstance().getDoubleValue({"Metronome", "hitDeltaTime"})),
+        _moveToTime(_rhythmScript.getOffsetRhythmScript(0)[0] - Config::getInstance().getDoubleValue({"Metronome", "promptStartTime"})),
         _promptScript(musicScript.promptName.c_str()),
-        _promptMetronome(_promptScript.getOffsetRhythmScript(0), 0.02f)
+        _promptMetronome(_promptScript.getOffsetRhythmScript(-1 * _moveToTime), 0.02f)
         // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
     {
         CHECKNULL(battleScene);
@@ -47,8 +48,7 @@ namespace joker
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
         _promptMetronome.setRhythmCallBack([this](int){
-            this->getScene()->getPromptBar()->addPromptSprite(
-                Config::getInstance().getDoubleValue({ "Metronome", "promptSpriteMoveTime" }));
+            this->getScene()->getPromptBar()->addPromptSprite(_moveToTime);
             // this (in second) must be equivalent to move_to_time (in millisecond) defined in Resources/music/gen_prompt.py
         });
 

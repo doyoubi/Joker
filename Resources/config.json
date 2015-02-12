@@ -1,7 +1,7 @@
 {
     "Metronome": {
         "hitDeltaTime": 0.04,
-        "promptSpriteMoveTime": 2
+        "promptStartTime": 0.1
     },
     "RoleProperty": {
         "player": {

@@ -68,6 +68,7 @@ namespace joker
         Metronome _metronome;
         std::unordered_map<const char*, RhythmEventDispatcher> _rhythmEventDispaters;
 
+        const float _moveToTime;
         RhythmScript _promptScript;
         Metronome _promptMetronome;
 
