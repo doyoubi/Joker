@@ -17,6 +17,7 @@ namespace joker
         _direction->setPositionY(lineHeight);
 
         getScheduler()->scheduleUpdate(this, 0, false);
+        return true;
     }
 
     RoleStateDebug::~RoleStateDebug()

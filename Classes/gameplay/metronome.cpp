@@ -41,6 +41,8 @@ namespace joker
         // set it to true, then the first point will not invoke miss or hit callback
         _rhythmPointChecked = true;
 
+        _startHitTag = false;
+
         auto scheduler = Director::getInstance()->getScheduler();
         scheduler->scheduleUpdate(this, 0, true);
     }
@@ -58,6 +60,13 @@ namespace joker
         _passedTime += dt;
         _timeSinceLastPoint += dt;
 
+        if (!_startHitTag && _timeSinceLastPoint >= _rhythmPoints[_nextRhythmPointsIndex] - _hitDeltaTime)
+        {
+            if (_startHitCallBack)
+                _startHitCallBack(_nextRhythmPointsIndex);
+            _startHitTag = true;
+        }
+
         if (_timeSinceLastPoint >= _rhythmPoints[_nextRhythmPointsIndex])
         {
             if (_rhythmCallBack)
@@ -69,6 +78,7 @@ namespace joker
             ++_nextRhythmPointsIndex;
 
             _rhythmPointChecked = false;
+            _startHitTag = false;
         }
 
         // miss or hit callback
@@ -133,6 +143,11 @@ namespace joker
     void Metronome::setRhythmCallBack(RhythmCallBack rhythmCallBack)
     {
         _rhythmCallBack = rhythmCallBack;
+    }
+
+    void Metronome::setStartHitCallBack(StartHitCallBack startHitCallBack)
+    {
+        _startHitCallBack = startHitCallBack;
     }
 
 

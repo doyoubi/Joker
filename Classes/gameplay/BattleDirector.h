@@ -48,6 +48,7 @@ namespace joker
         int getEnemyNum() { return _enemyConductor.getEnemyArray().size(); }
 
         void supplyEnemy();
+        void enemyAttackReady();
 
         SoundManager * getSoundManager() { return &_soundManager; }
 

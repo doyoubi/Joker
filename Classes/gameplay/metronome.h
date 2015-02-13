@@ -21,11 +21,13 @@ namespace joker
         typedef std::function<void(int)> MissCallBack;
         typedef std::function<void(int, float)> TabCallBack; // accept index of tag point and delta time of rhythm point
         typedef std::function<void(int)> RhythmCallBack;
+        typedef std::function<void(int)> StartHitCallBack;
 
         void setMissCallBack(MissCallBack missCallBack);
         void setWrongHitCallBack(TabCallBack wrongHitCallBack);
         void setHitCallBack(TabCallBack hitCallBack);
         void setRhythmCallBack(RhythmCallBack rhythmCallBack);
+        void setStartHitCallBack(StartHitCallBack startHitCallBack);
 
         // the time loop is equivalent to
         /*
@@ -56,11 +58,14 @@ namespace joker
         TabCallBack _hitCallBack;
         TabCallBack _wrongHitCallBack;
         RhythmCallBack _rhythmCallBack;
+        StartHitCallBack _startHitCallBack;
         float _hitDeltaTime;
 
         std::vector<float> _rhythmPoints;
         std::vector<int> _hitted;
         bool _rhythmPointChecked;
+
+        bool _startHitTag;
 
         int _nextRhythmPointsIndex;
         float _passedTime;

@@ -67,6 +67,9 @@ namespace joker
         _metronome.setMissCallBack([this](int index){
             getEventDispather("miss").runEvent(index);
         });
+        _metronome.setStartHitCallBack([this](int){
+            this->enemyAttackReady();
+        });
 
         getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
             this->addEvent(DirectorEventType::NOD);
@@ -203,6 +206,13 @@ namespace joker
         if (posi + distance <= 0 || posi + distance > width)
             distance *= -1;
         addEnemy(Vec2(posi + distance, 0));
+    }
+
+    void BattleDirector::enemyAttackReady()
+    {
+        RolePtr & enemy = getClosestEnemy();
+        RoleCommand command(RoleAction::ATTACK_READY);
+        enemy->executeCommand(command);
     }
 
 }

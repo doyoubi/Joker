@@ -56,10 +56,15 @@ namespace joker
 
     void RoleSprite::die()
     {
-        getArmature()->getAnimation()->play("attacked");
+        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement("attacked"),
+            "missing 'attacked' movement.");
+        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement("dead"),
+            "missing 'dead' movement.");
+        std::vector<std::string> names = { "attacked", "dead" };
+        getArmature()->getAnimation()->playWithNames(names, -1, false);
         getArmature()->getAnimation()->setMovementEventCallFunc(
             [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE)
+            if (movementType == MovementEventType::LOOP_COMPLETE)
             {
                 this->removeFromParent();
             }

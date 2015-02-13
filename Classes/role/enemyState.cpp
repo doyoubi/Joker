@@ -96,6 +96,8 @@ namespace joker
             role->getStateManager()->changeState(DefenceNodState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
+        else if (roleAction == RoleAction::ATTACK_READY)
+            role->getStateManager()->changeState(AttackReadyState::create());
     }
 
     // DefenceNodState
@@ -177,6 +179,8 @@ namespace joker
             role->getStateManager()->changeState(DefenceNodState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
+        else if (roleAction == RoleAction::ATTACK_READY)
+            role->getStateManager()->changeState(AttackReadyState::create());
     }
 
     // FastRunState
@@ -231,6 +235,28 @@ namespace joker
             role->getStateManager()->changeState(EnemyAttackedState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
+    }
+
+    // AttackReadyState
+    void AttackReadyState::enterState(Role * role)
+    {
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("attackReady"),
+            "missing 'attackReady' movement");
+        role->getArmature()->getAnimation()->play("attackReady");
+    }
+
+    void AttackReadyState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::ATTACK)
+            role->getStateManager()->changeState(EnemyAttackState::create());
+        else if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(EnemyAttackedState::create());
+    }
+
+    std::string AttackReadyState::getDebugString()
+    {
+        return "attack ready";
     }
 
 }

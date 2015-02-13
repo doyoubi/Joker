@@ -17,6 +17,7 @@ namespace joker
         DEFENCE_NOD,
         COLLIDE,
         FAST_RUN,
+        ATTACK_READY,
     };
 
     enum class RoleDirection

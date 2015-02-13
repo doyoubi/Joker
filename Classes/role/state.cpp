@@ -84,6 +84,8 @@ namespace joker
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::ATTACK_READY)
+            role->getStateManager()->changeState(AttackReadyState::create());
     }
 
     // RunState
