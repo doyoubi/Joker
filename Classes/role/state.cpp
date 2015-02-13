@@ -44,39 +44,17 @@ namespace joker
         _currState->executeCommand(_role, command);
     }
 
-    void StateManager::printCurrState()
+    std::string StateManager::getDebugString()
     {
-        State * p = _currState.get();
-        if (dynamic_cast<IdleState*>(p))
-            cout << "idle state" << endl;
-        else if (dynamic_cast<RunState*>(p))
-            cout << "run state" << endl;
-        else if (dynamic_cast<SlowDownState*>(p))
-            cout << "slow down state" << endl;
-        else if (dynamic_cast<PlayerAttackState*>(p))
-            cout << "player attack state" << endl;
-        else if (dynamic_cast<PlayerAttackedState*>(p))
-            cout << "player attacked state" << endl;
-        else if (dynamic_cast<EnemyAttackState*>(p))
-            cout << "enemy attack state" << endl;
-        else if (dynamic_cast<EnemyAttackedState*>(p))
-            cout << "enemy attacked state" << endl;
-        else if (dynamic_cast<JumpState*>(p))
-            cout << "jump state" << endl;
-        else if (dynamic_cast<NodState*>(p))
-            cout << "nod state" << endl;
-        else if (dynamic_cast<DefenceState*>(p))
-            cout << "defence state" << endl;
-        else if (dynamic_cast<DefenceNodState*>(p))
-            cout << "defence nod state" << endl;
-        else if (dynamic_cast<CrawlState*>(p))
-            cout << "crawl state" << endl;
-        else
-            cout << "error: no match state" << endl;
+        return _currState->getDebugString();
     }
 
-
     // IdleState
+    std::string IdleState::getDebugString()
+    {
+        return "Idle";
+    }
+
     void IdleState::enterState(Role * role)
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
@@ -109,6 +87,11 @@ namespace joker
     }
 
     // RunState
+    std::string RunState::getDebugString()
+    {
+        return "run";
+    }
+
     RunState::RunState(RoleDirection direction)
         : _direction(direction)
     {
@@ -174,6 +157,11 @@ namespace joker
     }
 
     // SlowDownState
+    std::string SlowDownState::getDebugString()
+    {
+        return "slow down";
+    }
+
     SlowDownState::SlowDownState(float velocityX)
         : _velocityX(velocityX)
     {

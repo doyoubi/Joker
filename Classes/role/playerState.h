@@ -14,6 +14,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     private:
         static int _currStage;
         static const int attackStageQuantity;
@@ -28,6 +29,7 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     };
 
     class JumpState : public State
@@ -39,6 +41,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         float _velocityX;
         static const float speedX;
@@ -53,6 +56,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         RoleDirection _direction;
     };

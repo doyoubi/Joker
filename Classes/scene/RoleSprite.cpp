@@ -1,5 +1,6 @@
 #include "RoleSprite.h"
 #include "utils/debug.h"
+#include "utils/RoleStateDebug.h"
 
 namespace joker
 {
@@ -21,16 +22,19 @@ namespace joker
             );
     }
 
-    RoleSprite * RoleSprite::create(const string & animationName)
+    RoleSprite * RoleSprite::create(const string & animationName, string animationDirection)
     {
         // check if animation has been loaded
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"));
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"));
-        CHECKNULL(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"));
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"),
+            "mising 'static' movement");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"),
+            "mising 'run' movement");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"),
+            "mising 'slowDown' movement");
         Armature * armature = Armature::create(animationName);
 
-        RoleSprite * role = new (std::nothrow) RoleSprite(armature);
+        RoleSprite * role = new (std::nothrow) RoleSprite(armature, animationDirection);
         if (!role || !role->init())
         {
             CC_SAFE_DELETE(role);
@@ -40,10 +44,12 @@ namespace joker
         return role;
     }
 
-    RoleSprite::RoleSprite(Armature * armature)
-        : _armature(armature)
+    RoleSprite::RoleSprite(Armature * armature, string animationDirection)
+        : _armature(armature), _animationDirection(animationDirection == "left" ? -1 : 1)
     {
         CHECKNULL(_armature);
+        DEBUGCHECK(animationDirection == "left" || animationDirection == "right",
+            "animationDirection must be either 'left' or 'right'.");
         addChild(_armature);
         _armature->retain();
     }
@@ -58,5 +64,32 @@ namespace joker
                 this->removeFromParent();
             }
         });
+        removeRoleSpriteDebug();
     }
+
+    void RoleSprite::setDirection(RoleDirection direction)
+    {
+        float sx = std::abs(_armature->getScaleX()) * _animationDirection;
+        if (direction == RoleDirection::LEFT) sx *= -1;
+        _armature->setScaleX(sx);
+    }
+
+    RoleDirection RoleSprite::getDirection() const
+    {
+        return _armature->getScaleX() * _animationDirection > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT;
+    }
+
+    void RoleSprite::addRoleSpriteDebug(Role * role)
+    {
+        auto debugMsg = RoleStateDebug::create();
+        debugMsg->setRole(role);
+        debugMsg->setName("RoleSpriteDebug");
+        this->addChild(debugMsg);
+    }
+
+    void RoleSprite::removeRoleSpriteDebug()
+    {
+        this->removeChildByName("RoleSpriteDebug");
+    }
+
 }

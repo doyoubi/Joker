@@ -23,6 +23,7 @@ namespace joker
             ));
 
         _roleSprite->setScale(spriteScale);
+        _roleSprite->addRoleSpriteDebug(this);
     }
 
     Role::~Role()
@@ -37,15 +38,12 @@ namespace joker
 
     RoleDirection Role::getDirection() const
     {
-        //DEBUGCHECK(std::abs(_roleSprite->getScaleX()) == 1.0f, "abs of scale x must be 1");
-        return _roleSprite->getScaleX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT;
+        return _roleSprite->getDirection();
     }
 
     void Role::setDirection(RoleDirection direction)
     {
-        float sx = std::abs(_roleSprite->getScaleX());
-        if (direction == RoleDirection::LEFT) sx *= -1;
-        _roleSprite->setScaleX(sx);
+        _roleSprite->setDirection(direction);
     }
 
     void Role::setPosition(const Vec2 & position)

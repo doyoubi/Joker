@@ -2,6 +2,7 @@
 #define JOKER_STATE
 
 #include <memory>
+#include <string>
 
 #include "cocos2d.h"
 
@@ -28,7 +29,7 @@ namespace joker
         void executeCommand(const RoleCommand & command);
         void update(float dt);
 
-        void printCurrState();   // for debug
+        std::string getDebugString();
     private:
         Role * _role;   // weak reference
         StatePtr _currState;
@@ -44,6 +45,8 @@ namespace joker
         virtual void exitState(Role * role) = 0;
         virtual void execute(Role * role) = 0;
         virtual void executeCommand(Role * role, const RoleCommand & command) = 0;
+
+        virtual std::string getDebugString() = 0;
     private:
         CC_DISALLOW_COPY_AND_ASSIGN(State);
     };
@@ -56,6 +59,7 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override {};
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     };
 
     class RunState : public State
@@ -67,6 +71,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         RoleDirection _direction;
     };
@@ -80,6 +85,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         float _velocityX;
     };

@@ -6,6 +6,7 @@
     "RoleProperty": {
         "player": {
             "animationName": "joker",
+            "animationDirection": "right",
             "spriteScale": 0.6,
             "width": 50,
             "height": 150,
@@ -17,7 +18,8 @@
         },
         "enemy": {
             "animationName": "enemy",
-            "spriteScale": 1.2,
+            "animationDirection": "left",
+            "spriteScale": 0.6,
             "width": 50,
             "height": 150,
             "slowSpeed": 10,

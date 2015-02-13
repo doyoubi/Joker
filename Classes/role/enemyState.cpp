@@ -5,6 +5,11 @@
 namespace joker
 {
     // EnemyAttackState
+    std::string EnemyAttackState::getDebugString()
+    {
+        return "enemy attack";
+    }
+
     void EnemyAttackState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attack");
@@ -20,6 +25,11 @@ namespace joker
 
 
     // EnemyAttackedState
+    std::string EnemyAttackedState::getDebugString()
+    {
+        return "enemy attacked";
+    }
+
     void EnemyAttackedState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attacked");
@@ -34,6 +44,11 @@ namespace joker
     }
 
     // NodState
+    std::string NodState::getDebugString()
+    {
+        return "nod";
+    }
+
     void NodState::enterState(Role * role)
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("nod"));
@@ -49,6 +64,11 @@ namespace joker
     }
 
     // DefenceState
+    std::string DefenceState::getDebugString()
+    {
+        return "defence";
+    }
+
     void DefenceState::enterState(Role * role)
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
@@ -79,6 +99,11 @@ namespace joker
     }
 
     // DefenceNodState
+    std::string DefenceNodState::getDebugString()
+    {
+        return "defence nod";
+    }
+
     void DefenceNodState::enterState(Role * role)
     {
         CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defenceNod"));
@@ -100,6 +125,11 @@ namespace joker
     }
 
     // CrawlState
+    std::string CrawlState::getDebugString()
+    {
+        return "crawl";
+    }
+
     CrawlState::CrawlState(RoleDirection direction)
         : _direction(direction)
     {
@@ -152,6 +182,11 @@ namespace joker
     // FastRunState
     const float FastRunState::fastSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "fastSpeed" });
 
+    std::string FastRunState::getDebugString()
+    {
+        return "fast run";
+    }
+
     FastRunState::FastRunState(RoleDirection direction)
         : _direction(direction)
     {
@@ -159,7 +194,8 @@ namespace joker
 
     void FastRunState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"));
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"),
+            "enemy missing 'fastRun' movement");
         role->getArmature()->getAnimation()->play("fastRun");
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * fastSpeed;
 

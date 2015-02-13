@@ -78,7 +78,8 @@ namespace joker
     RoleSprite * BattleLayer::addEnemySprite(const Vec2 & position)
     {
         RoleSprite * enemy = RoleSprite::create(
-            Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }));
+            Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }),
+            Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationDirection" }));
         enemy->setPosition(position);
         _enemyArray.push_back(enemy);
         addChild(enemy);
@@ -98,7 +99,8 @@ namespace joker
     {
         DEBUGCHECK(_player == nullptr, "player already exist");
         _player = RoleSprite::create(
-            Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}));
+            Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}),
+            Config::getInstance().getStringValue({ "RoleProperty", "player", "animationDirection" }));
         _player->setPosition(200, 200);
         addChild(_player);
         return _player;

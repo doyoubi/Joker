@@ -158,6 +158,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\sound\SoundManager.cpp" />
     <ClCompile Include="..\Classes\utils\config.cpp" />
     <ClCompile Include="..\Classes\utils\debug.cpp" />
+    <ClCompile Include="..\Classes\utils\RoleStateDebug.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +184,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\sound\SoundManager.h" />
     <ClInclude Include="..\Classes\utils\config.h" />
     <ClInclude Include="..\Classes\utils\debug.h" />
+    <ClInclude Include="..\Classes\utils\RoleStateDebug.h" />
     <ClInclude Include="..\Classes\utils\VarParams.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

@@ -13,6 +13,7 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     };
 
     class EnemyAttackedState : public State
@@ -23,6 +24,7 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     };
 
     class NodState : public State
@@ -33,6 +35,7 @@ namespace joker
         void exitState(Role * role) override {};
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     };
 
     class DefenceState : public State
@@ -43,6 +46,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override {};
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     };
 
     class DefenceNodState : public State
@@ -53,6 +57,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override;
         void executeCommand(Role * role, const RoleCommand & command) override {};
+        std::string getDebugString() override;
     };
 
     class CrawlState : public State
@@ -64,6 +69,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override {};
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         RoleDirection _direction;
     };
@@ -77,6 +83,7 @@ namespace joker
         void exitState(Role * role) override;
         void execute(Role * role) override {};
         void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     private:
         RoleDirection _direction;
         static const float fastSpeed;

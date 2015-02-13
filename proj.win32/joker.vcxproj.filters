@@ -98,6 +98,9 @@
     <ClCompile Include="..\Classes\utils\config.cpp">
       <Filter>Classes\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\utils\RoleStateDebug.cpp">
+      <Filter>Classes\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -166,6 +169,9 @@
       <Filter>Classes\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\utils\config.h">
+      <Filter>Classes\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\utils\RoleStateDebug.h">
       <Filter>Classes\utils</Filter>
     </ClInclude>
   </ItemGroup>

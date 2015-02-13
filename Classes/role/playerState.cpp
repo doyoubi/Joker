@@ -14,6 +14,11 @@ namespace joker
     const int PlayerAttackState::attackStageQuantity = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
     int PlayerAttackState::_currStage = 0;
 
+    std::string PlayerAttackState::getDebugString()
+    {
+        return "player attack";
+    }
+
     void PlayerAttackState::enterState(Role * role)
     {
         for (int i = 0; i < attackStageQuantity; ++i)
@@ -41,6 +46,11 @@ namespace joker
 
 
     // PlayerAttackedState
+    std::string PlayerAttackedState::getDebugString()
+    {
+        return "player attacked";
+    }
+
     void PlayerAttackedState::enterState(Role * role)
     {
         role->getArmature()->getAnimation()->play("attacked");
@@ -57,6 +67,11 @@ namespace joker
 
     // JumpState
     const float JumpState::speedX = Config::getInstance().getDoubleValue({"RoleProperty", "player", "jumpSpeedY"});
+
+    std::string JumpState::getDebugString()
+    {
+        return "jump";
+    }
 
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)
@@ -106,6 +121,11 @@ namespace joker
 
 
     // CollideState
+    std::string CollideState::getDebugString()
+    {
+        return "collide";
+    }
+
     CollideState::CollideState(RoleDirection direction)
         : _direction(direction)
     {
