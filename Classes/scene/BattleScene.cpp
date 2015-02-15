@@ -60,19 +60,13 @@ namespace joker
 
         addChild(_background, -1);
 
-        schedule(schedule_selector(BattleLayer::updateBackgroud));
-
-        auto physicsWorld = joker::PhysicsWorld::getInstance();
-        physicsWorld->setWorldWidth(_background->getContentSize().width);
-        physicsWorld->setGravity(120.0f);
-        physicsWorld->setGroundHeight(200.0f);
-        physicsWorld->setResistance(480.0f);
+        schedule(schedule_selector(BattleLayer::updateBackground));
 
         return true;
     }
 
     BattleLayer::~BattleLayer() {
-        unschedule(schedule_selector(BattleLayer::updateBackgroud));
+        unschedule(schedule_selector(BattleLayer::updateBackground));
     }
 
     RoleSprite * BattleLayer::addEnemySprite(const Vec2 & position)
@@ -106,7 +100,7 @@ namespace joker
         return _player;
     }
 
-    void BattleLayer::updateBackgroud(float dt) {
+    void BattleLayer::updateBackground(float dt) {
         Size visibleSize = Director::getInstance()->getVisibleSize();
 
         float bgLeft = 0, x = _player->getPositionX();

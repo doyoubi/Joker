@@ -1,4 +1,9 @@
 {
+    "Physics": {
+        "gravity": 120,
+        "groundHeight": 200,
+        "resistance": 480
+    },
     "Metronome": {
         "hitDeltaTime": 0.04,
         "promptStartTime": 0.1

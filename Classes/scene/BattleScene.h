@@ -45,12 +45,13 @@ namespace joker
         RoleSprite * addPlayerSprite(const cocos2d::Vec2 & position);
         void removeEnemySprite(RoleSprite * enemy);
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
+        cocos2d::Sprite * getBackground() { return _background; }
 
         ~BattleLayer();
 
     private:
         bool init() override;
-        void updateBackgroud(float dt);
+        void updateBackground(float dt);
 
         vector<RoleSprite*> _enemyArray;  // weak reference
         RoleSprite * _player = nullptr;   // weak reference

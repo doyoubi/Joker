@@ -45,6 +45,12 @@ namespace joker
     {
         CHECKNULL(battleScene);
 
+        auto physicsWorld = joker::PhysicsWorld::getInstance();
+        physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getBackground()->getContentSize().width);
+        physicsWorld->setGravity(Config::getInstance().getDoubleValue({"Physics", "gravity"}));
+        physicsWorld->setGroundHeight(Config::getInstance().getDoubleValue({ "Physics", "groundHeight" }));
+        physicsWorld->setResistance(Config::getInstance().getDoubleValue({ "Physics", "resistance" }));
+
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
         _promptMetronome.setRhythmCallBack([this](int){

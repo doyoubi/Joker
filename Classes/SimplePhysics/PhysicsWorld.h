@@ -10,7 +10,6 @@ namespace joker
     class PhysicsWorld
     {
     public:
-        PhysicsWorld();
         ~PhysicsWorld();
 
         static PhysicsWorld * getInstance();
@@ -30,7 +29,8 @@ namespace joker
         void update(float dt);
 
     private:
-        
+        PhysicsWorld();
+
         float _gravity = 0.0f;
         float _groundHeight = 0.0f;
         float _worldWidth = 0.0f;

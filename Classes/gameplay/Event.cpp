@@ -58,6 +58,7 @@ namespace joker
         RolePtr & sufferer = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
+        sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
         attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
         sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
 
@@ -74,8 +75,9 @@ namespace joker
         RolePtr & attacker = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
-        sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
+        sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
+        attacker->executeCommand(RoleAction::ATTACK);
+        sufferer->executeCommand(RoleAction::ATTACKED);
     }
 
     // NodEvent
