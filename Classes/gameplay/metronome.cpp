@@ -63,7 +63,7 @@ namespace joker
         if (!_startHitTag && _timeSinceLastPoint >= _rhythmPoints[_nextRhythmPointsIndex] - _hitDeltaTime)
         {
             if (_startHitCallBack)
-                _startHitCallBack(_nextRhythmPointsIndex);
+                _startHitCallBack(_nextRhythmPointsIndex - 1); // minus one, change to script index
             _startHitTag = true;
         }
 
@@ -132,7 +132,7 @@ namespace joker
 
     void Metronome::setWrongHitCallBack(TabCallBack wrongHitCallBack)
     {
-        _wrongHitCallBack = std::move(_wrongHitCallBack);
+        _wrongHitCallBack = std::move(wrongHitCallBack);
     }
 
     void Metronome::setHitCallBack(TabCallBack hitCallBack)

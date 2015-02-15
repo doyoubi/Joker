@@ -62,6 +62,7 @@ namespace joker
         _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
         _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
         _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("emptyHit", RhythmEventDispatcher(_rhythmScript));
 
         _metronome.setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
@@ -73,8 +74,11 @@ namespace joker
         _metronome.setMissCallBack([this](int index){
             getEventDispather("miss").runEvent(index);
         });
-        _metronome.setStartHitCallBack([this](int){
-            this->enemyAttackReady();
+        _metronome.setStartHitCallBack([this](int index){
+            getEventDispather("emptyHit").runEvent(index);
+        });
+        _metronome.setWrongHitCallBack([this](int, float){
+            this->addEvent(DirectorEventType::EMPTY_HIT);
         });
 
         getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
@@ -94,6 +98,10 @@ namespace joker
 
         getEventDispather("addEnemy").addEvent(_rhythmScript.getEvent("addEnemy"), [this](){
             this->supplyEnemy();
+        });
+
+        getEventDispather("emptyHit").addEvent(_rhythmScript.getEvent("attack"), [this](){
+            this->enemyAttackReady();
         });
 
         addEnemy(Vec2(500, 200));

@@ -18,6 +18,7 @@ namespace joker
         MOVE,
         COLLIDE_TO_LEFT,
         COLLIDE_TO_RIGHT,
+        EMPTY_HIT,
     };
 
 }
@@ -98,6 +99,12 @@ namespace joker
         virtual void execute(BattleDirector * director) override;
     private:
         RoleDirection _direction;
+    };
+
+    class EmptyAttackEvent : public DirectorEvent
+    {
+    public:
+        void execute(BattleDirector * director) override;
     };
 
 }

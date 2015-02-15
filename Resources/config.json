@@ -15,7 +15,7 @@
             "spriteScale": 0.6,
             "width": 50,
             "height": 150,
-            "attackChangedDistance": 200,
+            "attackChangedDistance": 0,
             "jumpSpeedY": 50,
             "slowSpeed": 10,
             "normalSpeed": 200,

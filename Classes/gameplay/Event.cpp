@@ -15,6 +15,7 @@ namespace joker
         _eventPool.emplace(DirectorEventType::NOD, EventPtr(new NodEvent()));
         _eventPool.emplace(DirectorEventType::COLLIDE_TO_LEFT, EventPtr(new CollideEvent(RoleDirection::LEFT)));
         _eventPool.emplace(DirectorEventType::COLLIDE_TO_RIGHT, EventPtr(new CollideEvent(RoleDirection::RIGHT)));
+        _eventPool.emplace(DirectorEventType::EMPTY_HIT, EventPtr(new EmptyAttackEvent()));
     }
 
     void DirectorEventManager::activateEvent(DirectorEventType event)
@@ -93,6 +94,14 @@ namespace joker
         RoleCommand command(RoleAction::COLLIDE);
         command.add<RoleDirection>("direction", _direction);
         director->sendCommand(director->getPlayer(), command);
+    }
+
+    // EmptyAttackEvent
+    void EmptyAttackEvent::execute(BattleDirector * director)
+    {
+        director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
+        if (director->getEnemyNum() == 0) return;
+        director->sendCommand(director->getClosestEnemy(), RoleAction::DEFENCE);
     }
 
 }
