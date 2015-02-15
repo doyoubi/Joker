@@ -151,9 +151,7 @@ namespace joker
             role->getPhysicsBody()->getVelocityX()
             ));
         else if (roleAction == RoleAction::DEFENCE)
-            role->getStateManager()->changeState(CrawlState::create(
-                role->getPhysicsBody()->getVelocityX() > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT
-            ));
+            role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
     }

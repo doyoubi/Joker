@@ -50,6 +50,8 @@ namespace joker
         void supplyEnemy();
         void enemyAttackReady();
 
+        bool withinAttackScope(const RolePtr & attacker, const RolePtr & sufferrer);
+
         SoundManager * getSoundManager() { return &_soundManager; }
 
     private:

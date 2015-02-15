@@ -103,15 +103,21 @@ namespace joker
         BTNodeStatus traverse(const BTParam & param) override;
     };
 
-
-    class KeepDistance : public RoleActionNode
+    class Sequence : public ControlNode
     {
     public:
-        KeepDistance(BTprecondition && precondition, Role * role);
+        Sequence(BTprecondition && precondition) : ControlNode(std::move(precondition)) {};
     private:
-        virtual void onEnter() override;
-        virtual void onExit() override;
-        BTNodeStatus execute(const BTParam & param) override;
+        BTNodeStatus traverse(const BTParam & param) override;
+        int _currNode = 0;
+    };
+
+    class DoNothing : public RoleActionNode
+    {
+    public:
+        DoNothing(BTprecondition && precondition, Role * role) : RoleActionNode(std::move(precondition), role) {}
+    private:
+        BTNodeStatus execute(const BTParam & param) override { return BTNodeStatus::SUCCESS; };
     };
 
     class FaceToPlayer : public RoleActionNode

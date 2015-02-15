@@ -4,6 +4,7 @@
 #include "BattleDirector.h"
 #include "role/Role.h"
 #include "scene/BattleScene.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -101,6 +102,8 @@ namespace joker
     {
         director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
         if (director->getEnemyNum() == 0) return;
+        float d = director->getPlayer()->getPosition().x - director->getClosestEnemy()->getPosition().x;
+        if (!director->withinAttackScope(director->getPlayer(), director->getClosestEnemy())) return;
         director->sendCommand(director->getClosestEnemy(), RoleAction::DEFENCE);
     }
 

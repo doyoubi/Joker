@@ -111,51 +111,24 @@ namespace joker
         return status;
     }
 
-    // KeepDistance
-    KeepDistance::KeepDistance(BTprecondition && precondition, Role * role)
-        : RoleActionNode(std::move(precondition), role)
+    // Sequence
+    BTNodeStatus Sequence::traverse(const BTParam & param)
     {
-    }
-
-    void KeepDistance::onEnter()
-    {
-    }
-
-    void KeepDistance::onExit()
-    {
-    }
-
-    BTNodeStatus KeepDistance::execute(const BTParam & param)
-    {
-        using std::abs;
-        int distance = getRole()->getPosition().x - param.playerPosition;
-
-        int defenceDis = Config::getInstance().getDoubleValue({"EnemyKeepDistance", "defenceDis"});
-        int rangeNear = Config::getInstance().getDoubleValue({
-            "EnemyKeepDistance", param.closest? "closest" : "notClosest", "rangeNear"});
-        int rangeFar = Config::getInstance().getDoubleValue({ 
-            "EnemyKeepDistance", param.closest ? "closest" : "notClosest", "rangeFar"});
-
-        if (abs(distance) < defenceDis)
-            getRole()->executeCommand(RoleAction::DEFENCE);
-        if (param.closest && rangeNear <= abs(distance) && abs(distance) < rangeFar)
-            getRole()->executeCommand(RoleCommand(RoleAction::DEFENCE));
-        else if (distance < 0 && abs(distance) < rangeNear
-            || distance >= 0 && abs(distance) >= rangeFar)
+        BTNodeStatus status = _children[_currNode]->tick(param);
+        if (status == BTNodeStatus::SUCCESS)
         {
-            RoleCommand command(RoleAction::RUN);
-            command.add<RoleDirection>("direction", RoleDirection::LEFT);
-            getRole()->executeCommand(command);
+            ++_currNode;
+            if (_currNode == _children.size())
+            {
+                _currNode = 0;
+                return BTNodeStatus::SUCCESS;
+            }
         }
-        else if (distance < 0 && abs(distance) >= rangeFar
-            || distance >= 0 && abs(distance) < rangeNear)
+        else if (status == BTNodeStatus::FAILURE)
         {
-            RoleCommand command(RoleAction::RUN);
-            command.add("direction", RoleDirection::RIGHT);
-            getRole()->executeCommand(command);
+            _currNode = 0;
+            return BTNodeStatus::FAILURE;
         }
-        else
-            getRole()->executeCommand(RoleAction::IDLE);
         return BTNodeStatus::RUNNING;
     }
 
@@ -191,6 +164,9 @@ namespace joker
 
     void EnemyFastRunNode::onExit()
     {
+        RoleCommand command(RoleAction::STOP);
+        command.add("direction", getRole()->getDirection());
+        getRole()->executeCommand(command);
     }
 
 
@@ -198,9 +174,6 @@ namespace joker
     BTNodePtr createEnemyTree(Role * enemy)
     {
         CHECKNULL(enemy);
-        auto sel = BTNodePtr(new Selector([](const BTParam & param){
-            return true;
-        }));
 
         auto par = BTNodePtr(new Parallel([](const BTParam & param){
             return true;
@@ -210,18 +183,34 @@ namespace joker
             return true;
         }, enemy));
 
-        auto keepDistance = BTNodePtr(new KeepDistance([](const BTParam & param){
-            return true;
+        auto fastRunRoot = BTNodePtr(new joker::Sequence([](const BTParam & param){ return true; }));
+        auto fastRunPred = BTNodePtr(new DoNothing([enemy](const BTParam & param){
+            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance;
+        }, enemy));
+        auto fastRun = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){ 
+            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.2f;
         }, enemy));
 
-        auto fastRun = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){
-            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance;
-        } , enemy));
+        fastRunRoot->addChild(std::move(fastRunPred));
+        fastRunRoot->addChild(std::move(fastRun));
 
-        sel->addChild(std::move(keepDistance));
+        auto rushRoot = BTNodePtr(new joker::Sequence([](const BTParam & param){ return param.closest; }));
+        auto rushPred = BTNodePtr(new DoNothing([enemy](const BTParam & param){
+            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.5f;
+        }, enemy));
+        auto rush = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){
+            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.8f;
+        }, enemy));
+
+        rushRoot->addChild(std::move(rushPred));
+        rushRoot->addChild(std::move(rush));
+
+        auto keepDistance = BTNodePtr(new Selector([](const BTParam & param){ return true; }));
+        keepDistance->addChild(std::move(rushRoot));
+        keepDistance->addChild(std::move(fastRunRoot));
+
         par->addChild(std::move(faceToPlayer));
-        par->addChild(std::move(fastRun));
-        par->addChild(std::move(sel));
+        par->addChild(std::move(keepDistance));
 
         return par;
     }

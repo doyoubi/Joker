@@ -19,7 +19,10 @@
             "jumpSpeedY": 50,
             "slowSpeed": 10,
             "normalSpeed": 200,
-            "attackStageQuantity": 2
+            "attackStageQuantity": 2,
+            "attackScope": 200,
+            "initPositionX": 200,
+            "initPositionY": 200
         },
         "enemy": {
             "animationName": "enemy",
@@ -30,7 +33,8 @@
             "slowSpeed": 10,
             "normalSpeed": 100,
             "fastSpeed": 300,
-            "maxQuantity": 2
+            "maxQuantity": 2,
+            "attackScope": 200
         }
     },
     "EnemyApearPosition": {

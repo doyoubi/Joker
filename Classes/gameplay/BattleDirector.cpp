@@ -105,7 +105,8 @@ namespace joker
         });
 
         addEnemy(Vec2(500, 200));
-        addPlayer(Vec2(200, 200));
+        addPlayer(Vec2(Config::getInstance().getDoubleValue({"RoleProperty", "player", "initPositionX"}),
+            Config::getInstance().getDoubleValue({ "RoleProperty", "player", "initPositionY" })));
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 0, false);
     }
@@ -227,6 +228,22 @@ namespace joker
         RolePtr & enemy = getClosestEnemy();
         RoleCommand command(RoleAction::ATTACK_READY);
         enemy->executeCommand(command);
+    }
+
+    bool BattleDirector::withinAttackScope(const RolePtr & attacker, const RolePtr & sufferrer)
+    {
+        static float playerScope = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackScope" });
+        static float enemyScope = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "attackScope" });
+        float scope = attacker->isPlayer() ? playerScope : enemyScope;
+        float attackerX = attacker->getPosition().x;
+        float sufferrerX = sufferrer->getPosition().x;
+        float d = attackerX - sufferrerX;
+        if (std::abs(attackerX - sufferrerX) > scope) return false;
+        if (attacker->getDirection() == RoleDirection::LEFT && d > 0)
+            return true;
+        if (attacker->getDirection() == RoleDirection::RIGHT && d < 0)
+            return true;
+        return false;
     }
 
 }

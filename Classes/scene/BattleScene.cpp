@@ -75,6 +75,7 @@ namespace joker
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }),
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationDirection" }));
         enemy->setPosition(position);
+        enemy->setLocalZOrder(0);
         _enemyArray.push_back(enemy);
         addChild(enemy);
         return enemy;
@@ -95,7 +96,7 @@ namespace joker
         _player = RoleSprite::create(
             Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}),
             Config::getInstance().getStringValue({ "RoleProperty", "player", "animationDirection" }));
-        _player->setPosition(200, 200);
+        _player->setLocalZOrder(1);
         addChild(_player);
         return _player;
     }

@@ -76,29 +76,17 @@ namespace joker
         role->getPhysicsBody()->setCollidable(true);
     }
 
+    void DefenceState::execute(Role * role)
+    {
+        if (role->getArmature()->getAnimation()->isComplete())
+            role->getStateManager()->changeState(IdleState::create());
+    }
+
     void DefenceState::exitState(Role * role)
     {
         role->getPhysicsBody()->setCollidable(false);
     }
 
-    void DefenceState::executeCommand(Role * role, const RoleCommand & command)
-    {
-        RoleAction roleAction = command.roleAction;
-        if (roleAction == RoleAction::RUN)
-            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::ATTACK)
-            role->getStateManager()->changeState(EnemyAttackState::create());
-        else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(EnemyAttackedState::create());
-        else if (roleAction == RoleAction::NOD)
-            role->getStateManager()->changeState(DefenceNodState::create());
-        else if (roleAction == RoleAction::IDLE)
-            role->getStateManager()->changeState(IdleState::create());
-        else if (roleAction == RoleAction::ATTACK_READY)
-            role->getStateManager()->changeState(AttackReadyState::create());
-    }
 
     // DefenceNodState
     std::string DefenceNodState::getDebugString()
@@ -228,16 +216,23 @@ namespace joker
         else if (roleAction == RoleAction::FAST_RUN)
             role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
-            role->getStateManager()->changeState(DefenceState::create());
+            role->getStateManager()->changeState(SlowDownState::create(role->getPhysicsBody()->getVelocityX()));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
             role->getStateManager()->changeState(EnemyAttackedState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
+        else if (roleAction == RoleAction::DEFENCE)
+            role->getStateManager()->changeState(DefenceState::create());
     }
 
     // AttackReadyState
+    std::string AttackReadyState::getDebugString()
+    {
+        return "attack ready";
+    }
+
     void AttackReadyState::enterState(Role * role)
     {
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("attackReady"),
@@ -254,9 +249,5 @@ namespace joker
             role->getStateManager()->changeState(EnemyAttackedState::create());
     }
 
-    std::string AttackReadyState::getDebugString()
-    {
-        return "attack ready";
-    }
 
 }
