@@ -50,5 +50,30 @@
             "rangeNear": 350,
             "rangeFar": 400
         }
+    },
+    "animation" : {
+        "role": {
+            "IdleState": "static",
+            "RunState": "run",
+            "SlowDownState": "slowDown"
+        },
+        "player": {
+            "PlayerAttackState": "attack",
+            "PlayerAttackedState": "attacked",
+            "JumpState": "jump",
+            "CollideState": "attacked"
+        },
+        "enemy": {
+            "EnemyAttackState": "attack",
+            "EnemyAttackedState": "attacked",
+            "NodState": "nod",
+            "DefenceState": "defence",
+            "DefenceNodState": "defenceNod",
+            "CrawlState": "run",
+            "FastRunState": "run",
+            "AttackReadyState": "attackReady",
+            "RetreatState": "run",
+            "dead": "dead"
+        }
     }
 }

@@ -6,6 +6,7 @@
 #include "SimplePhysics/PhysicsWorld.h"
 #include "playerState.h"
 #include "enemyState.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -49,6 +50,13 @@ namespace joker
         return _currState->getDebugString();
     }
 
+
+    static std::string missingAnimation(Role * role, const std::string animName)
+    {
+        return std::string(role->isPlayer() ? "player" : "enemy") + ": missing '" + animName + "' animation";
+    }
+
+
     // IdleState
     std::string IdleState::getDebugString()
     {
@@ -57,8 +65,10 @@ namespace joker
 
     void IdleState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("static"));
-        role->getArmature()->getAnimation()->play("static");
+        static const string animName = Config::getInstance().getStringValue({"animation", "role", "IdleState"});
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(role, animName));
+        role->getArmature()->getAnimation()->play(animName);
     }
 
     void IdleState::executeCommand(Role * role, const RoleCommand & command)
@@ -101,8 +111,10 @@ namespace joker
 
     void RunState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("run"));
-        role->getArmature()->getAnimation()->play("run");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "role", "RunState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(role, animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_direction);
         
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getNormalSpeed();
@@ -169,8 +181,10 @@ namespace joker
 
     void SlowDownState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
-        role->getArmature()->getAnimation()->play("slowDown");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "role", "SlowDownState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(role, animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         role->getPhysicsBody()->setVelocityX(_velocityX);
         role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());

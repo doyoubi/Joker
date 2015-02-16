@@ -4,6 +4,11 @@
 
 namespace joker
 {
+    static std::string missingAnimation(const std::string animName)
+    {
+        return "enemy: missing '" + animName + "' animation";
+    }
+
     // EnemyAttackState
     std::string EnemyAttackState::getDebugString()
     {
@@ -12,7 +17,10 @@ namespace joker
 
     void EnemyAttackState::enterState(Role * role)
     {
-        role->getArmature()->getAnimation()->play("attack");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
     }
 
     void EnemyAttackState::execute(Role * role)
@@ -32,6 +40,9 @@ namespace joker
 
     void EnemyAttackedState::enterState(Role * role)
     {
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackedState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
         role->getArmature()->getAnimation()->play("attacked");
     }
 
@@ -51,8 +62,10 @@ namespace joker
 
     void NodState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("nod"));
-        role->getArmature()->getAnimation()->play("nod");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "NodState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
     }
 
     void NodState::execute(Role * role)
@@ -71,8 +84,10 @@ namespace joker
 
     void DefenceState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
-        role->getArmature()->getAnimation()->play("defence");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "DefenceState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->getPhysicsBody()->setCollidable(true);
     }
 
@@ -96,8 +111,10 @@ namespace joker
 
     void DefenceNodState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defenceNod"));
-        role->getArmature()->getAnimation()->play("defenceNod");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "DefenceNodState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->getPhysicsBody()->setCollidable(true);
     }
 
@@ -127,8 +144,10 @@ namespace joker
 
     void CrawlState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("defence"));
-        role->getArmature()->getAnimation()->play("defence");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "CrawlState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
 
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * role->getSlowSpeed();
 
@@ -186,9 +205,10 @@ namespace joker
 
     void FastRunState::enterState(Role * role)
     {
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"),
-            "enemy missing 'fastRun' movement");
-        role->getArmature()->getAnimation()->play("fastRun");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "FastRunState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * fastSpeed;
 
         role->getPhysicsBody()->setVelocityX(speed);
@@ -235,9 +255,10 @@ namespace joker
 
     void AttackReadyState::enterState(Role * role)
     {
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("attackReady"),
-            "missing 'attackReady' movement");
-        role->getArmature()->getAnimation()->play("attackReady");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "AttackReadyState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
     }
 
     void AttackReadyState::executeCommand(Role * role, const RoleCommand & command)
@@ -257,10 +278,11 @@ namespace joker
 
     void RetreatState::enterState(Role * role)
     {
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "RetreatState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
         static const float retreastSpeed = Config::getInstance().getDoubleValue({"", "", ""});
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"),
-            "enemy missing 'fastRun' movement");
-        role->getArmature()->getAnimation()->play("run");
+        role->getArmature()->getAnimation()->play(animName);
         float speed = (_direction == RoleDirection::LEFT ? 1 : -1) * retreastSpeed;
 
         role->getPhysicsBody()->setVelocityX(speed);

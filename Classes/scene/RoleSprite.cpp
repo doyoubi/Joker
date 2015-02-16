@@ -1,6 +1,7 @@
 #include "RoleSprite.h"
 #include "utils/debug.h"
 #include "utils/RoleStateDebug.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -26,12 +27,6 @@ namespace joker
     {
         // check if animation has been loaded
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("static"),
-            "mising 'static' movement");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("run"),
-            "mising 'run' movement");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement("slowDown"),
-            "mising 'slowDown' movement");
         Armature * armature = Armature::create(animationName);
 
         RoleSprite * role = new (std::nothrow) RoleSprite(armature, animationDirection);
@@ -56,11 +51,14 @@ namespace joker
 
     void RoleSprite::die()
     {
-        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement("attacked"),
-            "missing 'attacked' movement.");
-        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement("dead"),
-            "missing 'dead' movement.");
-        std::vector<std::string> names = { "attacked", "dead" };
+        auto missingAnimation = [](const string & animName) { return "role die(): missing '" + animName + "' movement."; };
+        static const string attackedAnimName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackedState" });
+        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(attackedAnimName),
+            missingAnimation(attackedAnimName));
+        static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "enemy", "dead" });
+        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName),
+            missingAnimation(deadAnimName));
+        std::vector<std::string> names = { attackedAnimName, deadAnimName };
         getArmature()->getAnimation()->playWithNames(names, -1, false);
         getArmature()->getAnimation()->setMovementEventCallFunc(
             [this](Armature *armature, MovementEventType movementType, const std::string& movementID){

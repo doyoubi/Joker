@@ -8,6 +8,10 @@
 
 namespace joker
 {
+    static std::string missingAnimation(const std::string animName)
+    {
+        return "player: missing '" + animName + "' animation";
+    }
 
     // PlayerAttackState
     const float PlayerAttackState::changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
@@ -21,12 +25,13 @@ namespace joker
 
     void PlayerAttackState::enterState(Role * role)
     {
+        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
         for (int i = 0; i < attackStageQuantity; ++i)
         {
-            CHECKNULL(cocostudio::ArmatureDataManager::getInstance()->getAnimationData(
-                "joker")->getMovement("attack" + std::to_string(i)));
+            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)),
+                missingAnimation(animName + std::to_string(i)));
         }
-        role->getArmature()->getAnimation()->play("attack" + std::to_string(_currStage));
+        role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
         float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
         role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
     }
@@ -53,7 +58,10 @@ namespace joker
 
     void PlayerAttackedState::enterState(Role * role)
     {
-        role->getArmature()->getAnimation()->play("attacked");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackedState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
     }
 
     void PlayerAttackedState::execute(Role * role)
@@ -80,7 +88,10 @@ namespace joker
 
     void JumpState::enterState(Role * role)
     {
-        role->getArmature()->getAnimation()->play("jump");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "JumpState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->getPhysicsBody()->jump();
         if (_velocityX != 0)
         {
@@ -133,8 +144,10 @@ namespace joker
 
     void CollideState::enterState(Role * role)
     {
-        CHECKNULL(role->getArmature()->getAnimation()->getAnimationData()->getMovement("slowDown"));
-        role->getArmature()->getAnimation()->play("slowDown");
+        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "CollideState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_direction == RoleDirection::LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
         float v = (_direction == RoleDirection::LEFT ? -1 : 1) * PhysicsBody::getDefaultSpeed();
         role->getPhysicsBody()->setVelocityX(v);
