@@ -35,15 +35,19 @@ namespace joker
     MusicScriptFile musicScript("music/", "alice");
 
     BattleDirector::BattleDirector(BattleScene * battleScene)
-        : _battleScene(battleScene),
-        _rhythmScript(musicScript.scriptName.c_str()),   // rhythmScript should init first before metronome and eventDispatcher
-        _metronome(_rhythmScript.getOffsetRhythmScript(0), Config::getInstance().getDoubleValue({"Metronome", "hitDeltaTime"})),
-        _moveToTime(_rhythmScript.getOffsetRhythmScript(0)[0] - Config::getInstance().getDoubleValue({"Metronome", "promptStartTime"})),
-        _promptScript(musicScript.promptName.c_str()),
-        _promptMetronome(_promptScript.getOffsetRhythmScript(-1 * _moveToTime), 0.02f)
-        // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
+        : _battleScene(battleScene)
     {
         CHECKNULL(battleScene);
+
+        _rhythmScripts.emplace("battle", musicScript.scriptName.c_str());
+        _metronomes.emplace("battle", 
+            Metronome(getScript("battle").getOffsetRhythmScript(0),
+            Config::getInstance().getDoubleValue({ "Metronome", "hitDeltaTime" }))
+        );
+        const float moveToTime = getScript("battle").getOffsetRhythmScript(0)[0] - Config::getInstance().getDoubleValue({ "Metronome", "promptStartTime" });
+        _rhythmScripts.emplace("prompt", RhythmScript(musicScript.promptName.c_str()));
+        _metronomes.emplace("prompt", Metronome(_rhythmScripts.at("prompt").getOffsetRhythmScript(-1 * moveToTime), 0.02f));
+        // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
 
         auto physicsWorld = joker::PhysicsWorld::getInstance();
         physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getBackground()->getContentSize().width);
@@ -53,54 +57,53 @@ namespace joker
 
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
-        _promptMetronome.setRhythmCallBack([this](int){
-            this->getScene()->getPromptBar()->addPromptSprite(_moveToTime);
-            // this (in second) must be equivalent to move_to_time (in millisecond) defined in Resources/music/gen_prompt.py
+        getMetronome("prompt").setRhythmCallBack([this, moveToTime](int){
+            this->getScene()->getPromptBar()->addPromptSprite(moveToTime);
         });
 
-        _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(_rhythmScript));
-        _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(_rhythmScript));
-        _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(_rhythmScript));
-        _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(_rhythmScript));
-        _rhythmEventDispaters.emplace("emptyHit", RhythmEventDispatcher(_rhythmScript));
+        _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("emptyHit", RhythmEventDispatcher(getScript("battle")));
 
-        _metronome.setRhythmCallBack([this](int i){
+        getMetronome("battle").setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
             getEventDispather("addEnemy").runEvent(i);
         });
-        _metronome.setHitCallBack([this](int index, float dt){
+        getMetronome("battle").setHitCallBack([this](int index, float dt){
             getEventDispather("hit").runEvent(index);
         });
-        _metronome.setMissCallBack([this](int index){
+        getMetronome("battle").setMissCallBack([this](int index){
             getEventDispather("miss").runEvent(index);
         });
-        _metronome.setStartHitCallBack([this](int index){
+        getMetronome("battle").setStartHitCallBack([this](int index){
             getEventDispather("emptyHit").runEvent(index);
         });
-        _metronome.setWrongHitCallBack([this](int, float){
+        getMetronome("battle").setWrongHitCallBack([this](int, float){
             this->addEvent(DirectorEventType::EMPTY_HIT);
         });
 
-        getEventDispather("nod").addEvent(_rhythmScript.getEvent("nod"), [this](){
+        getEventDispather("nod").addEvent(getScript("battle").getEvent("nod"), [this](){
             this->addEvent(DirectorEventType::NOD);
             getScene()->getPromptBar()->rhythm();
         });
 
-        getEventDispather("hit").addEvent(_rhythmScript.getEvent("attack"), [this](){
+        getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](){
             this->addEvent(DirectorEventType::ATTACK);
             getScene()->getPromptBar()->hitSuccess();
         });
 
-        getEventDispather("miss").addEvent(_rhythmScript.getEvent("attack"), [this](){
+        getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](){
             this->addEvent(DirectorEventType::ATTACKED);
             getScene()->getPromptBar()->miss();
         });
 
-        getEventDispather("addEnemy").addEvent(_rhythmScript.getEvent("addEnemy"), [this](){
+        getEventDispather("addEnemy").addEvent(getScript("battle").getEvent("addEnemy"), [this](){
             this->supplyEnemy();
         });
 
-        getEventDispather("emptyHit").addEvent(_rhythmScript.getEvent("attack"), [this](){
+        getEventDispather("emptyHit").addEvent(getScript("battle").getEvent("attack"), [this](){
             this->enemyAttackReady();
         });
 
@@ -136,15 +139,15 @@ namespace joker
 
     void BattleDirector::tagMetronome()
     {
-        _metronome.tab();
+        getMetronome("battle").tab();
     }
 
     void BattleDirector::restartMetronome()
     {
-        _metronome.reset();
-        _metronome.start();
-        _promptMetronome.reset();
-        _promptMetronome.start();
+        getMetronome("battle").reset();
+        getMetronome("battle").start();
+        getMetronome("prompt").reset();
+        getMetronome("prompt").start();
         getSoundManager()->playBackGroundSound(musicScript.musicFileName.c_str());
         getScene()->getPromptBar()->clearPromptSprite();
     }

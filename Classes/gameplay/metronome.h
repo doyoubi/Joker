@@ -72,7 +72,7 @@ namespace joker
         float _timeSinceLastPoint;
 
         void operator=(const Metronome &) = delete;
-        Metronome(const Metronome &) = delete;
+        //Metronome(const Metronome &) = delete;  need default copy constructor
     };
 
 }

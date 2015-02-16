@@ -60,20 +60,12 @@ namespace joker
 
         BattleScene * _battleScene = nullptr;   // weak reference
 
-        // Here we should make sure that _rhyScript init before metronome and eventDispatcher
-        // because the latter two member will use _rhythmScript for initialization.
-        // The c++ standard said,
-        // nonstatic data members shall be initialized in the order
-        // they were declared in the class definition
-        // regardless of the order of the mem-initializers.
-        // So we have to declare RhythmScript member first.
-        RhythmScript _rhythmScript;
-        Metronome _metronome;
         std::unordered_map<const char*, RhythmEventDispatcher> _rhythmEventDispaters;
 
-        const float _moveToTime;
-        RhythmScript _promptScript;
-        Metronome _promptMetronome;
+        std::unordered_map<std::string, RhythmScript> _rhythmScripts;
+        std::unordered_map<std::string, Metronome> _metronomes;
+        RhythmScript & getScript(const char * key) { return _rhythmScripts.at(key); }
+        Metronome & getMetronome(const char * key) { return _metronomes.at(key); }
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
