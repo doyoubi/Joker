@@ -13,6 +13,7 @@
 #include "Event.h"
 #include "role/Role.h"
 #include "sound/SoundManager.h"
+#include "AI/BehaviorTree.h"
 
 
 namespace joker
@@ -54,6 +55,8 @@ namespace joker
 
         SoundManager * getSoundManager() { return &_soundManager; }
 
+        void setBTEvent(BTEvent event) { _btEvent = event; }
+
     private:
 
         SoundManager  _soundManager;
@@ -64,13 +67,15 @@ namespace joker
 
         std::unordered_map<std::string, RhythmScript> _rhythmScripts;
         std::unordered_map<std::string, Metronome> _metronomes;
-        RhythmScript & getScript(const char * key) { return _rhythmScripts.at(key); }
-        Metronome & getMetronome(const char * key) { return _metronomes.at(key); }
+        RhythmScript & getScript(const char * key);
+        Metronome & getMetronome(const char * key);
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
 
         RolePtr _player;
+
+        BTEvent _btEvent = BTEvent::NO_EVENT;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;

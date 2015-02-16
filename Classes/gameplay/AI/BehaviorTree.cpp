@@ -212,7 +212,13 @@ namespace joker
         auto closest = createKeepDisNode(enemy, RoleAction::FAST_RUN,
             [](const BTParam & param){ return param.closest; }, closestRangeNear, closestRangeFar);
 
+        static float rushNear = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "rush", "rangeNear" });
+        static float rushFar = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "rush", "rangeFar" });
+        auto rush = createKeepDisNode(enemy, RoleAction::FAST_RUN,
+            [](const BTParam & param){ return param.event == BTEvent::READY_TO_ATTACK && param.closest; }, rushNear, rushFar);
+
         auto keepDistance = BTNodePtr(new Selector([](const BTParam & param){ return true; }));
+        keepDistance->addChild(std::move(rush));
         keepDistance->addChild(std::move(closest));
         keepDistance->addChild(std::move(notClosest));
 

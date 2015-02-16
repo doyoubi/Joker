@@ -11,11 +11,18 @@ namespace joker
 {
     class BTNode;
 
+    enum class BTEvent
+    {
+        NO_EVENT,
+        READY_TO_ATTACK,
+    };
+
     struct BTParam
     {
         int playerPosition;
         bool closest;
         int playerWidth;
+        BTEvent event;
     };
 
     typedef std::function<bool(const BTParam &)> BTprecondition;

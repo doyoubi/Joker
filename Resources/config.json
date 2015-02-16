@@ -41,7 +41,11 @@
         "distance": 400
     },
     "EnemyKeepDistance": {
-        "defenceDis": 120,
+        "rushTime": 0.5,
+        "rush": {
+            "rangeNear": 100,
+            "rangeFar": 200
+        },
         "closest": {
             "rangeNear": 150,
             "rangeFar": 250
