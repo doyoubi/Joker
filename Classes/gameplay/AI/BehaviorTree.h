@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 
+#include "role/RoleEnumType.h"
+
 namespace joker
 {
     class BTNode;
@@ -128,11 +130,10 @@ namespace joker
         BTNodeStatus execute(const BTParam & param) override;
     };
 
-    class EnemyFastRunNode : public RoleActionNode
+    class KeepDistanceNode : public RoleActionNode
     {
     public:
-        EnemyFastRunNode(BTprecondition && precondition, Role * role);
-        static float distance; // when the distance between player and enemy is larger than this distance, enemy fast run
+        KeepDistanceNode(BTprecondition && precondition, Role * role, RoleAction moveAction);
     private:
         virtual void onEnter() override;
         virtual void onExit() override;
@@ -140,6 +141,7 @@ namespace joker
         {
             return BTNodeStatus::RUNNING;
         };
+        RoleAction _moveAction;
     };
 
 

@@ -100,6 +100,20 @@ namespace joker
         std::string getDebugString() override;
     };
 
+    class RetreatState : public State
+    {
+    public:
+        static StatePtr create(RoleDirection direction) { return StatePtr(new RetreatState(direction)); }
+        RetreatState(RoleDirection direction) : _direction(direction) {}
+        void enterState(Role * role) override;
+        void exitState(Role * role) override;
+        void execute(Role * role) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
+    private:
+        RoleDirection _direction;
+    };
+
 }
 
 #endif

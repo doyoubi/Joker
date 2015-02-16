@@ -249,5 +249,54 @@ namespace joker
             role->getStateManager()->changeState(EnemyAttackedState::create());
     }
 
+    // RetreatState
+    std::string RetreatState::getDebugString()
+    {
+        return "retreat";
+    }
+
+    void RetreatState::enterState(Role * role)
+    {
+        static const float retreastSpeed = Config::getInstance().getDoubleValue({"", "", ""});
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement("fastRun"),
+            "enemy missing 'fastRun' movement");
+        role->getArmature()->getAnimation()->play("run");
+        float speed = (_direction == RoleDirection::LEFT ? 1 : -1) * retreastSpeed;
+
+        role->getPhysicsBody()->setVelocityX(speed);
+        role->getPhysicsBody()->setResistanceX(0);
+    }
+
+    void RetreatState::exitState(Role * role)
+    {
+        role->getPhysicsBody()->setVelocityX(0);
+        role->getPhysicsBody()->setResistanceX(0);
+    }
+
+    void RetreatState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::RUN
+            && command.get<RoleDirection>("direction") == _direction)
+        {
+            return;
+        }
+
+        if (roleAction == RoleAction::RUN)
+            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::FAST_RUN)
+            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
+            role->getStateManager()->changeState(SlowDownState::create(role->getPhysicsBody()->getVelocityX()));
+        else if (roleAction == RoleAction::ATTACK)
+            role->getStateManager()->changeState(EnemyAttackState::create());
+        else if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(EnemyAttackedState::create());
+        else if (roleAction == RoleAction::IDLE)
+            role->getStateManager()->changeState(IdleState::create());
+        else if (roleAction == RoleAction::DEFENCE)
+            role->getStateManager()->changeState(DefenceState::create());
+    }
+
 
 }

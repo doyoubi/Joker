@@ -43,13 +43,12 @@
     "EnemyKeepDistance": {
         "defenceDis": 120,
         "closest": {
-            "rangeNear": 120,
-            "rangeFar": 200
+            "rangeNear": 150,
+            "rangeFar": 250
         },
         "notClosest": {
-            "rangeNear": 240,
-            "rangeFar": 320
-        },
-        "FastRunDistance": 370
+            "rangeNear": 350,
+            "rangeFar": 400
+        }
     }
 }

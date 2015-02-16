@@ -148,25 +148,42 @@ namespace joker
     }
 
     // EnemyFastRunNode
-    float EnemyFastRunNode::distance = Config::getInstance().getDoubleValue({"EnemyKeepDistance", "FastRunDistance"});
-
-    EnemyFastRunNode::EnemyFastRunNode(BTprecondition && precondition, Role * role)
-        : RoleActionNode(std::move(precondition), role)
+    KeepDistanceNode::KeepDistanceNode(BTprecondition && precondition, Role * role, RoleAction moveAction)
+        : RoleActionNode(std::move(precondition), role), _moveAction(moveAction)
     {
+        DEBUGCHECK(moveAction == RoleAction::RUN
+            || moveAction == RoleAction::FAST_RUN
+            || moveAction == RoleAction::RETREAT,
+            "invalid moveAction");
     }
 
-    void EnemyFastRunNode::onEnter()
+    void KeepDistanceNode::onEnter()
     {
-        RoleCommand command(RoleAction::FAST_RUN);
+        RoleCommand command(_moveAction);
         command.add<RoleDirection>("direction", getRole()->getDirection());
         getRole()->executeCommand(command);
     }
 
-    void EnemyFastRunNode::onExit()
+    void KeepDistanceNode::onExit()
     {
         RoleCommand command(RoleAction::STOP);
         command.add("direction", getRole()->getDirection());
         getRole()->executeCommand(command);
+    }
+
+
+    BTNodePtr createKeepDisNode(Role * role, RoleAction moveAction, BTprecondition pred, float rangeNear, float rangeFar)
+    {
+        auto root = BTNodePtr(new joker::Sequence(std::move(pred)));
+        auto predNode = BTNodePtr(new DoNothing([role, rangeFar](const BTParam & param){
+            return std::abs(param.playerPosition - role->getPosition().x) > rangeFar;
+        }, role));
+        auto runNode = BTNodePtr(new KeepDistanceNode([role, rangeNear](const BTParam & param){
+            return std::abs(param.playerPosition - role->getPosition().x) > rangeNear;
+        }, role, moveAction));
+        root->addChild(std::move(predNode));
+        root->addChild(std::move(runNode));
+        return root;
     }
 
 
@@ -183,31 +200,21 @@ namespace joker
             return true;
         }, enemy));
 
-        auto fastRunRoot = BTNodePtr(new joker::Sequence([](const BTParam & param){ return true; }));
-        auto fastRunPred = BTNodePtr(new DoNothing([enemy](const BTParam & param){
-            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance;
-        }, enemy));
-        auto fastRun = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){ 
-            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.2f;
-        }, enemy));
+        static float NotClosestRangeNear = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "notClosest", "rangeNear" });
+        static float NotClosestRangeFar = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "notClosest", "rangeFar" });
+        
+        auto notClosest = createKeepDisNode(enemy, RoleAction::FAST_RUN, 
+            [](const BTParam & param){ return true; }, NotClosestRangeNear, NotClosestRangeFar);
 
-        fastRunRoot->addChild(std::move(fastRunPred));
-        fastRunRoot->addChild(std::move(fastRun));
+        static float closestRangeNear = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "closest", "rangeNear" });
+        static float closestRangeFar = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "closest", "rangeFar" });
 
-        auto rushRoot = BTNodePtr(new joker::Sequence([](const BTParam & param){ return param.closest; }));
-        auto rushPred = BTNodePtr(new DoNothing([enemy](const BTParam & param){
-            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.5f;
-        }, enemy));
-        auto rush = BTNodePtr(new EnemyFastRunNode([enemy](const BTParam & param){
-            return std::abs(param.playerPosition - enemy->getPosition().x) > EnemyFastRunNode::distance / 1.8f;
-        }, enemy));
-
-        rushRoot->addChild(std::move(rushPred));
-        rushRoot->addChild(std::move(rush));
+        auto closest = createKeepDisNode(enemy, RoleAction::FAST_RUN,
+            [](const BTParam & param){ return param.closest; }, closestRangeNear, closestRangeFar);
 
         auto keepDistance = BTNodePtr(new Selector([](const BTParam & param){ return true; }));
-        keepDistance->addChild(std::move(rushRoot));
-        keepDistance->addChild(std::move(fastRunRoot));
+        keepDistance->addChild(std::move(closest));
+        keepDistance->addChild(std::move(notClosest));
 
         par->addChild(std::move(faceToPlayer));
         par->addChild(std::move(keepDistance));
