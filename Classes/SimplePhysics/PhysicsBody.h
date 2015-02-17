@@ -18,7 +18,7 @@ namespace joker {
         PhysicsBody(float x, float y, float w, float h);
         ~PhysicsBody();
 
-        inline bool isJumping();
+        inline bool isLanded();
 
         void jump();
         /*

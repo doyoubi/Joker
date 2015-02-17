@@ -2,14 +2,15 @@
 
 #include "utils/debug.h"
 #include "Role.h"
+#include "gameplay/BattleDirector.h"
 
 namespace joker
 {
     using std::string;
 
     // Role
-    Role::Role(RoleSprite * roleSprite, int width, int height, float spriteScale)
-        : _simplePhysicsBody(0, 0, 0, 0), _roleSprite(roleSprite)
+    Role::Role(BattleDirector * director, RoleSprite * roleSprite, int width, int height, float spriteScale, RoleType roleType)
+        : _battleDirector(director), _simplePhysicsBody(0, 0, 0, 0), _roleSprite(roleSprite), _roleType(roleType)
     {
         CHECKNULL(roleSprite);
 
@@ -63,6 +64,16 @@ namespace joker
         float x = _simplePhysicsBody.getX();
         float y = _simplePhysicsBody.getY();
         return Vec2(x, y);
+    }
+
+    void Role::die()
+    {
+        if (_roleType == RoleType::PLAYER)
+            ERRORMSG("can't remove player now");
+        else if (_roleType == RoleType::ENEMY)
+            _battleDirector->removeEnemy(this);
+        else if (_roleType == RoleType::BOMB)
+            _battleDirector->removeBomb(this);
     }
 
 }

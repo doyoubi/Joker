@@ -44,9 +44,11 @@ namespace joker
         void addPlayer(const cocos2d::Vec2 & position);
         RolePtr & getPlayer();
         void addEnemy(const cocos2d::Vec2 & position);
-        void removeEnemy(RolePtr & enemy);
+        void removeEnemy(Role * enemy);
         RolePtr & getClosestEnemy();
         int getEnemyNum() { return _enemyConductor.getEnemyArray().size(); }
+        void addBomb(const cocos2d::Vec2 & position);
+        void removeBomb(Role * bomb);
 
         void supplyEnemy();
         void enemyAttackReady();
@@ -76,6 +78,8 @@ namespace joker
         RolePtr _player;
 
         BTEvent _btEvent = BTEvent::NO_EVENT;
+
+        vector<RolePtr> _bombs;
 
         void operator=(const BattleDirector &) = delete;
         BattleDirector(const BattleScene &) = delete;

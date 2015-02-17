@@ -101,6 +101,16 @@ namespace joker
         return _player;
     }
 
+    RoleSprite * BattleLayer::addBombSprite(const cocos2d::Vec2 & position)
+    {
+        auto bomb = RoleSprite::create(
+            Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationName" }),
+            Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationDirection" }));
+        bomb->setLocalZOrder(0);
+        addChild(bomb);
+        return bomb;
+    }
+
     void BattleLayer::updateBackground(float dt) {
         Size visibleSize = Director::getInstance()->getVisibleSize();
 

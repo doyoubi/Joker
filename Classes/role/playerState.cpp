@@ -58,7 +58,7 @@ namespace joker
 
     void PlayerAttackedState::enterState(Role * role)
     {
-        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackedState" });
+        static const string animName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);

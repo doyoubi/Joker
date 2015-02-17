@@ -21,6 +21,11 @@ namespace joker
             "roleAnimation/enemy/enemy0.plist",
             "roleAnimation/enemy/enemy.ExportJson"
             );
+        ArmatureDataManager::getInstance()->addArmatureFileInfo(
+            "roleAnimation/bomb/bomb0.png",
+            "roleAnimation/bomb/bomb0.plist",
+            "roleAnimation/bomb/bomb.ExportJson"
+            );
     }
 
     RoleSprite * RoleSprite::create(const string & animationName, string animationDirection)
@@ -51,11 +56,11 @@ namespace joker
 
     void RoleSprite::die()
     {
-        auto missingAnimation = [](const string & animName) { return "role die(): missing '" + animName + "' movement."; };
-        static const string attackedAnimName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackedState" });
+        auto missingAnimation = [](const string & animName) { return "RoleSprite::die(): missing '" + animName + "' movement."; };
+        static const string attackedAnimName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
         DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(attackedAnimName),
             missingAnimation(attackedAnimName));
-        static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "enemy", "dead" });
+        static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "role", "dead" });
         DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName),
             missingAnimation(deadAnimName));
         std::vector<std::string> names = { attackedAnimName, deadAnimName };

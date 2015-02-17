@@ -19,13 +19,13 @@ namespace joker
         _enemyArray.push_back(std::move(enemy));
     }
 
-    void EnemyConductor::removeEnemy(RolePtr & enemy)
+    void EnemyConductor::removeEnemy(Role * enemy)
     {
         CHECKNULL(enemy);
-        DEBUGCHECK(_tree.count(enemy.get()) == 1, "enemy not exist in EnemyConductor");
-        auto it = std::find(begin(_enemyArray), end(_enemyArray), enemy);
+        DEBUGCHECK(_tree.count(enemy) == 1, "enemy not exist in EnemyConductor");
+        auto it = std::find_if(begin(_enemyArray), end(_enemyArray), [enemy](RolePtr & role){ return role.get() == enemy; });
         DEBUGCHECK(end(_enemyArray) != it, "enemy not exist in EnemyConductor");
-        _tree.erase(enemy.get());
+        _tree.erase(enemy);
         _enemyArray.erase(it);
     }
 

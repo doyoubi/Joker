@@ -65,16 +65,16 @@ namespace joker {
     }
 
     void PhysicsBody::jump() {
-        if (isJumping())
-            return;
+        if (!isLanded())
+            return;  // avoid double jump
         _vy = JumpInitSpeedY;
 
         if (_jumpCallback)
             _jumpCallback();
     }
 
-    bool PhysicsBody::isJumping() {
-        return _y > PhysicsWorld::getInstance()->getGroundHeight();
+    bool PhysicsBody::isLanded() {
+        return _y <= PhysicsWorld::getInstance()->getGroundHeight();
     }
 
     void PhysicsBody::update(float dt) {

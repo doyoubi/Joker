@@ -35,6 +35,14 @@
             "fastSpeed": 300,
             "maxQuantity": 2,
             "attackScope": 200
+        },
+        "bomb": {
+            "animationName": "bomb",
+            "animationDirection": "right",
+            "width": 50,
+            "height": 50,
+            "spriteScale": 1,
+            "explodeScope": "100"
         }
     },
     "EnemyApearPosition": {
@@ -59,25 +67,29 @@
         "role": {
             "IdleState": "static",
             "RunState": "run",
-            "SlowDownState": "slowDown"
+            "SlowDownState": "slowDown",
+            "attacked": "attacked",
+            "dead": "dead"
         },
         "player": {
             "PlayerAttackState": "attack",
-            "PlayerAttackedState": "attacked",
             "JumpState": "jump",
             "CollideState": "attacked"
         },
         "enemy": {
             "EnemyAttackState": "attack",
-            "EnemyAttackedState": "attacked",
             "NodState": "nod",
             "DefenceState": "defence",
             "DefenceNodState": "defenceNod",
             "CrawlState": "run",
             "FastRunState": "run",
             "AttackReadyState": "attackReady",
-            "RetreatState": "run",
-            "dead": "dead"
+            "RetreatState": "run"
+        },
+        "bomb": {
+            "IdleState": "static",
+            "FallingState": "static",
+            "ExplodeState": "explode"
         }
     }
 }

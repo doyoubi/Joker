@@ -7,6 +7,7 @@
 #include "playerState.h"
 #include "enemyState.h"
 #include "utils/config.h"
+#include "bombState.h"
 
 namespace joker
 {
@@ -96,6 +97,8 @@ namespace joker
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::ATTACK_READY)
             role->getStateManager()->changeState(AttackReadyState::create());
+        else if (roleAction == RoleAction::FALLING)
+            role->getStateManager()->changeState(FallingState::create());
     }
 
     // RunState

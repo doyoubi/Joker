@@ -15,7 +15,7 @@ namespace joker
     public:
         std::vector<RolePtr> & getEnemyArray();
         void addEnemy(RolePtr && role);
-        void removeEnemy(RolePtr & enemy);
+        void removeEnemy(Role * enemy);
         void tick(RolePtr & role, const BTParam & param);
 
     private:

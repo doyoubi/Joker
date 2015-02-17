@@ -146,6 +146,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\gameplay\RhythmEventDispatcher.cpp" />
     <ClCompile Include="..\Classes\gameplay\RhythmScript.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\role\bombState.cpp" />
     <ClCompile Include="..\Classes\role\enemyState.cpp" />
     <ClCompile Include="..\Classes\role\playerState.cpp" />
     <ClCompile Include="..\Classes\role\Role.cpp" />
@@ -171,6 +172,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\gameplay\RhythmEventDispatcher.h" />
     <ClInclude Include="..\Classes\gameplay\RhythmScript.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\role\bombState.h" />
     <ClInclude Include="..\Classes\role\enemyState.h" />
     <ClInclude Include="..\Classes\role\playerState.h" />
     <ClInclude Include="..\Classes\role\Role.h" />

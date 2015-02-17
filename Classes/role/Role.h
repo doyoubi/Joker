@@ -23,12 +23,20 @@ namespace joker
 
     class Role;
     typedef std::unique_ptr<Role> RolePtr;
+    class BattleDirector;
+
+    enum class RoleType
+    {
+        PLAYER,
+        ENEMY,
+        BOMB,
+    };
 
     class Role
     {
     public:
 
-        Role(RoleSprite * roleSprite, int width, int height, float SpriteScale);
+        Role(BattleDirector * director, RoleSprite * roleSprite, int width, int height, float SpriteScale, RoleType roleType);
         ~Role();
 
         void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)
@@ -50,19 +58,23 @@ namespace joker
         float getNormalSpeed() const { return _normalSpeed; }
         float getSlowSpeed() const { return _slowSpeed; }
 
-        bool isPlayer() const { return _isPlayer; }
-        void setIsPlayer() { _isPlayer = true; }
+        bool isPlayer() const { return getRoleType() == RoleType::PLAYER; }
+        RoleType getRoleType() const { return _roleType; }
 
         cocostudio::Armature * getArmature() { return _roleSprite->getArmature(); }
+
+        void die();
 
     private:
         std::unique_ptr<StateManager> _stateManager;
         PhysicsBody _simplePhysicsBody;
 
+        BattleDirector * _battleDirector;
+
         float _normalSpeed = 0;
         float _slowSpeed = 0;
 
-        bool _isPlayer = false;
+        RoleType _roleType;
 
         RoleSprite * _roleSprite; // weak reference
     };

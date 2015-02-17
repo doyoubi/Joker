@@ -40,7 +40,7 @@ namespace joker
 
     void EnemyAttackedState::enterState(Role * role)
     {
-        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackedState" });
+        static const string animName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play("attacked");

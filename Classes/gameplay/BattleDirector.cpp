@@ -94,6 +94,8 @@ namespace joker
         });
         getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](){
             this->setBTEvent(BTEvent::READY_TO_ATTACK);
+            float x = getPlayer()->getPosition().x;
+            //this->addBomb(Vec2(x, 300));
         });
 
         getEventDispather("nod").addEvent(getScript("battle").getEvent("nod"), [this](){
@@ -172,8 +174,7 @@ namespace joker
         int width = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "width" });
         int height = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "height" });
         float scale = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "spriteScale" });
-        _player = RolePtr(new Role(player,width, height, scale));
-        _player->setIsPlayer();
+        _player = RolePtr(new Role(this, player,width, height, scale, RoleType::PLAYER));
         _player->setSpeed(Config::getInstance().getDoubleValue({"RoleProperty", "player", "normalSpeed"}),
             Config::getInstance().getDoubleValue({ "RoleProperty", "player", "slowSpeed" }));
         _player->setPosition(position);
@@ -196,14 +197,14 @@ namespace joker
         int width = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "width" });
         int height = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "height" });
         float scale = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "spriteScale" });
-        auto enemy = RolePtr(new Role(enemySprite, width, height, scale));
+        auto enemy = RolePtr(new Role(this, enemySprite, width, height, scale, RoleType::ENEMY));
         enemy->setSpeed(Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "normalSpeed"}),
             Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "slowSpeed" }));
         enemy->setPosition(position);
         _enemyConductor.addEnemy(std::move(enemy));
     }
 
-    void BattleDirector::removeEnemy(RolePtr & enemy)
+    void BattleDirector::removeEnemy(Role * enemy)
     {
         _enemyConductor.removeEnemy(enemy);
     }
@@ -274,6 +275,28 @@ namespace joker
     { 
         DEBUGCHECK(_metronomes.count(key) == 1, string("getMetronome(): invalid key: ") + key);
         return _metronomes.at(key);
+    }
+
+    void BattleDirector::addBomb(const cocos2d::Vec2 & position)
+    {
+        auto bombSprite = _battleScene->getBattleLayer()->addBombSprite(position);
+        int width = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "width" });
+        int height = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "height" });
+        float scale = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "spriteScale" });
+        auto bomb = RolePtr(new Role(this, bombSprite, width, height, scale, RoleType::BOMB));
+        bomb->setSpeed(Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "normalSpeed" }),
+            Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "slowSpeed" }));
+        bomb->setPosition(position);
+        bomb->executeCommand(RoleAction::FALLING);
+        _bombs.push_back(std::move(bomb));
+    }
+
+    void BattleDirector::removeBomb(Role * bomb)
+    {
+        CHECKNULL(bomb);
+        auto it = std::find_if(begin(_bombs), end(_bombs), [bomb](RolePtr & ptr){ return ptr.get() == bomb; });
+        DEBUGCHECK(end(_bombs) != it, "enemy not exist in EnemyConductor");
+        _bombs.erase(it);
     }
 
 }

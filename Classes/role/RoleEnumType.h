@@ -19,6 +19,8 @@ namespace joker
         FAST_RUN,
         ATTACK_READY,
         RETREAT,
+        EXPLODE,
+        FALLING,
     };
 
     enum class RoleDirection

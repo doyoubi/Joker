@@ -101,6 +101,9 @@
     <ClCompile Include="..\Classes\utils\RoleStateDebug.cpp">
       <Filter>Classes\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\role\bombState.cpp">
+      <Filter>Classes\role</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -173,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\utils\RoleStateDebug.h">
       <Filter>Classes\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\role\bombState.h">
+      <Filter>Classes\role</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

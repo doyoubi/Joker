@@ -43,6 +43,7 @@ namespace joker
         RoleSprite * getPlayerSprite() { return _player; }
         RoleSprite * addEnemySprite(const cocos2d::Vec2 & position);
         RoleSprite * addPlayerSprite(const cocos2d::Vec2 & position);
+        RoleSprite * addBombSprite(const cocos2d::Vec2 & position);
         void removeEnemySprite(RoleSprite * enemy);
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         cocos2d::Sprite * getBackground() { return _background; }
