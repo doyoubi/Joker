@@ -37,11 +37,13 @@ namespace joker
     {
     }
 
-    void FallingState::executeCommand(Role * role, const RoleCommand & command)
+    bool FallingState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::EXPLODE)
             role->getStateManager()->changeState(ExplodeState::create());
+        else return false;
+        return true;
     }
 
     // ExplodeState
@@ -71,8 +73,9 @@ namespace joker
         }
     }
 
-    void ExplodeState::executeCommand(Role * role, const RoleCommand & command)
+    bool ExplodeState::executeCommand(Role * role, const RoleCommand & command)
     {
+        return false;
     }
 
 }

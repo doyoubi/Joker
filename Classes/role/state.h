@@ -26,12 +26,12 @@ namespace joker
         StateManager(Role * role, StatePtr initState);
         ~StateManager();
         void changeState(StatePtr && nextState);
-        void executeCommand(const RoleCommand & command);
+        bool executeCommand(const RoleCommand & command);
         void update(float dt);
 
         std::string getDebugString();
     private:
-        Role * _role;   // weak reference
+        Role * _role;   // weak referencebool executeCommand
         StatePtr _currState;
 
         CC_DISALLOW_COPY_AND_ASSIGN(StateManager);
@@ -44,7 +44,7 @@ namespace joker
         virtual void enterState(Role * role) = 0;
         virtual void exitState(Role * role) = 0;
         virtual void execute(Role * role) = 0;
-        virtual void executeCommand(Role * role, const RoleCommand & command) = 0;
+        virtual bool executeCommand(Role * role, const RoleCommand & command) = 0;
 
         virtual std::string getDebugString() = 0;
     private:
@@ -58,7 +58,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override {};
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     };
 
@@ -70,7 +70,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
@@ -84,7 +84,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         float _velocityX;

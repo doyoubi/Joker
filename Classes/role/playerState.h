@@ -20,7 +20,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         static const float changedDistance;
@@ -33,19 +33,22 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     };
 
     class PlayerAttackedState : public State
     {
     public:
-        static StatePtr create() { return StatePtr(new PlayerAttackedState()); }
+        static StatePtr create(RoleDirection direction) { return StatePtr(new PlayerAttackedState(direction)); }
+        PlayerAttackedState(RoleDirection direction) : _direction(direction) {}
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
+    private:
+        RoleDirection _direction;
     };
 
     class JumpState : public State
@@ -56,7 +59,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         float _velocityX;
@@ -71,7 +74,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         RoleDirection _direction;

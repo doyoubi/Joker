@@ -32,9 +32,9 @@ namespace joker
         _roleSprite->die();
     }
 
-    void Role::executeCommand(const RoleCommand & command)
+    bool Role::executeCommand(const RoleCommand & command)
     {
-        _stateManager->executeCommand(command);
+        return _stateManager->executeCommand(command);
     }
 
     RoleDirection Role::getDirection() const

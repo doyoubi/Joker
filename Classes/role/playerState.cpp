@@ -54,8 +54,9 @@ namespace joker
         _currStage = (_currStage + 1) % attackStageQuantity;
     }
 
-    void PlayerAttackState::executeCommand(Role * role, const RoleCommand & command)
+    bool PlayerAttackState::executeCommand(Role * role, const RoleCommand & command)
     {
+        return false;
     }
 
     // EmptyAttackState
@@ -90,13 +91,15 @@ namespace joker
         }
     }
 
-    void EmptyAttackState::executeCommand(Role * role, const RoleCommand & command)
+    bool EmptyAttackState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(PlayerAttackedState::create());
+            role->getStateManager()->changeState(PlayerAttackedState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::COLLIDE)
-            role->getStateManager()->changeState(PlayerAttackedState::create());
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else return false;
+        return true;
     }
 
     // PlayerAttackedState
@@ -111,6 +114,11 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
+
+        static float attackedFallBackSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackedFallBackSpeed" });
+        float v = (_direction == RoleDirection::LEFT ? 1 : -1) * attackedFallBackSpeed;
+        role->getPhysicsBody()->setVelocityX(v);
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }
 
     void PlayerAttackedState::execute(Role * role)
@@ -119,6 +127,17 @@ namespace joker
         {
             role->getStateManager()->changeState(IdleState::create());
         }
+    }
+
+    bool PlayerAttackedState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(PlayerAttackedState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else return false;
+        return true;
     }
 
 
@@ -166,7 +185,7 @@ namespace joker
         }
     }
 
-    void JumpState::executeCommand(Role * role, const RoleCommand & command)
+    bool JumpState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN)
@@ -177,6 +196,8 @@ namespace joker
         }
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else return false;
+        return true;
     }
 
 
@@ -198,7 +219,8 @@ namespace joker
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_direction == RoleDirection::LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
-        float v = (_direction == RoleDirection::LEFT ? -1 : 1) * PhysicsBody::getDefaultSpeed();
+        static float collideFallBackSpeed = Config::getInstance().getDoubleValue({"RoleProperty", "player", "collideFallBackSpeed"});
+        float v = (_direction == RoleDirection::LEFT ? -1 : 1) * collideFallBackSpeed;
         role->getPhysicsBody()->setVelocityX(v);
         role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }
@@ -217,13 +239,17 @@ namespace joker
         }
     }
 
-    void CollideState::executeCommand(Role * role, const RoleCommand & command)
+    bool CollideState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(PlayerAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(PlayerAttackedState::create());
+            role->getStateManager()->changeState(PlayerAttackedState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else return false;
+        return true;
     }
 
 }

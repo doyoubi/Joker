@@ -12,19 +12,22 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
         std::string getDebugString() override;
     };
 
     class EnemyAttackedState : public State
     {
     public:
-        static StatePtr create() { return StatePtr(new EnemyAttackedState()); }
+        static StatePtr create(RoleDirection direction) { return StatePtr(new EnemyAttackedState(direction)); }
+        EnemyAttackedState(RoleDirection direction) : _direction(direction) {}
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
         std::string getDebugString() override;
+    private:
+        RoleDirection _direction;
     };
 
     class NodState : public State
@@ -34,7 +37,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
         std::string getDebugString() override;
     };
 
@@ -45,7 +48,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
         std::string getDebugString() override;
     };
 
@@ -56,7 +59,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
         std::string getDebugString() override;
     };
 
@@ -68,7 +71,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override {};
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
@@ -82,7 +85,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override {};
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
@@ -96,22 +99,24 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override {};
         void execute(Role * role) override {};
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     };
 
+    class RetreatNode;
     class RetreatState : public State
     {
     public:
-        static StatePtr create(RoleDirection direction) { return StatePtr(new RetreatState(direction)); }
-        RetreatState(RoleDirection direction) : _direction(direction) {}
+        static StatePtr create(RoleDirection direction, RetreatNode * node) { return StatePtr(new RetreatState(direction, node)); }
+        RetreatState(RoleDirection direction, RetreatNode * node) : _direction(direction), _retreatNode(node) {}
         void enterState(Role * role) override;
         void exitState(Role * role) override;
-        void execute(Role * role) override {};
-        void executeCommand(Role * role, const RoleCommand & command) override;
+        void execute(Role * role) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
+        RetreatNode * _retreatNode;
     };
 
 }

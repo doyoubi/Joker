@@ -42,7 +42,7 @@ namespace joker
         void setCollideCallbak(PhysicsBody::CollideCallback && collideCallback)
         { _simplePhysicsBody.setCollideCallback(std::move(collideCallback)); }
 
-        void executeCommand(const RoleCommand & command);
+        bool executeCommand(const RoleCommand & command);
         RoleDirection getDirection() const;
         void setDirection(RoleDirection direction);
 

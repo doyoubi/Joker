@@ -7,6 +7,7 @@
 #include "PhysicsBody.h"
 #include "PhysicsWorld.h"
 #include "utils/debug.h"
+#include "utils/config.h"
 
 USING_NS_CC;
 
@@ -14,12 +15,12 @@ USING_NS_CC;
 
 namespace joker {
 
-    float PhysicsBody::_defaultSpeed(160.0f);
-    float PhysicsBody::JumpInitSpeedY(100.0f);
+    float PhysicsBody::JumpInitSpeedY = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "jumpSpeedY" });
 
     PhysicsBody::PhysicsBody(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0), _r(0), _collidable(false),
-        _landCallback(nullptr), _jumpCallback(nullptr) {
+        _landCallback(nullptr), _jumpCallback(nullptr) 
+    {
         PhysicsWorld::getInstance()->addPhysicsBody(this);
     }
 

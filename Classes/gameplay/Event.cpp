@@ -44,7 +44,9 @@ namespace joker
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
-        sufferer->executeCommand(RoleAction::ATTACKED);
+        RoleCommand command(RoleAction::ATTACKED);
+        command.add("direction", sufferer->getDirection());
+        sufferer->executeCommand(command);
 
         director->getSoundManager()->playSound("hit");
 
@@ -59,7 +61,9 @@ namespace joker
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
-        sufferer->executeCommand(RoleAction::ATTACKED);
+        RoleCommand command(RoleAction::ATTACKED);
+        command.add("direction", sufferer->getDirection());
+        sufferer->executeCommand(command);
     }
 
     // NodEvent

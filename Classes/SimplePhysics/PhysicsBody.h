@@ -53,8 +53,6 @@ namespace joker {
         float getHeight() const          { return _h; }
         bool  isCollidable() const      { return _collidable; }
 
-        static float getDefaultSpeed() { return _defaultSpeed; }
-
         void update(float);
 
         typedef std::function<void(const CollideInfo & CollideInfo)> CollideCallback;
@@ -66,7 +64,6 @@ namespace joker {
         std::function <void(void)> _jumpCallback;
 
     private:
-        static float _defaultSpeed;
 
         CollideCallback _collideCallback;
 

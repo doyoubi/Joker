@@ -2,6 +2,7 @@
 #include "Role.h"
 #include "utils/config.h"
 #include "gameplay/BattleDirector.h"
+#include "SimplePhysics/PhysicsWorld.h"
 
 namespace joker
 {
@@ -48,6 +49,11 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play("attacked");
+
+        static float attackedFallBackSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "attackedFallBackSpeed" });
+        float v = (_direction == RoleDirection::LEFT ? 1 : -1) * attackedFallBackSpeed;
+        role->getPhysicsBody()->setVelocityX(v);
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }
 
     void EnemyAttackedState::execute(Role * role)
@@ -92,7 +98,6 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
-        role->getPhysicsBody()->setCollidable(true);
     }
 
     void DefenceState::execute(Role * role)
@@ -103,7 +108,6 @@ namespace joker
 
     void DefenceState::exitState(Role * role)
     {
-        role->getPhysicsBody()->setCollidable(false);
     }
 
 
@@ -119,12 +123,10 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
-        role->getPhysicsBody()->setCollidable(true);
     }
 
     void DefenceNodState::exitState(Role * role)
     {
-        role->getPhysicsBody()->setCollidable(false);
     }
 
     void DefenceNodState::execute(Role * role)
@@ -157,23 +159,21 @@ namespace joker
 
         role->getPhysicsBody()->setVelocityX(speed);
         role->getPhysicsBody()->setResistanceX(0);
-        role->getPhysicsBody()->setCollidable(true);
     }
 
     void CrawlState::exitState(Role * role)
     {
         role->getPhysicsBody()->setVelocityX(0);
         role->getPhysicsBody()->setResistanceX(0);
-        role->getPhysicsBody()->setCollidable(false);
     }
 
-    void CrawlState::executeCommand(Role * role, const RoleCommand & command)
+    bool CrawlState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN
             && command.get<RoleDirection>("direction") == _direction)
         {
-            return;
+            return false;
         }
 
         if (roleAction == RoleAction::RUN)
@@ -185,13 +185,15 @@ namespace joker
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(EnemyAttackedState::create());
+            role->getStateManager()->changeState(EnemyAttackedState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::NOD)
             role->getStateManager()->changeState(DefenceNodState::create());
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
         else if (roleAction == RoleAction::ATTACK_READY)
             role->getStateManager()->changeState(AttackReadyState::create());
+        else return false;
+        return true;
     }
 
     // FastRunState
@@ -217,7 +219,6 @@ namespace joker
 
         role->getPhysicsBody()->setVelocityX(speed);
         role->getPhysicsBody()->setResistanceX(0);
-        role->getPhysicsBody()->setCollidable(false);
     }
 
     void FastRunState::exitState(Role * role)
@@ -226,13 +227,13 @@ namespace joker
         role->getPhysicsBody()->setResistanceX(0);
     }
 
-    void FastRunState::executeCommand(Role * role, const RoleCommand & command)
+    bool FastRunState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN
             && command.get<RoleDirection>("direction") == _direction)
         {
-            return;
+            return false;
         }
 
         if (roleAction == RoleAction::RUN)
@@ -244,11 +245,13 @@ namespace joker
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(EnemyAttackedState::create());
+            role->getStateManager()->changeState(EnemyAttackedState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
         else if (roleAction == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
+        else return false;
+        return true;
     }
 
     // AttackReadyState
@@ -265,13 +268,15 @@ namespace joker
         role->getArmature()->getAnimation()->play(animName);
     }
 
-    void AttackReadyState::executeCommand(Role * role, const RoleCommand & command)
+    bool AttackReadyState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(EnemyAttackedState::create());
+            role->getStateManager()->changeState(EnemyAttackedState::create(command.get<RoleDirection>("direction")));
+        else return false;
+        return true;
     }
 
     // RetreatState
@@ -285,43 +290,48 @@ namespace joker
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "RetreatState" });
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
-        static const float retreastSpeed = Config::getInstance().getDoubleValue({"", "", ""});
+        static const float retreastSpeed = Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "restreatSpeed"});
         role->getArmature()->getAnimation()->play(animName);
         float speed = (_direction == RoleDirection::LEFT ? 1 : -1) * retreastSpeed;
 
         role->getPhysicsBody()->setVelocityX(speed);
-        role->getPhysicsBody()->setResistanceX(0);
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
+    }
+
+    void RetreatState::execute(Role * role)
+    {
+        if (role->getPhysicsBody()->getVelocityX() == 0.0f)
+            role->getStateManager()->changeState(IdleState::create());
     }
 
     void RetreatState::exitState(Role * role)
     {
         role->getPhysicsBody()->setVelocityX(0);
         role->getPhysicsBody()->setResistanceX(0);
+        _retreatNode->setExit(true);
     }
 
-    void RetreatState::executeCommand(Role * role, const RoleCommand & command)
+    bool RetreatState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::RUN
             && command.get<RoleDirection>("direction") == _direction)
         {
-            return;
+            return false;
         }
 
-        if (roleAction == RoleAction::RUN)
-            role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
-        else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
+        if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(SlowDownState::create(role->getPhysicsBody()->getVelocityX()));
         else if (roleAction == RoleAction::ATTACK)
             role->getStateManager()->changeState(EnemyAttackState::create());
         else if (roleAction == RoleAction::ATTACKED)
-            role->getStateManager()->changeState(EnemyAttackedState::create());
+            role->getStateManager()->changeState(EnemyAttackedState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::IDLE)
             role->getStateManager()->changeState(IdleState::create());
         else if (roleAction == RoleAction::DEFENCE)
             role->getStateManager()->changeState(DefenceState::create());
+        else return false;
+        return true;
     }
 
 

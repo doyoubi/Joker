@@ -91,8 +91,11 @@ namespace joker
     public:
         RoleActionNode(BTprecondition && precondition, Role * role);
         Role * getRole() { return _role; }
+        void setExit(bool exit) { _exit = exit; }
     private:
         Role * _role;
+    protected:
+        bool _exit = false;
     };
 
 
@@ -151,6 +154,15 @@ namespace joker
         RoleAction _moveAction;
     };
 
+    class RetreatNode : public RoleActionNode
+    {
+    public:
+        RetreatNode(BTprecondition && precondition, Role * role) : RoleActionNode(std::move(precondition), role) {}
+    private:
+        virtual void onEnter() override;
+        virtual void onExit() override;
+        BTNodeStatus execute(const BTParam & param) override;
+    };
 
     BTNodePtr createEnemyTree(Role * enemy);
 

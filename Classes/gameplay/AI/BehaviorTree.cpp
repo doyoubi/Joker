@@ -171,16 +171,53 @@ namespace joker
         getRole()->executeCommand(command);
     }
 
+    // RetreatNode
+    void RetreatNode::onEnter()
+    {
+        RoleCommand command(RoleAction::RETREAT);
+        command.add<RoleDirection>("direction", getRole()->getDirection());
+        command.add<RetreatNode*>("btnode", this);
+        setExit(!getRole()->executeCommand(command));
+    }
+
+    void RetreatNode::onExit()
+    {
+    }
+
+    BTNodeStatus RetreatNode::execute(const BTParam & param)
+    {
+        if (_exit) return BTNodeStatus::SUCCESS;
+        return BTNodeStatus::RUNNING;
+    }
+
 
     BTNodePtr createKeepDisNode(Role * role, RoleAction moveAction, BTprecondition pred, float rangeNear, float rangeFar)
     {
         auto root = BTNodePtr(new joker::Sequence(std::move(pred)));
         auto predNode = BTNodePtr(new DoNothing([role, rangeFar](const BTParam & param){
-            return std::abs(param.playerPosition - role->getPosition().x) > rangeFar;
+            float d = std::abs(param.playerPosition - role->getPosition().x);
+            return d > rangeFar;
         }, role));
         auto runNode = BTNodePtr(new KeepDistanceNode([role, rangeNear](const BTParam & param){
-            return std::abs(param.playerPosition - role->getPosition().x) > rangeNear;
+            float d = std::abs(param.playerPosition - role->getPosition().x);
+            return d > rangeNear;
         }, role, moveAction));
+        root->addChild(std::move(predNode));
+        root->addChild(std::move(runNode));
+        return root;
+    }
+
+    BTNodePtr createRetreatNode(Role * role, BTprecondition pred, float rangeNear, float rangeFar)
+    {
+        auto root = BTNodePtr(new joker::Sequence(std::move(pred)));
+        auto predNode = BTNodePtr(new DoNothing([role, rangeNear](const BTParam & param){
+            float d = std::abs(param.playerPosition - role->getPosition().x);
+            return d < rangeNear;
+        }, role));
+        auto runNode = BTNodePtr(new RetreatNode([role, rangeFar](const BTParam & param){
+            float d = std::abs(param.playerPosition - role->getPosition().x);
+            return d < rangeFar;
+        }, role));
         root->addChild(std::move(predNode));
         root->addChild(std::move(runNode));
         return root;
@@ -217,7 +254,13 @@ namespace joker
         auto rush = createKeepDisNode(enemy, RoleAction::FAST_RUN,
             [](const BTParam & param){ return param.event == BTEvent::READY_TO_ATTACK && param.closest; }, rushNear, rushFar);
 
+        static float retreatNear = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "retreat", "rangeNear" });
+        static float retreatFar = Config::getInstance().getDoubleValue({ "EnemyKeepDistance", "retreat", "rangeFar" });
+        auto retreat = createRetreatNode(enemy,
+            [](const BTParam & param){ return true; }, retreatNear, retreatFar);
+
         auto keepDistance = BTNodePtr(new Selector([](const BTParam & param){ return true; }));
+        keepDistance->addChild(std::move(retreat));
         keepDistance->addChild(std::move(rush));
         keepDistance->addChild(std::move(closest));
         keepDistance->addChild(std::move(notClosest));

@@ -22,7 +22,9 @@
             "attackStageQuantity": 2,
             "attackScope": 200,
             "initPositionX": 200,
-            "initPositionY": 200
+            "initPositionY": 200,
+            "collideFallBackSpeed": 400,
+            "attackedFallBackSpeed": 200
         },
         "enemy": {
             "animationName": "enemy",
@@ -31,16 +33,18 @@
             "width": 50,
             "height": 150,
             "slowSpeed": 10,
+            "restreatSpeed": 300,
             "normalSpeed": 100,
             "fastSpeed": 300,
             "maxQuantity": 2,
-            "attackScope": 200
+            "attackScope": 200,
+            "attackedFallBackSpeed": 400
         },
         "bomb": {
             "animationName": "bomb",
             "animationDirection": "right",
-            "width": 50,
-            "height": 50,
+            "width": 70,
+            "height": 100,
             "spriteScale": 1,
             "explodeScope": 100,
             "explodeTime": 0.5,
@@ -53,6 +57,10 @@
     },
     "EnemyKeepDistance": {
         "rushTime": 0.5,
+        "retreat": {
+            "rangeNear": 100,
+            "rangeFar": 120
+        },
         "rush": {
             "rangeNear": 100,
             "rangeFar": 200
@@ -87,7 +95,7 @@
             "CrawlState": "run",
             "FastRunState": "run",
             "AttackReadyState": "attackReady",
-            "RetreatState": "run"
+            "RetreatState": "slowDown"
         },
         "bomb": {
             "IdleState": "static",
