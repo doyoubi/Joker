@@ -119,6 +119,7 @@ namespace joker
     {
     public:
         Sequence(BTprecondition && precondition) : ControlNode(std::move(precondition)) {};
+        void setInitStatus() override;
     private:
         BTNodeStatus traverse(const BTParam & param) override;
         int _currNode = 0;
@@ -147,10 +148,7 @@ namespace joker
     private:
         virtual void onEnter() override;
         virtual void onExit() override;
-        BTNodeStatus execute(const BTParam & param) override 
-        {
-            return BTNodeStatus::RUNNING;
-        };
+        BTNodeStatus execute(const BTParam & param) override;
         RoleAction _moveAction;
     };
 

@@ -17,7 +17,6 @@ namespace joker
     {
         if (!_precondition(param))
         {
-            setInitStatus();
             return BTNodeStatus::FAILURE;
         }
 
@@ -80,16 +79,21 @@ namespace joker
     // Selector
     BTNodeStatus Selector::traverse(const BTParam & param)
     {
+        BTNodeStatus s = BTNodeStatus::FAILURE;
         // Keep going until a child says its running.
         for (auto & ptr : _children)
         {
             BTNodeStatus status = ptr->tick(param);
-            if (status == BTNodeStatus::RUNNING || status == BTNodeStatus::SUCCESS)
+            if (s == BTNodeStatus::FAILURE && (status == BTNodeStatus::RUNNING || status == BTNodeStatus::SUCCESS))
             {
-                return status;
+                s = status;
+            }
+            else
+            {
+                ptr->setInitStatus();
             }
         }
-        return BTNodeStatus::FAILURE; // return failure when there is not running node
+        return s; // return failure when there is not running node
     }
 
     // Parallel
@@ -107,6 +111,8 @@ namespace joker
             {
                 status = BTNodeStatus::SUCCESS;
             }
+            else if (status == BTNodeStatus::FAILURE)
+                ptr->setInitStatus();
         }
         return status;
     }
@@ -127,9 +133,16 @@ namespace joker
         else if (status == BTNodeStatus::FAILURE)
         {
             _currNode = 0;
+            _children[_currNode]->setInitStatus();
             return BTNodeStatus::FAILURE;
         }
         return BTNodeStatus::RUNNING;
+    }
+
+    void Sequence::setInitStatus()
+    {
+        ControlNode::setInitStatus();
+        _currNode = 0;
     }
 
     // FaceToPlayer
@@ -161,7 +174,7 @@ namespace joker
     {
         RoleCommand command(_moveAction);
         command.add<RoleDirection>("direction", getRole()->getDirection());
-        getRole()->executeCommand(command);
+        setExit(!getRole()->executeCommand(command));
     }
 
     void KeepDistanceNode::onExit()
@@ -169,6 +182,12 @@ namespace joker
         RoleCommand command(RoleAction::STOP);
         command.add("direction", getRole()->getDirection());
         getRole()->executeCommand(command);
+    }
+
+    BTNodeStatus KeepDistanceNode::execute(const BTParam & param)
+    {
+        if (_exit) return BTNodeStatus::SUCCESS;
+        return BTNodeStatus::RUNNING;
     }
 
     // RetreatNode
