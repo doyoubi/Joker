@@ -158,18 +158,18 @@ namespace joker
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
     }
 
-    void BattleDirector::sendCommand(RolePtr & role, const RoleCommand & command)
+    void BattleDirector::sendCommand(Role * role, const RoleCommand & command)
     {
         CHECKNULL(role);
         role->executeCommand(command);
     }
 
-    RolePtr & BattleDirector::getClosestEnemy()
+    Role * BattleDirector::getClosestEnemy()
     {
-        auto & enemyArray = _enemyConductor.getEnemyArray();
+        auto enemyArray = _enemyConductor.getEnemyArray();
         DEBUGCHECK(enemyArray.size() > 0, "empty enemy array");
         auto it = std::min_element(std::begin(enemyArray), std::end(enemyArray), 
-            [this](RolePtr & r, RolePtr & min) {
+            [this](Role * r, Role * min) {
             return abs(r->getPosition().x - getPlayer()->getPosition().x)
                 < abs(min->getPosition().x - getPlayer()->getPosition().x);
         });
@@ -213,9 +213,9 @@ namespace joker
         });
     }
 
-    RolePtr & BattleDirector::getPlayer()
+    Role * BattleDirector::getPlayer()
     {
-        return _player;
+        return _player.get();
     }
 
     void BattleDirector::addEnemy(const cocos2d::Vec2 & position)
@@ -249,7 +249,7 @@ namespace joker
         param.playerWidth = getPlayer()->getPhysicsBody()->getWidth();
         param.playerPosition = getPlayer()->getPosition().x;
         param.event = _btEvent;
-        for (RolePtr & enemy : _enemyConductor.getEnemyArray())
+        for (Role * enemy : _enemyConductor.getEnemyArray())
         {
             param.closest = enemy == getClosestEnemy();
             _enemyConductor.tick(enemy, param);
@@ -271,12 +271,12 @@ namespace joker
 
     void BattleDirector::enemyAttackReady()
     {
-        RolePtr & enemy = getClosestEnemy();
+        Role * enemy = getClosestEnemy();
         RoleCommand command(RoleAction::ATTACK_READY);
         enemy->executeCommand(command);
     }
 
-    bool BattleDirector::withinAttackScope(const RolePtr & attacker, const RolePtr & sufferrer)
+    bool BattleDirector::withinAttackScope(const Role * attacker, const Role * sufferrer)
     {
         static float playerScope = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackScope" });
         static float enemyScope = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "attackScope" });

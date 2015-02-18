@@ -39,8 +39,8 @@ namespace joker
     // PlayerAttackEvent
     void PlayerAttackEvent::execute(BattleDirector * director)
     {
-        RolePtr & attacker = director->getPlayer();
-        RolePtr & sufferer = director->getClosestEnemy();
+        Role * attacker = director->getPlayer();
+        Role* sufferer = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
@@ -54,8 +54,8 @@ namespace joker
     // EnemyAttackEvent
     void EnemyAttackEvent::execute(BattleDirector * director)
     {
-        RolePtr & sufferer = director->getPlayer();
-        RolePtr & attacker = director->getClosestEnemy();
+        Role * sufferer = director->getPlayer();
+        Role * attacker = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
@@ -81,9 +81,16 @@ namespace joker
     void EmptyAttackEvent::execute(BattleDirector * director)
     {
         if (director->getEnemyNum() == 0) return;
-        float d = director->getPlayer()->getPosition().x - director->getClosestEnemy()->getPosition().x;
-        if (!director->withinAttackScope(director->getPlayer(), director->getClosestEnemy())) return;
-        director->sendCommand(director->getClosestEnemy(), RoleAction::DEFENCE);
+        vector<Role*> enemyArray = director->getEnemyArray();
+        float playerX = director->getPlayer()->getPosition().x;
+        std::sort(begin(enemyArray), end(enemyArray), [playerX](Role * lhs, Role * rhs){
+            return abs(lhs->getPosition().x - playerX) < abs(rhs->getPosition().x - playerX);
+        });
+        for (auto enemy : enemyArray)
+        {
+            if (!director->withinAttackScope(director->getPlayer(), enemy)) continue;
+            director->sendCommand(enemy, RoleAction::DEFENCE);
+        }
     }
 
     // RemoveRoleEvent

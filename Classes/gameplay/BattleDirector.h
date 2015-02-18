@@ -29,7 +29,7 @@ namespace joker
         BattleDirector(BattleScene * battleScene);
         ~BattleDirector();
         BattleScene * getScene() { return _battleScene; }
-        void sendCommand(RolePtr & role, const RoleCommand & command);
+        void sendCommand(Role * role, const RoleCommand & command);
 
         void restartMetronome();
 
@@ -42,10 +42,11 @@ namespace joker
         void addEvent(EventPtr && event){ _eventManager.addEvent(std::move(event)); }
 
         void addPlayer(const cocos2d::Vec2 & position);
-        RolePtr & getPlayer();
+        Role * getPlayer();
         void addEnemy(const cocos2d::Vec2 & position);
         void removeEnemy(Role * enemy);
-        RolePtr & getClosestEnemy();
+        Role * getClosestEnemy();
+        vector<Role*> getEnemyArray(){ return _enemyConductor.getEnemyArray(); }
         int getEnemyNum() { return _enemyConductor.getEnemyArray().size(); }
         void addBomb(const cocos2d::Vec2 & position);
         void removeBomb(Role * bomb);
@@ -53,7 +54,7 @@ namespace joker
         void supplyEnemy();
         void enemyAttackReady();
 
-        bool withinAttackScope(const RolePtr & attacker, const RolePtr & sufferrer);
+        bool withinAttackScope(const Role * attacker, const Role * sufferrer);
 
         SoundManager * getSoundManager() { return &_soundManager; }
 

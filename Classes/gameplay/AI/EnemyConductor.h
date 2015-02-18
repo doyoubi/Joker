@@ -13,10 +13,10 @@ namespace joker
     class EnemyConductor
     {
     public:
-        std::vector<RolePtr> & getEnemyArray();
+        std::vector<Role*> getEnemyArray();
         void addEnemy(RolePtr && role);
         void removeEnemy(Role * enemy);
-        void tick(RolePtr & role, const BTParam & param);
+        void tick(Role * role, const BTParam & param);
 
     private:
         std::unordered_map<Role*, BTNodePtr> _tree;
