@@ -95,6 +95,8 @@ namespace joker
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::ATTACKED)
             role->getStateManager()->changeState(PlayerAttackedState::create());
+        else if (roleAction == RoleAction::COLLIDE)
+            role->getStateManager()->changeState(PlayerAttackedState::create());
     }
 
     // PlayerAttackedState
