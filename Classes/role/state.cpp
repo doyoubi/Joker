@@ -99,6 +99,8 @@ namespace joker
             role->getStateManager()->changeState(AttackReadyState::create());
         else if (roleAction == RoleAction::FALLING)
             role->getStateManager()->changeState(FallingState::create());
+        else if (roleAction == RoleAction::EMPTY_ATTACK)
+            role->getStateManager()->changeState(EmptyAttackState::create());
     }
 
     // RunState
@@ -169,6 +171,8 @@ namespace joker
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::EMPTY_ATTACK)
+            role->getStateManager()->changeState(EmptyAttackState::create());
     }
 
     // SlowDownState
@@ -232,6 +236,8 @@ namespace joker
             role->getStateManager()->changeState(NodState::create());
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::EMPTY_ATTACK)
+            role->getStateManager()->changeState(EmptyAttackState::create());
     }
 
     

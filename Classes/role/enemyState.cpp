@@ -1,6 +1,7 @@
 #include "enemyState.h"
 #include "Role.h"
 #include "utils/config.h"
+#include "gameplay/BattleDirector.h"
 
 namespace joker
 {
@@ -8,6 +9,7 @@ namespace joker
     {
         return "enemy: missing '" + animName + "' animation";
     }
+
 
     // EnemyAttackState
     std::string EnemyAttackState::getDebugString()
@@ -21,6 +23,8 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
+
+        role->getBattleDirector()->addEvent(EventPtr(new EnemyAttackEvent()));
     }
 
     void EnemyAttackState::execute(Role * role)
@@ -50,7 +54,7 @@ namespace joker
     {
         if (!role->getArmature()->getAnimation()->isPlaying())
         {
-            role->getStateManager()->changeState(IdleState::create());
+            role->die();
         }
     }
 

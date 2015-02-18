@@ -5,6 +5,7 @@
 #include "SimplePhysics/PhysicsWorld.h"
 #include "utils/config.h"
 #include "utils/debug.h"
+#include "gameplay/BattleDirector.h"
 
 namespace joker
 {
@@ -13,10 +14,12 @@ namespace joker
         return "player: missing '" + animName + "' animation";
     }
 
+    // PlayerAttackBaseState
+    const int PlayerAttackBaseState::attackStageQuantity = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
+    int PlayerAttackBaseState::_currStage = 0;
+
     // PlayerAttackState
     const float PlayerAttackState::changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
-    const int PlayerAttackState::attackStageQuantity = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
-    int PlayerAttackState::_currStage = 0;
 
     std::string PlayerAttackState::getDebugString()
     {
@@ -34,6 +37,8 @@ namespace joker
         role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
         float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
         role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
+
+        role->getBattleDirector()->addEvent(EventPtr(new PlayerAttackEvent()));
     }
 
     void PlayerAttackState::execute(Role * role)
@@ -50,6 +55,42 @@ namespace joker
     }
 
     void PlayerAttackState::executeCommand(Role * role, const RoleCommand & command)
+    {
+    }
+
+    // EmptyAttackState
+    std::string EmptyAttackState::getDebugString()
+    {
+        return "empty attack";
+    }
+
+    void EmptyAttackState::enterState(Role * role)
+    {
+        static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
+        for (int i = 0; i < attackStageQuantity; ++i)
+        {
+            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)),
+                missingAnimation(animName + std::to_string(i)));
+        }
+        role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
+
+        role->getBattleDirector()->addEvent(EventPtr(new EmptyAttackEvent()));
+    }
+
+    void EmptyAttackState::exitState(Role * role)
+    {
+        _currStage = (_currStage + 1) % attackStageQuantity;
+    }
+
+    void EmptyAttackState::execute(Role * role)
+    {
+        if (!role->getArmature()->getAnimation()->isPlaying())
+        {
+            role->getStateManager()->changeState(IdleState::create());
+        }
+    }
+
+    void EmptyAttackState::executeCommand(Role * role, const RoleCommand & command)
     {
         RoleAction roleAction = command.roleAction;
         if (roleAction == RoleAction::ATTACKED)

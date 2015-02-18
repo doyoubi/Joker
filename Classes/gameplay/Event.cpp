@@ -15,16 +15,19 @@ namespace joker
 
     void DirectorEventManager::addEvent(EventPtr && event)
     {
+        DEBUGCHECK(!_addEventLock, "can't add event while executeEvent() running.");
         _eventPool.push_back(std::move(event));
     }
 
     void DirectorEventManager::executeEvent(BattleDirector * director)
     {
+        _addEventLock = true;
         for (auto & p : _eventPool)
         {
             p->execute(director);
         }
         _eventPool.clear();
+        _addEventLock = false;
     }
 
     bool DirectorEventManager::hasEvent()
@@ -33,32 +36,29 @@ namespace joker
     }
 
 
-    // AttackEvent
-    void AttackEvent::execute(BattleDirector * director)
+    // PlayerAttackEvent
+    void PlayerAttackEvent::execute(BattleDirector * director)
     {
         RolePtr & attacker = director->getPlayer();
         RolePtr & sufferer = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
-        attacker->executeCommand(RoleCommand(RoleAction::ATTACK));
-        sufferer->executeCommand(RoleCommand(RoleAction::ATTACKED));
+        sufferer->executeCommand(RoleAction::ATTACKED);
 
         director->getSoundManager()->playSound("hit");
-        director->removeEnemy(sufferer.get());
 
         director->supplyEnemy();
     }
 
-    // AttackedEvent
-    void AttackedEvent::execute(BattleDirector * director)
+    // EnemyAttackEvent
+    void EnemyAttackEvent::execute(BattleDirector * director)
     {
         RolePtr & sufferer = director->getPlayer();
         RolePtr & attacker = director->getClosestEnemy();
         int d = attacker->getPosition().x - sufferer->getPosition().x;
         attacker->setDirection(d < 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
         sufferer->setDirection(d < 0 ? RoleDirection::LEFT : RoleDirection::RIGHT);
-        attacker->executeCommand(RoleAction::ATTACK);
         sufferer->executeCommand(RoleAction::ATTACKED);
     }
 
@@ -80,7 +80,6 @@ namespace joker
     // EmptyAttackEvent
     void EmptyAttackEvent::execute(BattleDirector * director)
     {
-        director->sendCommand(director->getPlayer(), RoleAction::ATTACK);
         if (director->getEnemyNum() == 0) return;
         float d = director->getPlayer()->getPosition().x - director->getClosestEnemy()->getPosition().x;
         if (!director->withinAttackScope(director->getPlayer(), director->getClosestEnemy())) return;

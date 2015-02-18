@@ -24,6 +24,7 @@ namespace joker
         bool hasEvent();
     private:
         std::vector<EventPtr> _eventPool;
+        bool _addEventLock = false;
     };
 
 
@@ -33,13 +34,13 @@ namespace joker
         virtual void execute(BattleDirector * director) = 0;
     };
 
-    class AttackEvent : public DirectorEvent
+    class PlayerAttackEvent : public DirectorEvent
     {
     public:
         virtual void execute(BattleDirector * director) override;
     };
 
-    class AttackedEvent : public DirectorEvent
+    class EnemyAttackEvent : public DirectorEvent
     {
     public:
         virtual void execute(BattleDirector * director) override;

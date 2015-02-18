@@ -8,6 +8,7 @@ namespace joker
     {
         IDLE,
         ATTACK,
+        EMPTY_ATTACK,
         ATTACKED,
         RUN,
         STOP,

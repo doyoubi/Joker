@@ -100,7 +100,7 @@ namespace joker
             getEventDispather("emptyHit").runEvent(index);
         });
         getMetronome("battle").setWrongHitCallBack([this](int, float){
-            this->addEvent(EventPtr(new EmptyAttackEvent()));
+            getPlayer()->executeCommand(RoleAction::EMPTY_ATTACK);
         });
 
         // bomb
@@ -129,12 +129,12 @@ namespace joker
         });
 
         getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](){
-            this->addEvent(EventPtr(new AttackEvent()));
+            getPlayer()->executeCommand(RoleAction::ATTACK);
             getScene()->getPromptBar()->hitSuccess();
         });
 
         getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](){
-            this->addEvent(EventPtr(new AttackedEvent()));
+            getClosestEnemy()->executeCommand(RoleAction::ATTACK);
             getScene()->getPromptBar()->miss();
         });
 

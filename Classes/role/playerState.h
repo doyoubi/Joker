@@ -5,8 +5,15 @@
 
 namespace joker
 {
+    // this class is only used to share member '_currStage' between PlayerAttackState and EmptyAttackState
+    class PlayerAttackBaseState : public State
+    {
+    protected:
+        static const int attackStageQuantity;
+        static int _currStage;
+    };
 
-    class PlayerAttackState : public State
+    class PlayerAttackState : public PlayerAttackBaseState
     {
     public:
         static StatePtr create() { return StatePtr(new PlayerAttackState()); }
@@ -16,9 +23,18 @@ namespace joker
         void executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
-        static int _currStage;
-        static const int attackStageQuantity;
         static const float changedDistance;
+    };
+
+    class EmptyAttackState : public PlayerAttackBaseState
+    {
+    public:
+        static StatePtr create() { return StatePtr(new EmptyAttackState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override;
+        void execute(Role * role) override;
+        void executeCommand(Role * role, const RoleCommand & command) override;
+        std::string getDebugString() override;
     };
 
     class PlayerAttackedState : public State

@@ -63,6 +63,8 @@ namespace joker
 
         cocostudio::Armature * getArmature() { return _roleSprite->getArmature(); }
 
+        BattleDirector * getBattleDirector() const { return _battleDirector; }
+
         void die();
 
     private:

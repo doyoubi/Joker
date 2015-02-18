@@ -57,14 +57,10 @@ namespace joker
     void RoleSprite::die()
     {
         auto missingAnimation = [](const string & animName) { return "RoleSprite::die(): missing '" + animName + "' movement."; };
-        static const string attackedAnimName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
-        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(attackedAnimName),
-            missingAnimation(attackedAnimName));
         static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "role", "dead" });
         DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName),
             missingAnimation(deadAnimName));
-        std::vector<std::string> names = { attackedAnimName, deadAnimName };
-        getArmature()->getAnimation()->playWithNames(names, -1, false);
+        getArmature()->getAnimation()->play(deadAnimName);
         getArmature()->getAnimation()->setMovementEventCallFunc(
             [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
             if (movementType == MovementEventType::COMPLETE && movementID == "dead")
