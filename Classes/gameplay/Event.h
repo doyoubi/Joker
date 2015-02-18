@@ -8,56 +8,22 @@
 
 namespace joker
 {
-
-    enum class DirectorEventType
-    {
-        ATTACK,
-        ATTACKED,
-        NOD,
-        APPEAR,
-        MOVE,
-        COLLIDE_TO_LEFT,
-        COLLIDE_TO_RIGHT,
-        EMPTY_HIT,
-    };
-
-}
-
-// g++ does not support hash for enum class
-#if defined(__GNUC__)
-namespace std
-{
-    using joker::DirectorEventType;
-
-    template<>
-    struct hash<DirectorEventType>
-    {
-        typedef DirectorEventType argument_type;
-        typedef std::size_t result_type;
-        std::size_t operator() (const DirectorEventType & arg) const
-        {
-            return size_t(arg);
-        }
-    };
-}
-#endif
-
-namespace joker
-{
     class DirectorEvent;
     class BattleDirector;
     typedef std::unique_ptr<DirectorEvent> EventPtr;
+
+    // This event manager is mainly used for postpone function call
+    // from event happen time to the beginning of Director::update()
 
     class DirectorEventManager
     {
     public:
         DirectorEventManager();
-        void activateEvent(DirectorEventType event);
+        void addEvent(EventPtr && event);
         void executeEvent(BattleDirector * director);
         bool hasEvent();
-        bool isActive(DirectorEventType event);
     private:
-        std::unordered_map<DirectorEventType, EventPtr> _eventPool;
+        std::vector<EventPtr> _eventPool;
     };
 
 
@@ -65,12 +31,6 @@ namespace joker
     {
     public:
         virtual void execute(BattleDirector * director) = 0;
-        bool isActive() { return _active; }
-        void activate() { _active = true; }
-        void deactivate() { _active = false; }
-
-    private:
-        bool _active = false;
     };
 
     class AttackEvent : public DirectorEvent
@@ -106,6 +66,16 @@ namespace joker
     public:
         void execute(BattleDirector * director) override;
     };
+
+    class RemoveRoleEvent : public DirectorEvent
+    {
+    public:
+        RemoveRoleEvent(Role * role) : _role(role) {}
+        void execute(BattleDirector * director) override;
+    private:
+        Role * _role;
+    };
+
 
 }
 

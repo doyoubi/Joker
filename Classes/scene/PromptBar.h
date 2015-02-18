@@ -11,6 +11,12 @@ namespace joker
     using cocos2d::Layer;
     using cocos2d::Sprite;
 
+    enum class PromptSpriteType
+    {
+        ATTACK,
+        BOMB,
+    };
+
     class PromptBar
     {
     public:
@@ -24,7 +30,7 @@ namespace joker
         void hitFail();
         void miss();
         void rhythm();
-        void addPromptSprite(float moveToTime);
+        void addPromptSprite(float moveToTime, PromptSpriteType type);
 
     private:
         std::queue<Sprite*> _promptSpriteQueue;

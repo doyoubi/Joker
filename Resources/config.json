@@ -42,7 +42,10 @@
             "width": 50,
             "height": 50,
             "spriteScale": 1,
-            "explodeScope": "100"
+            "explodeScope": 100,
+            "explodeTime": 0.5,
+            "vy": -500.0,
+            "vxAbs": 0
         }
     },
     "EnemyApearPosition": {

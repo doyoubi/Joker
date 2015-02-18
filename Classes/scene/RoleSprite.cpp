@@ -67,7 +67,7 @@ namespace joker
         getArmature()->getAnimation()->playWithNames(names, -1, false);
         getArmature()->getAnimation()->setMovementEventCallFunc(
             [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::LOOP_COMPLETE)
+            if (movementType == MovementEventType::COMPLETE && movementID == "dead")
             {
                 this->removeFromParent();
             }

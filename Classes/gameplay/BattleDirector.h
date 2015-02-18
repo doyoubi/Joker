@@ -39,7 +39,7 @@ namespace joker
 
         void update(float dt);
         DirectorEventManager & getEventManager() { return _eventManager; }
-        void addEvent(DirectorEventType event){ _eventManager.activateEvent(event); }
+        void addEvent(EventPtr && event){ _eventManager.addEvent(std::move(event)); }
 
         void addPlayer(const cocos2d::Vec2 & position);
         RolePtr & getPlayer();
@@ -58,6 +58,8 @@ namespace joker
         SoundManager * getSoundManager() { return &_soundManager; }
 
         void setBTEvent(BTEvent event) { _btEvent = event; }
+
+        RolePtr & getLowestBomb();
 
     private:
 

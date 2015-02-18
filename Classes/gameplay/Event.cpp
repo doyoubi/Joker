@@ -11,45 +11,25 @@ namespace joker
     // DirectorEventManager
     DirectorEventManager::DirectorEventManager()
     {
-        _eventPool.emplace(DirectorEventType::ATTACK, EventPtr(new AttackEvent()));
-        _eventPool.emplace(DirectorEventType::ATTACKED, EventPtr(new AttackedEvent()));
-        _eventPool.emplace(DirectorEventType::NOD, EventPtr(new NodEvent()));
-        _eventPool.emplace(DirectorEventType::COLLIDE_TO_LEFT, EventPtr(new CollideEvent(RoleDirection::LEFT)));
-        _eventPool.emplace(DirectorEventType::COLLIDE_TO_RIGHT, EventPtr(new CollideEvent(RoleDirection::RIGHT)));
-        _eventPool.emplace(DirectorEventType::EMPTY_HIT, EventPtr(new EmptyAttackEvent()));
     }
 
-    void DirectorEventManager::activateEvent(DirectorEventType event)
+    void DirectorEventManager::addEvent(EventPtr && event)
     {
-        DEBUGCHECK(_eventPool.count(event) == 1,
-            "event not register in DirectorEventManager conctructor");
-        _eventPool.at(event)->activate();
+        _eventPool.push_back(std::move(event));
     }
 
     void DirectorEventManager::executeEvent(BattleDirector * director)
     {
         for (auto & p : _eventPool)
         {
-            if (p.second->isActive())
-            {
-                p.second->execute(director);
-                p.second->deactivate();
-            }
+            p->execute(director);
         }
+        _eventPool.clear();
     }
 
     bool DirectorEventManager::hasEvent()
     {
-        for (auto & p : _eventPool)
-        {
-            if (p.second->isActive()) return true;
-        }
-        return false;
-    }
-
-    bool DirectorEventManager::isActive(DirectorEventType event)
-    {
-        return _eventPool.at(event)->isActive();
+        return !_eventPool.empty();
     }
 
 
@@ -105,6 +85,16 @@ namespace joker
         float d = director->getPlayer()->getPosition().x - director->getClosestEnemy()->getPosition().x;
         if (!director->withinAttackScope(director->getPlayer(), director->getClosestEnemy())) return;
         director->sendCommand(director->getClosestEnemy(), RoleAction::DEFENCE);
+    }
+
+    // RemoveRoleEvent
+    void RemoveRoleEvent::execute(BattleDirector * director)
+    {
+        if (_role->getRoleType() == RoleType::ENEMY)
+            director->removeEnemy(_role);
+        else if (_role->getRoleType() == RoleType::BOMB)
+            director->removeBomb(_role);
+        else ERRORMSG("invalid role type");
     }
 
 }

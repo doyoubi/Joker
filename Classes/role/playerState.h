@@ -13,7 +13,7 @@ namespace joker
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override;
-        void executeCommand(Role * role, const RoleCommand & command) override {};
+        void executeCommand(Role * role, const RoleCommand & command) override;
         std::string getDebugString() override;
     private:
         static int _currStage;

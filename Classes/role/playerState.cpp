@@ -49,6 +49,12 @@ namespace joker
         _currStage = (_currStage + 1) % attackStageQuantity;
     }
 
+    void PlayerAttackState::executeCommand(Role * role, const RoleCommand & command)
+    {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(PlayerAttackedState::create());
+    }
 
     // PlayerAttackedState
     std::string PlayerAttackedState::getDebugString()

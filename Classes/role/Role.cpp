@@ -71,9 +71,9 @@ namespace joker
         if (_roleType == RoleType::PLAYER)
             ERRORMSG("can't remove player now");
         else if (_roleType == RoleType::ENEMY)
-            _battleDirector->removeEnemy(this);
+            _battleDirector->addEvent(EventPtr(new RemoveRoleEvent(this)));
         else if (_roleType == RoleType::BOMB)
-            _battleDirector->removeBomb(this);
+            _battleDirector->addEvent(EventPtr(new RemoveRoleEvent(this)));
     }
 
 }

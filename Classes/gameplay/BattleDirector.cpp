@@ -45,11 +45,13 @@ namespace joker
             Config::getInstance().getDoubleValue({ "Metronome", "hitDeltaTime" }))
         );
         const float moveToTime = getScript("battle").getOffsetRhythmScript(0)[0] - Config::getInstance().getDoubleValue({ "Metronome", "promptStartTime" });
-        _rhythmScripts.emplace("prompt", RhythmScript(musicScript.promptName.c_str()));
-        _metronomes.emplace("prompt", Metronome(getScript("prompt").getOffsetRhythmScript(-1 * moveToTime), 0.02f));
+        _rhythmScripts.emplace("prompt", RhythmScript(musicScript.scriptName.c_str()));
+        _metronomes.emplace("prompt", Metronome(getScript("battle").getOffsetRhythmScript(-1 * moveToTime), 0.02f));
         // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
         _metronomes.emplace("enemyRush", Metronome(getScript("battle").getOffsetRhythmScript(
             -1 * Config::getInstance().getDoubleValue({"EnemyKeepDistance", "rushTime"})), 0.02f));
+        const float explodeTime = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "explodeTime" });
+        _metronomes.emplace("bombFall", Metronome(getScript("battle").getOffsetRhythmScript(-explodeTime), 0.02));
 
         auto physicsWorld = joker::PhysicsWorld::getInstance();
         physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getBackground()->getContentSize().width);
@@ -59,20 +61,32 @@ namespace joker
 
         getSoundManager()->loadSound("hit", "music/knock.wav");
 
-        getMetronome("prompt").setRhythmCallBack([this, moveToTime](int){
-            this->getScene()->getPromptBar()->addPromptSprite(moveToTime);
-        });
-
         _rhythmEventDispaters.emplace("nod", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("emptyHit", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("enemyRush", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("bombFall", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("bomb", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("attackPrompt", RhythmEventDispatcher(getScript("battle")));
+        _rhythmEventDispaters.emplace("bombPrompt", RhythmEventDispatcher(getScript("battle")));
+
+        getMetronome("prompt").setRhythmCallBack([this, moveToTime](int i){
+            getEventDispather("attackPrompt").runEvent(i);
+            getEventDispather("bombPrompt").runEvent(i);
+        });
+        getEventDispather("attackPrompt").addEvent(getScript("battle").getEvent("attack"), [this, moveToTime](){
+            this->getScene()->getPromptBar()->addPromptSprite(moveToTime, PromptSpriteType::ATTACK);
+        });
+        getEventDispather("bombPrompt").addEvent(getScript("battle").getEvent("bomb"), [this, moveToTime](){
+            this->getScene()->getPromptBar()->addPromptSprite(moveToTime, PromptSpriteType::BOMB);
+        });
 
         getMetronome("battle").setRhythmCallBack([this](int i){
             getEventDispather("nod").runEvent(i);
             getEventDispather("addEnemy").runEvent(i);
+            getEventDispather("bomb").runEvent(i);
         });
         getMetronome("battle").setHitCallBack([this](int index, float dt){
             getEventDispather("hit").runEvent(index);
@@ -86,30 +100,41 @@ namespace joker
             getEventDispather("emptyHit").runEvent(index);
         });
         getMetronome("battle").setWrongHitCallBack([this](int, float){
-            this->addEvent(DirectorEventType::EMPTY_HIT);
+            this->addEvent(EventPtr(new EmptyAttackEvent()));
         });
 
+        // bomb
+        getMetronome("bombFall").setRhythmCallBack([this](int i){
+            getEventDispather("bombFall").runEvent(i);
+        });
+        getEventDispather("bombFall").addEvent(getScript("battle").getEvent("bomb"), [this](){
+            float x = getPlayer()->getPosition().x;
+            this->addBomb(Vec2(x, 600));
+        });
+        getEventDispather("bomb").addEvent(getScript("battle").getEvent("bomb"), [this](){
+            this->getLowestBomb()->executeCommand(RoleAction::EXPLODE);
+        });
+
+        // enemy rush
         getMetronome("enemyRush").setRhythmCallBack([this](int index){
             getEventDispather("enemyRush").runEvent(index);
         });
         getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](){
             this->setBTEvent(BTEvent::READY_TO_ATTACK);
-            float x = getPlayer()->getPosition().x;
-            //this->addBomb(Vec2(x, 300));
         });
 
         getEventDispather("nod").addEvent(getScript("battle").getEvent("nod"), [this](){
-            this->addEvent(DirectorEventType::NOD);
+            this->addEvent(EventPtr(new NodEvent()));
             getScene()->getPromptBar()->rhythm();
         });
 
         getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](){
-            this->addEvent(DirectorEventType::ATTACK);
+            this->addEvent(EventPtr(new AttackEvent()));
             getScene()->getPromptBar()->hitSuccess();
         });
 
         getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](){
-            this->addEvent(DirectorEventType::ATTACKED);
+            this->addEvent(EventPtr(new AttackedEvent()));
             getScene()->getPromptBar()->miss();
         });
 
@@ -164,6 +189,8 @@ namespace joker
         getMetronome("prompt").start();
         getMetronome("enemyRush").reset();
         getMetronome("enemyRush").start();
+        getMetronome("bombFall").reset();
+        getMetronome("bombFall").start();
         getSoundManager()->playBackGroundSound(musicScript.musicFileName.c_str());
         getScene()->getPromptBar()->clearPromptSprite();
     }
@@ -180,9 +207,9 @@ namespace joker
         _player->setPosition(position);
         _player->getPhysicsBody()->setCollidable(true);
         _player->setCollideCallbak([this](const CollideInfo & collideInfo){
-            auto eventType = collideInfo.selfPosition < collideInfo.oppositePosition ?
-                DirectorEventType::COLLIDE_TO_LEFT : DirectorEventType::COLLIDE_TO_RIGHT;
-            this->addEvent(eventType);
+            auto direction = collideInfo.selfPosition < collideInfo.oppositePosition ?
+                RoleDirection::LEFT: RoleDirection::RIGHT;
+            this->addEvent(EventPtr(new CollideEvent(direction)));
         });
     }
 
@@ -287,6 +314,9 @@ namespace joker
         bomb->setSpeed(Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "normalSpeed" }),
             Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "slowSpeed" }));
         bomb->setPosition(position);
+        bomb->getPhysicsBody()->setVelocityY(Config::getInstance().getDoubleValue({"RoleProperty", "bomb", "vy"}));
+        int direction = getPlayer()->getDirection() == RoleDirection::LEFT ? -1 : 1;
+        bomb->getPhysicsBody()->setVelocityX(Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "vxAbs" }) * direction);
         bomb->executeCommand(RoleAction::FALLING);
         _bombs.push_back(std::move(bomb));
     }
@@ -298,5 +328,15 @@ namespace joker
         DEBUGCHECK(end(_bombs) != it, "enemy not exist in EnemyConductor");
         _bombs.erase(it);
     }
+
+    RolePtr & BattleDirector::getLowestBomb()
+    {
+        DEBUGCHECK(!_bombs.empty(), "no bomb exist");
+        auto it = std::min_element(begin(_bombs), end(_bombs), [](RolePtr & lhs, RolePtr & rhs){
+            return lhs->getPhysicsBody()->getHeight() < rhs->getPhysicsBody()->getHeight();
+        });
+        return *it;
+    }
+
 
 }

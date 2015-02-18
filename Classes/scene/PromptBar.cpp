@@ -1,4 +1,5 @@
 #include <limits>
+#include <vector>
 
 #include "PromptBar.h"
 #include "utils/debug.h"
@@ -26,9 +27,13 @@ namespace joker
         _barBackground->addChild(_goal);
     }
 
-    void PromptBar::addPromptSprite(float moveToTime)
+    void PromptBar::addPromptSprite(float moveToTime, PromptSpriteType type)
     {
-        auto promptSprite = Sprite::create("PromptBar/PromptSprite.png");
+        Sprite * promptSprite;
+        if (type == PromptSpriteType::ATTACK)
+            promptSprite = Sprite::create("PromptBar/PromptSpriteAttack.png");
+        else if (type == PromptSpriteType::BOMB)
+            promptSprite = Sprite::create("PromptBar/PromptSpriteBomb.png");
         CHECKNULL(promptSprite);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
         auto bgSize = _barBackground->getContentSize();
@@ -36,8 +41,23 @@ namespace joker
         _promptSpriteQueue.push(promptSprite);
         _barBackground->addChild(promptSprite);
 
-        auto moveTo = cocos2d::MoveTo::create(moveToTime, _endPoint - Vec2(20, 0));
-        promptSprite->runAction(moveTo);
+        cocos2d::ActionInterval * act;
+        if (type == PromptSpriteType::BOMB)
+        {
+            FiniteTimeAction * moveTo = cocos2d::MoveTo::create(moveToTime, _endPoint);
+            FiniteTimeAction * callback = cocos2d::CallFunc::create([this](){
+                hitSuccess();
+            });
+            Vector<FiniteTimeAction*> arr;
+            arr.pushBack(moveTo);
+            arr.pushBack(callback);
+            act = cocos2d::Sequence::create(arr);
+        }
+        else
+        {
+            act = cocos2d::MoveTo::create(moveToTime, _endPoint - Vec2(20, 0));
+        }
+        promptSprite->runAction(act);
     }
 
     void PromptBar::hitSuccess()

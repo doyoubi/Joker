@@ -79,7 +79,7 @@
         },
         {
           "name": "explode",
-          "dr": 5,
+          "dr": 6,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -126,8 +126,8 @@
         },
         {
           "name": "attacked",
-          "dr": 1,
-          "lp": true,
+          "dr": 2,
+          "lp": false,
           "to": 0,
           "drTW": 0,
           "twE": 0,
@@ -151,6 +151,21 @@
                   "tweenFrame": true,
                   "bd_src": 1,
                   "bd_dst": 771
+                },
+                {
+                  "dI": 0,
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 1,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
                 }
               ]
             }
@@ -158,8 +173,8 @@
         },
         {
           "name": "dead",
-          "dr": 1,
-          "lp": true,
+          "dr": 2,
+          "lp": false,
           "to": 0,
           "drTW": 0,
           "twE": 0,
@@ -179,6 +194,21 @@
                   "kX": 0.0,
                   "kY": 0.0,
                   "fi": 0,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 0,
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0,
+                  "cX": 1.1,
+                  "cY": 1.1,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 1,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,

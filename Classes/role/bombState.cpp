@@ -4,6 +4,7 @@
 #include "Role.h"
 #include "utils/config.h"
 #include "utils/debug.h"
+#include "gameplay/Event.h"
 
 namespace joker
 {
@@ -34,14 +35,13 @@ namespace joker
 
     void FallingState::execute(Role * role)
     {
-        if (role->getPhysicsBody()->isLanded())
-        {
-            role->getStateManager()->changeState(ExplodeState::create());
-        }
     }
 
     void FallingState::executeCommand(Role * role, const RoleCommand & command)
     {
+        RoleAction roleAction = command.roleAction;
+        if (roleAction == RoleAction::EXPLODE)
+            role->getStateManager()->changeState(ExplodeState::create());
     }
 
     // ExplodeState

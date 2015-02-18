@@ -20,44 +20,16 @@ def gen_script(filename, name):
     script = dict()
     script["rhythmPoints"] = delta_array
     script["rhythmEvents"] = dict()
-    script["rhythmEvents"]["attack"] = [i for i in range(0, len(delta_array))]
+    script["rhythmEvents"]["attack"] = [i for i in range(0, len(delta_array)) if i % 4 == 2]
     script["rhythmEvents"]["nod"] = []
     script["rhythmEvents"]["addEnemy"] = [i for i in range(0, len(delta_array))]
+    script["rhythmEvents"]["bomb"] = [i for i in range(0, len(delta_array)) if i % 4  == 0 or i % 4 == 1]
     
     script_str = json.dumps(script, indent=2)
     outfile = open(name + ".json", "w")
     outfile.write(script_str)
     outfile.close()
-
-
-def gen_prompt_script(json_script, name):
-    text = ''
-    with open(json_script) as json_file:
-        text = json_file.read()
-    script = json.loads(text)
     
-    src = script["rhythmPoints"]
-    select_point = script["rhythmEvents"]["attack"]
-    
-    out = list()
-    
-    accumulate = 0
-    for i in range(0, len(src)):
-        accumulate = accumulate + src[i]
-        if i in select_point:
-            out.append(accumulate)
-            accumulate = 0
-    
-    prompt_script = dict()
-    prompt_script["rhythmPoints"] = out
-    prompt_script["rhythmEvents"] = dict()
-    prompt_script["rhythmEvents"]["addPrompt"] = [i for i in range(0, len(out))]
-    
-    script_str = json.dumps(prompt_script)
-    
-    outfile = open(name + "_prompt.json", "w")
-    outfile.write(script_str)
-    outfile.close()
 
 def main(argv):
     param = argv[1] if 1 < len(argv) else None 
@@ -82,7 +54,6 @@ def main(argv):
             print usage
             return
         gen_script(beats_file, name)
-        gen_prompt_script(name + '.json', name)
 
 if __name__ == '__main__':
     main(sys.argv)
