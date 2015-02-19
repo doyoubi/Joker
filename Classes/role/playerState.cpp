@@ -142,7 +142,7 @@ namespace joker
 
 
     // JumpState
-    const float JumpState::speedX = Config::getInstance().getDoubleValue({"RoleProperty", "player", "jumpSpeedY"});
+    const float JumpState::speedX = Config::getInstance().getDoubleValue({"RoleProperty", "player", "jumpSpeedX"});
 
     std::string JumpState::getDebugString()
     {
@@ -196,6 +196,8 @@ namespace joker
         }
         else if (roleAction == RoleAction::COLLIDE && role->isPlayer())
             role->getStateManager()->changeState(CollideState::create(command.get<RoleDirection>("direction")));
+        else if (roleAction == RoleAction::ATTACKED)
+            role->getStateManager()->changeState(PlayerAttackedState::create(command.get<RoleDirection>("direction")));
         else return false;
         return true;
     }

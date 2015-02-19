@@ -34,6 +34,18 @@ namespace joker {
         _collideCallback = collideCallback;
     }
 
+    void PhysicsBody::setJumpCallback(JumpCallback && jumpCallback)
+    {
+        CHECKNULL(jumpCallback);
+        _jumpCallback = jumpCallback;
+    }
+
+    void PhysicsBody::setLandCallback(LandCallback && landCallback)
+    {
+        CHECKNULL(landCallback);
+        _landCallback = landCallback;
+    }
+
     void PhysicsBody::collide(const CollideInfo & CollideInfo)
     { 
         if (_collideCallback)

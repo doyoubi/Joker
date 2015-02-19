@@ -59,9 +59,10 @@ namespace joker {
         void setCollideCallback(CollideCallback && collideCallback);
         void collide(const CollideInfo & CollideInfo);
 
-        // callback functions
-        std::function <void(void)> _landCallback;
-        std::function <void(void)> _jumpCallback;
+        typedef std::function<void(void)> JumpCallback;
+        typedef std::function<void(void)> LandCallback;
+        void setJumpCallback(JumpCallback && jumpCallback);
+        void setLandCallback(LandCallback && landCallback);
 
     private:
 
@@ -76,6 +77,8 @@ namespace joker {
         float _vy;
         bool _collidable;
 
+        LandCallback _landCallback;
+        JumpCallback _jumpCallback;
     };
 }
 

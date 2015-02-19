@@ -31,8 +31,8 @@ namespace joker
         BattleScene * getScene() { return _battleScene; }
         void sendCommand(Role * role, const RoleCommand & command);
 
+        Metronome & getMetronome(const char * key);
         void restartMetronome();
-
         void tagMetronome();
 
         RhythmEventDispatcher & getEventDispather(const char * eventName);
@@ -73,7 +73,6 @@ namespace joker
         std::unordered_map<std::string, RhythmScript> _rhythmScripts;
         std::unordered_map<std::string, Metronome> _metronomes;
         RhythmScript & getScript(const char * key);
-        Metronome & getMetronome(const char * key);
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;

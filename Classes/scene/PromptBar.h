@@ -15,6 +15,7 @@ namespace joker
     {
         ATTACK,
         BOMB,
+        SPIKE,
     };
 
     class PromptBar

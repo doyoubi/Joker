@@ -16,7 +16,8 @@
             "width": 50,
             "height": 150,
             "attackChangedDistance": 0,
-            "jumpSpeedY": 50,
+            "jumpSpeedY": 30,
+            "jumpSpeedX": 200,
             "slowSpeed": 10,
             "normalSpeed": 200,
             "attackStageQuantity": 2,
@@ -50,6 +51,13 @@
             "explodeTime": 0.5,
             "vy": -500.0,
             "vxAbs": 0
+        },
+        "spike": {
+            "animationName": "spike",
+            "width": 100,
+            "height": 100,
+            "spriteScale": 1,
+            "spikeAriseTime": -0.5
         }
     },
     "EnemyApearPosition": {

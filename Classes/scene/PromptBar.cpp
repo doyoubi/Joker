@@ -32,6 +32,8 @@ namespace joker
         Sprite * promptSprite;
         if (type == PromptSpriteType::ATTACK)
             promptSprite = Sprite::create("PromptBar/PromptSpriteAttack.png");
+        else if (type == PromptSpriteType::SPIKE)
+            promptSprite = Sprite::create("PromptBar/PromptSpriteSpike.png");
         else if (type == PromptSpriteType::BOMB)
             promptSprite = Sprite::create("PromptBar/PromptSpriteBomb.png");
         CHECKNULL(promptSprite);

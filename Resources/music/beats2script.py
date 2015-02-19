@@ -20,10 +20,11 @@ def gen_script(filename, name):
     script = dict()
     script["rhythmPoints"] = delta_array
     script["rhythmEvents"] = dict()
-    script["rhythmEvents"]["attack"] = [i for i in range(0, len(delta_array)) if i % 4 == 2]
+    script["rhythmEvents"]["attack"] = [i for i in range(0, len(delta_array)) if i % 6 == 2]
     script["rhythmEvents"]["nod"] = []
     script["rhythmEvents"]["addEnemy"] = [i for i in range(0, len(delta_array))]
-    script["rhythmEvents"]["bomb"] = [i for i in range(0, len(delta_array)) if i % 4  == 0 or i % 4 == 1]
+    script["rhythmEvents"]["bomb"] = [i for i in range(0, len(delta_array)) if i % 6 == 0 or i % 6 == 1]
+    script["rhythmEvents"]["spikeAttack"] = [i for i in range(0, len(delta_array)) if i % 6 == 4]
     
     script_str = json.dumps(script, indent=2)
     outfile = open(name + ".json", "w")

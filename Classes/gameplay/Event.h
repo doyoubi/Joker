@@ -77,6 +77,18 @@ namespace joker
         Role * _role;
     };
 
+    class SpikeAttackEvent : public DirectorEvent
+    {
+    public:
+        void execute(BattleDirector * director) override;
+    };
+
+    class AttackedBySpikeEvent : public DirectorEvent
+    {
+    public:
+        void execute(BattleDirector * director) override;
+    };
+
 
 }
 
