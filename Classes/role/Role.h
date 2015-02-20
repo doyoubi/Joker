@@ -65,6 +65,7 @@ namespace joker
 
         BattleDirector * getBattleDirector() const { return _battleDirector; }
 
+        bool isAlive() { return !_dead; }
         void die();
 
     private:
@@ -79,6 +80,8 @@ namespace joker
         RoleType _roleType;
 
         RoleSprite * _roleSprite; // weak reference
+
+        bool _dead = false;
     };
 
 

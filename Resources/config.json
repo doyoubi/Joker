@@ -25,7 +25,8 @@
             "initPositionX": 200,
             "initPositionY": 200,
             "collideFallBackSpeed": 400,
-            "attackedFallBackSpeed": 200
+            "attackedFallBackSpeed": 200,
+            "localZ": 1
         },
         "enemy": {
             "animationName": "enemy",
@@ -39,7 +40,9 @@
             "fastSpeed": 300,
             "maxQuantity": 2,
             "attackScope": 200,
-            "attackedFallBackSpeed": 400
+            "attackedFallBackSpeed": 400,
+            "defenceFallBackSpeed": 100,
+            "localZ": 0
         },
         "bomb": {
             "animationName": "bomb",
@@ -48,15 +51,17 @@
             "height": 100,
             "spriteScale": 1,
             "explodeScope": 100,
-            "explodeTime": 0.5,
+            "explodeTime": 0.6,
             "vy": -500.0,
-            "vxAbs": 0
+            "vxAbs": 0,
+            "localZ": 0
         },
         "spike": {
             "animationName": "spike",
             "spriteWidth": 100,
             "spriteScale": 1,
-            "spikeAriseTime": -0.5
+            "spikeAriseTime": -0.5,
+            "localZ": 2
         }
     },
     "EnemyApearPosition": {
@@ -106,8 +111,7 @@
         },
         "bomb": {
             "IdleState": "static",
-            "FallingState": "static",
-            "ExplodeState": "explode"
+            "FallingState": "static"
         },
         "spike": {
             "static": "static",

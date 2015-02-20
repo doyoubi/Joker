@@ -95,7 +95,8 @@ namespace joker
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }),
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationDirection" }));
         enemy->setPosition(position);
-        enemy->setLocalZOrder(0);
+        const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "localZ" });
+        enemy->setLocalZOrder(localZ);
         _enemyArray.push_back(enemy);
         addChild(enemy);
         return enemy;
@@ -116,7 +117,8 @@ namespace joker
         _player = RoleSprite::create(
             Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}),
             Config::getInstance().getStringValue({ "RoleProperty", "player", "animationDirection" }));
-        _player->setLocalZOrder(1);
+        const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "localZ" });
+        _player->setLocalZOrder(localZ);
         addChild(_player);
         return _player;
     }
@@ -126,7 +128,8 @@ namespace joker
         auto bomb = RoleSprite::create(
             Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationName" }),
             Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationDirection" }));
-        bomb->setLocalZOrder(0);
+        const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "localZ" });
+        bomb->setLocalZOrder(localZ);
         addChild(bomb);
         return bomb;
     }
@@ -178,7 +181,8 @@ namespace joker
         if (!Node::init()) return false;
 
         this->setAnchorPoint(Vec2(0.5f, 0.5f));
-        this->setLocalZOrder(3);
+        const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "spike", "localZ" });
+        this->setLocalZOrder(localZ);
 
         using cocostudio::ArmatureDataManager;
         static bool addArmatureFileInfo = false;

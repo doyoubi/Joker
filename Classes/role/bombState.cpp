@@ -54,10 +54,6 @@ namespace joker
 
     void ExplodeState::enterState(Role * role)
     {
-        static const string animName = Config::getInstance().getStringValue({ "animation", "bomb", "ExplodeState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
-            missingAnimation(animName));
-        role->getArmature()->getAnimation()->play(animName);
         role->getPhysicsBody()->setCollidable(true);
     }
 
@@ -67,10 +63,7 @@ namespace joker
 
     void ExplodeState::execute(Role * role)
     {
-        if (role->getArmature()->getAnimation()->isComplete())
-        {
-            role->die();
-        }
+        role->die();
     }
 
     bool ExplodeState::executeCommand(Role * role, const RoleCommand & command)

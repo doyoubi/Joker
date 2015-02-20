@@ -120,7 +120,6 @@ namespace joker
 
         // spike
         getMetronome("spikeArise").setRhythmCallBack([this](int i){
-            // add spike in scene
             getEventDispather("spikeArise").runEvent(i);
         });
         getEventDispather("spikeArise").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
@@ -381,7 +380,8 @@ namespace joker
     {
         DEBUGCHECK(!_bombs.empty(), "no bomb exist");
         auto it = std::min_element(begin(_bombs), end(_bombs), [](RolePtr & lhs, RolePtr & rhs){
-            return lhs->getPhysicsBody()->getHeight() < rhs->getPhysicsBody()->getHeight();
+            return !rhs->isAlive()
+             || (lhs->isAlive() && lhs->getPhysicsBody()->getHeight() < rhs->getPhysicsBody()->getHeight());
         });
         return *it;
     }

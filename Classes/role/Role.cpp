@@ -68,6 +68,8 @@ namespace joker
 
     void Role::die()
     {
+        DEBUGCHECK(!_dead, "can't kill a dead Role");
+        _dead = true;
         if (_roleType == RoleType::PLAYER)
             ERRORMSG("can't remove player now");
         else if (_roleType == RoleType::ENEMY)

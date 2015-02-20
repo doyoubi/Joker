@@ -98,6 +98,11 @@ namespace joker
         DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
+
+        static float defenceFallBackSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "defenceFallBackSpeed" });
+        float v = (role->getDirection() == RoleDirection::LEFT ? 1 : -1) * defenceFallBackSpeed;
+        role->getPhysicsBody()->setVelocityX(v);
+        role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
     }
 
     void DefenceState::execute(Role * role)
