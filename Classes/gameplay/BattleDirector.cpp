@@ -72,8 +72,11 @@ namespace joker
         _rhythmEventDispaters.emplace("enemyRush", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("bombFall", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("bomb", RhythmEventDispatcher(getScript("battle")));
+
         _rhythmEventDispaters.emplace("attackPrompt", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("bombPrompt", RhythmEventDispatcher(getScript("battle")));
+
+        _rhythmEventDispaters.emplace("spikeArise", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("spikeAttack", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("spikePrompt", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("spikeHit", RhythmEventDispatcher(getScript("battle")));
@@ -118,6 +121,10 @@ namespace joker
         // spike
         getMetronome("spikeArise").setRhythmCallBack([this](int i){
             // add spike in scene
+            getEventDispather("spikeArise").runEvent(i);
+        });
+        getEventDispather("spikeArise").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
+            getScene()->getBattleLayer()->spikeArise(getPlayer()->getPosition());
         });
 
         getMetronome("spikeAttack").setRhythmCallBack([this](int i){
@@ -125,6 +132,7 @@ namespace joker
         });
         getEventDispather("spikeAttack").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
             getEventManager().addEvent(EventPtr(new SpikeAttackEvent()));
+            getScene()->getBattleLayer()->spikeAttack();
         });
         // spike hit
         getMetronome("spikeAttack").setHitCallBack([this](int i, float){

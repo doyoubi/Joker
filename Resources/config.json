@@ -54,8 +54,7 @@
         },
         "spike": {
             "animationName": "spike",
-            "width": 100,
-            "height": 100,
+            "spriteWidth": 100,
             "spriteScale": 1,
             "spikeAriseTime": -0.5
         }
@@ -109,6 +108,10 @@
             "IdleState": "static",
             "FallingState": "static",
             "ExplodeState": "explode"
+        },
+        "spike": {
+            "static": "static",
+            "attack": "attack"
         }
     }
 }

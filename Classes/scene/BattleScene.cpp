@@ -3,6 +3,7 @@
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "ui/UIHelper.h"
+#include "cocostudio/CCArmature.h"
 
 #include "BattleScene.h"
 #include "RoleSprite.h"
@@ -51,12 +52,28 @@ namespace joker
     }
 
     // BattleLayer
+
+    // SpikesSprite 
+    using cocostudio::Armature;
+    class SpikesSprite : public cocos2d::Node
+    {
+    public:
+        CREATE_FUNC(SpikesSprite);
+        void attack();
+        void arise();
+    private:
+        bool init() override;
+        Vector<Armature*> _spikes;
+    };
+
     bool BattleLayer::init()
     {
         if (!Layer::init()) return false;
 
         _background = Sprite::create("background/background.png");
         _background->setAnchorPoint(Point(0,0));
+        _spikes = SpikesSprite::create();
+        _spikes->retain();
 
         addChild(_background, -1);
 
@@ -66,6 +83,7 @@ namespace joker
     }
 
     BattleLayer::~BattleLayer() {
+        _spikes->release();
         unschedule(schedule_selector(BattleLayer::updateBackground));
     }
 
@@ -128,6 +146,85 @@ namespace joker
         float formerBgLeft = getPositionX();
         float delta = bgLeft - formerBgLeft;
         setPosition(formerBgLeft + delta / 10.0f, 0);
+    }
+
+    void BattleLayer::spikeArise(const cocos2d::Vec2 & position)
+    {
+        _spikes->setPosition(position);
+        _spikes->arise();
+        addChild(_spikes);
+    }
+
+    void BattleLayer::spikeAttack()
+    {
+        _spikes->attack();
+    }
+
+    void SpikesSprite::arise()
+    {
+        const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
+        const static string movementName = Config::getInstance().getStringValue({ "animation", "spike", "static" });
+        using namespace cocostudio;
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName),
+            "missing animation: " + movementName);
+        for (auto spike : _spikes)
+            spike->getAnimation()->play(movementName);
+    }
+
+    bool SpikesSprite::init()
+    {
+        if (!Node::init()) return false;
+
+        this->setAnchorPoint(Vec2(0.5f, 0.5f));
+        this->setLocalZOrder(3);
+
+        using cocostudio::ArmatureDataManager;
+        static bool addArmatureFileInfo = false;
+        if (!addArmatureFileInfo)
+        {
+            ArmatureDataManager::getInstance()->addArmatureFileInfo(
+                "roleAnimation/spike/spike0.png",
+                "roleAnimation/spike/spike0.plist",
+                "roleAnimation/spike/spike.ExportJson"
+                );
+            addArmatureFileInfo = true;
+        }
+        const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
+        const static float width = Config::getInstance().getDoubleValue({"RoleProperty", "spike", "spriteWidth"});
+        auto size = Director::getInstance()->getVisibleSize();
+        int spikeNum = int(size.width / width);
+        for (int i = 0; i < spikeNum; ++i)
+        {
+            _spikes.pushBack(Armature::create(animationName));
+        }
+        
+        float leftmost = -(spikeNum * width / 2.0f);
+        float posi = leftmost + width / 2.0f;
+        for (int i = 0; i < _spikes.size(); ++i)
+        {
+            _spikes.at(i)->setPositionX(posi + width * i);
+            addChild(_spikes.at(i));
+        }
+    }
+
+    void SpikesSprite::attack()
+    {
+        const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
+        const static string movementName = Config::getInstance().getStringValue({ "animation", "spike", "attack" });
+        using namespace cocostudio;
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName),
+            "missing animation: " + movementName);
+        for (auto spike : _spikes)
+            spike->getAnimation()->play(movementName);
+        DEBUGCHECK(!_spikes.empty(), "array of spike sprites is empty");
+        _spikes.at(0)->getAnimation()->setMovementEventCallFunc(
+            [this](Armature *armature, MovementEventType movementType, const std::string & movementID){
+            if (movementType == MovementEventType::COMPLETE)
+            {
+                this->removeFromParent();
+            }
+        });
     }
 
     // BattleUILayer

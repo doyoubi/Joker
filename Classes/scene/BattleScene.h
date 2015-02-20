@@ -35,7 +35,7 @@ namespace joker
         unique_ptr<PromptBar> _promptBar;
     };
 
-
+    class SpikesSprite;
     class BattleLayer : public cocos2d::Layer
     {
     public:
@@ -44,6 +44,8 @@ namespace joker
         RoleSprite * addEnemySprite(const cocos2d::Vec2 & position);
         RoleSprite * addPlayerSprite(const cocos2d::Vec2 & position);
         RoleSprite * addBombSprite(const cocos2d::Vec2 & position);
+        void spikeArise(const cocos2d::Vec2 & position);
+        void spikeAttack();
         void removeEnemySprite(RoleSprite * enemy);
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         cocos2d::Sprite * getBackground() { return _background; }
@@ -57,6 +59,8 @@ namespace joker
         vector<RoleSprite*> _enemyArray;  // weak reference
         RoleSprite * _player = nullptr;   // weak reference
         cocos2d::Sprite * _background = nullptr;  // weak reference
+        
+        SpikesSprite * _spikes; // strong reference, it's retain() by BattleLayer
     };
 
 
