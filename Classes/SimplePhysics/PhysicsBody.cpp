@@ -15,12 +15,16 @@ USING_NS_CC;
 
 namespace joker {
 
-    float PhysicsBody::JumpInitSpeedY = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "jumpSpeedY" });
+    float PhysicsBody::JumpInitSpeedY = 0;
 
     PhysicsBody::PhysicsBody(float x, float y, float w, float h) :
         _x(x), _y(y), _w(w), _h(h), _vx(0), _vy(0), _r(0), _collidable(false),
         _landCallback(nullptr), _jumpCallback(nullptr) 
     {
+        // avoid Config used for static value initialization
+        static float jumpSpeedY = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "jumpSpeedY" });
+        JumpInitSpeedY = jumpSpeedY;
+
         PhysicsWorld::getInstance()->addPhysicsBody(this);
     }
 

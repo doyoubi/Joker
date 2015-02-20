@@ -7,8 +7,10 @@
 
 namespace joker
 {
+    bool Config::_usableTag = false;
     Config & Config::getInstance()
     {
+        DEBUGCHECK(_usableTag, "Config is not usable before Config::setUsable called");
         static Config config("config.json");
         return config;
     }

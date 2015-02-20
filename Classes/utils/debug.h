@@ -45,7 +45,7 @@ namespace joker
         std::string errorMsg)
     {
         if (checkedExpression) return;
-        CCLOG("cocosdyb: %s", errorMsg.c_str());
+        CCLOGERROR("cocosdyb: %s", errorMsg.c_str());
     }
 
     inline void printCodeLocation(const char * filename, int line)
@@ -53,11 +53,18 @@ namespace joker
         CCLOG("cocosdyb:  %s: line %d", filename, line);
     }
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+
 #define DEBUGCHECK(checkedExpression, errMsg) \
     debugCheck(checkedExpression, __FILE__, __LINE__, errMsg)
 
-//#define DEBUGCHECK(checkedExpression, errMsg) \
-//    debugCheckInLogcat(checkedExpression, __FILE__, __LINE__, errMsg)
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+
+#define DEBUGCHECK(checkedExpression, errMsg) \
+    debugCheckInLogcat(checkedExpression, __FILE__, __LINE__, errMsg)
+
+#endif
+
 
 #define codeLoc() \
     printCodeLocation(__FILE__, __LINE__)

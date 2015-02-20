@@ -15,12 +15,16 @@ namespace joker
     }
 
     // PlayerAttackBaseState
-    const int PlayerAttackBaseState::attackStageQuantity = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
+    int PlayerAttackBaseState::attackStageQuantity = 0;
+    PlayerAttackBaseState::PlayerAttackBaseState()
+    {
+        // avoid Config used for static value initialization
+        const static int q = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackStageQuantity" });
+        attackStageQuantity = q;
+    }
     int PlayerAttackBaseState::_currStage = 0;
 
     // PlayerAttackState
-    const float PlayerAttackState::changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
-
     std::string PlayerAttackState::getDebugString()
     {
         return "player attack";
@@ -29,9 +33,11 @@ namespace joker
     void PlayerAttackState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
+        static const float changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
+        DEBUGCHECK(changedDistance >= 0, "changedDistance can't be negative");
         for (int i = 0; i < attackStageQuantity; ++i)
         {
-            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)),
+            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)) != nullptr,
                 missingAnimation(animName + std::to_string(i)));
         }
         role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
@@ -70,7 +76,7 @@ namespace joker
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
         for (int i = 0; i < attackStageQuantity; ++i)
         {
-            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)),
+            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)) != nullptr,
                 missingAnimation(animName + std::to_string(i)));
         }
         role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
@@ -111,7 +117,7 @@ namespace joker
     void PlayerAttackedState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
 
@@ -142,7 +148,7 @@ namespace joker
 
 
     // JumpState
-    const float JumpState::speedX = Config::getInstance().getDoubleValue({"RoleProperty", "player", "jumpSpeedX"});
+    float JumpState::speedX = 0;
 
     std::string JumpState::getDebugString()
     {
@@ -152,12 +158,15 @@ namespace joker
     JumpState::JumpState(float velocityX)
         : _velocityX(velocityX)
     {
+        // avoid Config used for static value initialization
+        static const float s = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "jumpSpeedX" });
+        JumpState::speedX = s;
     }
 
     void JumpState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "JumpState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
         role->getPhysicsBody()->jump();
@@ -217,7 +226,7 @@ namespace joker
     void CollideState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "CollideState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_direction == RoleDirection::LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);

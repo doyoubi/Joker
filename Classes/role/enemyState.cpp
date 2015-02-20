@@ -21,7 +21,7 @@ namespace joker
     void EnemyAttackState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "EnemyAttackState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
 
@@ -46,7 +46,7 @@ namespace joker
     void EnemyAttackedState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play("attacked");
 
@@ -73,7 +73,7 @@ namespace joker
     void NodState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "NodState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
     }
@@ -95,7 +95,7 @@ namespace joker
     void DefenceState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "DefenceState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
     }
@@ -120,7 +120,7 @@ namespace joker
     void DefenceNodState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "DefenceNodState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
     }
@@ -151,7 +151,7 @@ namespace joker
     void CrawlState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "CrawlState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
 
@@ -197,8 +197,6 @@ namespace joker
     }
 
     // FastRunState
-    const float FastRunState::fastSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "fastSpeed" });
-
     std::string FastRunState::getDebugString()
     {
         return "fast run";
@@ -212,8 +210,9 @@ namespace joker
     void FastRunState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "FastRunState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
+        const static float fastSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "fastSpeed" });
         role->getArmature()->getAnimation()->play(animName);
         float speed = (_direction == RoleDirection::LEFT ? -1 : 1) * fastSpeed;
 
@@ -263,7 +262,7 @@ namespace joker
     void AttackReadyState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "AttackReadyState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         role->getArmature()->getAnimation()->play(animName);
     }
@@ -288,7 +287,7 @@ namespace joker
     void RetreatState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "RetreatState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(animName));
         static const float retreastSpeed = Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "restreatSpeed"});
         role->getArmature()->getAnimation()->play(animName);

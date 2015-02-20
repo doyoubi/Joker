@@ -89,7 +89,6 @@ namespace joker
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
-        static const float fastSpeed;
     };
 
     class AttackReadyState : public State

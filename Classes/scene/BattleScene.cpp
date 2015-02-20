@@ -18,7 +18,9 @@ namespace joker
     bool BattleScene::init()
     {
         if (!Scene::init()) return false;
-
+        
+        // global init
+        Config::setUsable();
         RoleSprite::loadAnimationSource();
 
         auto battleLayer = BattleLayer::create();
@@ -165,7 +167,7 @@ namespace joker
         const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
         const static string movementName = Config::getInstance().getStringValue({ "animation", "spike", "static" });
         using namespace cocostudio;
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName),
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName) != nullptr,
             "missing animation: " + movementName);
         for (auto spike : _spikes)
             spike->getAnimation()->play(movementName);
@@ -190,7 +192,7 @@ namespace joker
             addArmatureFileInfo = true;
         }
         const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName) != nullptr, "missing animation: " + animationName);
         const static float width = Config::getInstance().getDoubleValue({"RoleProperty", "spike", "spriteWidth"});
         auto size = Director::getInstance()->getVisibleSize();
         int spikeNum = int(size.width / width);
@@ -206,6 +208,7 @@ namespace joker
             _spikes.at(i)->setPositionX(posi + width * i);
             addChild(_spikes.at(i));
         }
+        return true;
     }
 
     void SpikesSprite::attack()
@@ -213,7 +216,7 @@ namespace joker
         const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
         const static string movementName = Config::getInstance().getStringValue({ "animation", "spike", "attack" });
         using namespace cocostudio;
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName),
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName) != nullptr,
             "missing animation: " + movementName);
         for (auto spike : _spikes)
             spike->getAnimation()->play(movementName);
@@ -311,6 +314,7 @@ namespace joker
         return true;
     }
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
     void BattleUILayer::registerKeyBoard(unique_ptr<BattleDirector> & director)
     {
         auto listener = EventListenerKeyboard::create();
@@ -353,6 +357,6 @@ namespace joker
         };
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     }
-
+#endif
 
 }
