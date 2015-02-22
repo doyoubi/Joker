@@ -155,7 +155,8 @@ namespace joker
 
     void BattleLayer::spikeArise(const cocos2d::Vec2 & position)
     {
-        _spikes->setPosition(position);
+        static float height = Config::getInstance().getDoubleValue({ "RoleProperty", "spike", "positionY" });
+        _spikes->setPosition(position.x, height);
         _spikes->arise();
         addChild(_spikes);
     }

@@ -130,7 +130,6 @@ namespace joker
             getEventDispather("spikeAttack").runEvent(i);
         });
         getEventDispather("spikeAttack").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
-            getEventManager().addEvent(EventPtr(new SpikeAttackEvent()));
             getScene()->getBattleLayer()->spikeAttack();
         });
         // spike hit

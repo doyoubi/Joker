@@ -3,6 +3,7 @@
 
 #include "PromptBar.h"
 #include "utils/debug.h"
+#include "utils/config.h"
 
 namespace joker
 {
@@ -10,16 +11,22 @@ namespace joker
 
     PromptBar::PromptBar(Node * parent)
     {
+        static float barPositionX = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionX" });
+        static float barPositionY = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionY" });
+        static float startX = Config::getInstance().getDoubleValue({ "PromptBar", "startX" });
+        static float startY = Config::getInstance().getDoubleValue({ "PromptBar", "startY" });
+        static float endX = Config::getInstance().getDoubleValue({ "PromptBar", "endX" });
+        static float endY = Config::getInstance().getDoubleValue({ "PromptBar", "endY" });
         _barBackground = Sprite::create("PromptBar/PromptBarBackground.png");
         CHECKNULL(_barBackground);
-        _barBackground->setAnchorPoint(Vec2(0.5f, 0.5f));
+        _barBackground->setAnchorPoint(Vec2(0.0f, 0.0f));
         auto size = Director::getInstance()->getVisibleSize();
-        _barBackground->setPosition(size.width / 2, 480);
+        _barBackground->setPosition(size.width / 2 + barPositionX, barPositionY);
         parent->addChild(_barBackground);
 
         auto bgSize = _barBackground->getContentSize();
-        _startPoint = Vec2(bgSize.width - 70, bgSize.height / 2.0f);
-        _endPoint = Vec2(70, bgSize.height / 2.0f);
+        _startPoint = Vec2(startX, startY + bgSize.height / 2.0f);
+        _endPoint = Vec2(endX, endY + bgSize.height / 2.0f);
 
         _goal = Sprite::create("PromptBar/Goal.png");
         _goal->setAnchorPoint(Vec2(0.5, 0.5));

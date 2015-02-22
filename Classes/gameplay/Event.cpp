@@ -107,12 +107,6 @@ namespace joker
         else ERRORMSG("invalid role type");
     }
 
-    // SpikeAttackEvent
-    void SpikeAttackEvent::execute(BattleDirector * director)
-    {
-        cout << "spike attack!" << endl;
-    }
-
     // AttackedBySpikeEvent
     void AttackedBySpikeEvent::execute(BattleDirector * director)
     {

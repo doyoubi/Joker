@@ -58,6 +58,7 @@
         },
         "spike": {
             "animationName": "spike",
+            "positionY": 213,
             "spriteWidth": 100,
             "spriteScale": 1,
             "spikeAriseTime": -0.5,
@@ -117,5 +118,13 @@
             "static": "static",
             "attack": "attack"
         }
+    },
+    "PromptBar" : {
+        "barPositionX": 0,
+        "barPositionY": 480,
+        "startX": 400,
+        "startY": 0,
+        "endX": 0,
+        "endY": 0
     }
 }
