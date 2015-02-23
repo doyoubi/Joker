@@ -338,5 +338,22 @@ namespace joker
         return true;
     }
 
+    // EnterState
+    std::string EnterState::getDebugString()
+    {
+        return "enter state";
+    }
+    void EnterState::enterState(Role * role)
+    {
+        static const string animName = Config::getInstance().getStringValue({ "animation", "enemy", "EnterState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
+            missingAnimation(animName));
+        role->getArmature()->getAnimation()->play(animName);
+    }
+    void EnterState::execute(Role * role)
+    {
+        if (role->getArmature()->getAnimation()->isComplete())
+            role->getStateManager()->changeState(IdleState::create());
+    }
 
 }

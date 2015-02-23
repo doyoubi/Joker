@@ -108,7 +108,8 @@
             "CrawlState": "run",
             "FastRunState": "run",
             "AttackReadyState": "attackReady",
-            "RetreatState": "slowDown"
+            "RetreatState": "slowDown",
+            "EnterState": "show"
         },
         "bomb": {
             "IdleState": "static",

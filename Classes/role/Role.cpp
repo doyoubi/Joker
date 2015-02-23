@@ -3,6 +3,7 @@
 #include "utils/debug.h"
 #include "Role.h"
 #include "gameplay/BattleDirector.h"
+#include "enemyState.h"
 
 namespace joker
 {
@@ -19,9 +20,19 @@ namespace joker
         _simplePhysicsBody.setCollidable(false);
 
         // require roleSprite->_armature initialized
-        _stateManager = std::move(std::unique_ptr<StateManager>(
-            new StateManager(this, IdleState::create())
-            ));
+        if (_roleType == RoleType::PLAYER || _roleType == RoleType::BOMB)
+        {
+            _stateManager = std::move(std::unique_ptr<StateManager>(
+                new StateManager(this, IdleState::create())
+                ));
+        }
+        else if (roleType == RoleType::ENEMY)
+        {
+            _stateManager = std::move(std::unique_ptr<StateManager>(
+                new StateManager(this, EnterState::create())
+                ));
+        }
+        else ERRORMSG("invalid role type");
 
         _roleSprite->setScale(spriteScale);
         _roleSprite->addRoleSpriteDebug(this);
