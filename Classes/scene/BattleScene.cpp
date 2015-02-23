@@ -81,7 +81,6 @@ namespace joker
 
         _battleStage = BattleStage::create();
         _battleStage->setPosition(_size.width/2.0f, _size.height/2.0f);
-        //_battleStage->setAnchorPoint(Point(0, 0));
         _battleStage->enter();
         addChild(_battleStage, -1);
 

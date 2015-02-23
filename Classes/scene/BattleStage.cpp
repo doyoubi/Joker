@@ -17,6 +17,7 @@ namespace joker
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/cake/cake.ExportJson");
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/curtain/curtain.ExportJson");
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/stage/stage.ExportJson");
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/BG/BG.ExportJson");
             addArmatureFileInfo = true;
         }
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("cake") != nullptr,
@@ -25,18 +26,30 @@ namespace joker
             "missing animation: curtain");
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage") != nullptr,
             "missing animation: stage");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("BG") != nullptr,
+            "missing animation: stage");
+        _background = Armature::create("BG");
         _cake = Armature::create("cake");
         _curtain = Armature::create("curtain");
         _stage = Armature::create("stage");
+        _background->setLocalZOrder(-4);
         _cake->setLocalZOrder(-3);
         _stage->setLocalZOrder(-2);
         _curtain->setLocalZOrder(-1);
 
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("BG")->getMovement("static") != nullptr,
+            "missing animation movement: static");
+        _background->getAnimation()->play("static");
+        addChild(_background);
+
         Armature * arms[] = { _cake, _stage, _curtain };
-        for (auto a : arms)
+        string animationData[] = { "cake", "stage", "curtain" };
+        for (int i = 0; i < sizeof(arms) / sizeof(Armature *); ++i)
         {
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("cake")->getMovement("show") != nullptr,
-                "missing animation: cake");
+            auto a = arms[i];
+            string & animData = animationData[i];
+            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animData)->getMovement("show") != nullptr,
+                "missing animation movement: " + animData);
             addChild(a);
             a->getAnimation()->play("show");
             a->pause();

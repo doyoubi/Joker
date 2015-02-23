@@ -48,6 +48,8 @@ namespace joker
         void spikeArise(const cocos2d::Vec2 & position);
         void spikeAttack();
         void removeEnemySprite(RoleSprite * enemy);
+        void shake(){ _battleStage->shake(); }
+        void quake(){ _battleStage->quake(); }
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         Size getSize() { return _size; }
 

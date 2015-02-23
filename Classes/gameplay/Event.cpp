@@ -64,6 +64,7 @@ namespace joker
         RoleCommand command(RoleAction::ATTACKED);
         command.add("direction", sufferer->getDirection());
         sufferer->executeCommand(command);
+        director->getScene()->getBattleLayer()->shake();
     }
 
     // NodEvent

@@ -18,6 +18,7 @@ namespace joker
         cocostudio::Armature * _cake;    // weak ref
         cocostudio::Armature * _curtain; // weak ref
         cocostudio::Armature * _stage;   // weak ref
+        cocostudio::Armature * _background;   // weak ref
     };
 }
 
