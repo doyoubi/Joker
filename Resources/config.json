@@ -1,4 +1,8 @@
 {
+    "BattleStage" : {
+        "width": 2000,
+        "height": 640
+    },
     "Physics": {
         "gravity": 120,
         "groundHeight": 200,

@@ -7,6 +7,7 @@
 
 #include "gameplay/BattleDirector.h"
 #include "PromptBar.h"
+#include "BattleStage.h"
 
 namespace joker
 {
@@ -48,7 +49,7 @@ namespace joker
         void spikeAttack();
         void removeEnemySprite(RoleSprite * enemy);
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
-        cocos2d::Sprite * getBackground() { return _background; }
+        Size getSize() { return _size; }
 
         ~BattleLayer();
 
@@ -58,7 +59,8 @@ namespace joker
 
         vector<RoleSprite*> _enemyArray;  // weak reference
         RoleSprite * _player = nullptr;   // weak reference
-        cocos2d::Sprite * _background = nullptr;  // weak reference
+        BattleStage * _battleStage; // weak ref
+        Size _size;
         
         SpikesSprite * _spikes; // strong reference, it's retain() by BattleLayer
     };

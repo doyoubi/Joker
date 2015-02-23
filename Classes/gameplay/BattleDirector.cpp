@@ -40,7 +40,7 @@ namespace joker
         CHECKNULL(battleScene);
 
         auto physicsWorld = joker::PhysicsWorld::getInstance();
-        physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getBackground()->getContentSize().width);
+        physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getSize().width);
         physicsWorld->setGravity(Config::getInstance().getDoubleValue({ "Physics", "gravity" }));
         physicsWorld->setGroundHeight(Config::getInstance().getDoubleValue({ "Physics", "groundHeight" }));
         physicsWorld->setResistance(Config::getInstance().getDoubleValue({ "Physics", "resistance" }));

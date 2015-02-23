@@ -104,6 +104,9 @@
     <ClCompile Include="..\Classes\role\bombState.cpp">
       <Filter>Classes\role</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\scene\BattleStage.cpp">
+      <Filter>Classes\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -179,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\role\bombState.h">
       <Filter>Classes\role</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\scene\BattleStage.h">
+      <Filter>Classes\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

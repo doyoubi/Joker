@@ -72,14 +72,18 @@ namespace joker
     {
         if (!Layer::init()) return false;
 
-        _background = Sprite::create("background/background.png");
-        _background->setAnchorPoint(Point(0,0));
+        _size.width = Config::getInstance().getDoubleValue({ "BattleStage", "width" });
+        _size.height = Config::getInstance().getDoubleValue({ "BattleStage", "height" });
         _spikes = SpikesSprite::create();
         _spikes->retain();
 
-        addChild(_background, -1);
-
         schedule(schedule_selector(BattleLayer::updateBackground));
+
+        _battleStage = BattleStage::create();
+        _battleStage->setPosition(_size.width/2.0f, _size.height/2.0f);
+        //_battleStage->setAnchorPoint(Point(0, 0));
+        _battleStage->enter();
+        addChild(_battleStage, -1);
 
         return true;
     }
@@ -145,8 +149,8 @@ namespace joker
         else {
             bgLeft = visibleSize.width / 2 - x;
         }
-        if (bgLeft + _background->getContentSize().width < visibleSize.width) {
-            bgLeft = visibleSize.width - _background->getContentSize().width;
+        if (bgLeft + _size.width < visibleSize.width) {
+            bgLeft = visibleSize.width - _size.width;
         }
         float formerBgLeft = getPositionX();
         float delta = bgLeft - formerBgLeft;
