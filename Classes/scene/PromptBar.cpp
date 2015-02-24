@@ -84,22 +84,26 @@ namespace joker
             }
         }
 
+        _root = Node::create();
+        parent->addChild(_root);
+        auto size = Director::getInstance()->getVisibleSize();
+        _root->setPosition(size.width / 2 + barPositionX, barPositionY);
+
+        static float bgX = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundX" });
+        static float bgY = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundY" });
         _barBackground = Armature::create(backgroundAnimProj);
+        _barBackground->setPosition(bgX, bgY);
         CHECKNULL(_barBackground);
         _barBackground->getAnimation()->play(bSat);
-        _barBackground->setAnchorPoint(Vec2(0.0f, 0.0f));
-        auto size = Director::getInstance()->getVisibleSize();
-        _barBackground->setPosition(size.width / 2 + barPositionX, barPositionY);
-        parent->addChild(_barBackground);
+        _root->addChild(_barBackground, 0);
 
-        auto bgSize = _barBackground->getContentSize();
-        _startPoint = Vec2(startX, startY + bgSize.height / 2.0f);
-        _endPoint = Vec2(endX, endY + bgSize.height / 2.0f);
+        _startPoint = Vec2(startX, startY);
+        _endPoint = Vec2(endX, endY);
 
         _goal = Sprite::create("PromptBar/Goal.png");
         _goal->setAnchorPoint(Vec2(0.5, 0.5));
         _goal->setPosition(_endPoint);
-        _barBackground->addChild(_goal);
+        _root->addChild(_goal, 1);
     }
 
     void PromptBar::addPromptSprite(float moveToTime, PromptSpriteType type)
@@ -115,9 +119,11 @@ namespace joker
         CHECKNULL(promptSprite);
         promptSprite->getAnimation()->play(mSat);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
-        promptSprite->setPosition(_startPoint);
+        static float x = Config::getInstance().getDoubleValue({ "PromptBar", "MovingObjectX" });
+        static float y = Config::getInstance().getDoubleValue({ "PromptBar", "MovingObjectY" });
+        promptSprite->setPosition(_startPoint + Vec2(x, y));
         _promptSpriteQueue.push(promptSprite);
-        _barBackground->addChild(promptSprite);
+        _root->addChild(promptSprite, 2);
 
         cocos2d::ActionInterval * act;
         if (type == PromptSpriteType::BOMB)

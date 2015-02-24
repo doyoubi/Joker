@@ -39,6 +39,7 @@ namespace joker
         std::queue<cocostudio::Armature*> _promptSpriteQueue;
         cocostudio::Armature * _barBackground;
         cocos2d::Sprite * _goal;
+        cocos2d::Node * _root;
 
         Vec2 _startPoint;
         Vec2 _endPoint;

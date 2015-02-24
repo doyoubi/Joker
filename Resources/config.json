@@ -147,9 +147,13 @@
     "PromptBar" : {
         "barPositionX": 0,
         "barPositionY": 480,
-        "startX": 400,
+        "startX": 200,
         "startY": 0,
         "endX": 0,
-        "endY": 0
+        "endY": 0,
+        "backgroundX": 100,
+        "backgroundY": 0,
+        "MovingObjectX": 70,
+        "MovingObjectY": 0
     }
 }
