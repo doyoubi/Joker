@@ -2,8 +2,10 @@
 #define JOKER_PROMPT_BAR
 
 #include <queue>
+#include <string>
 
 #include "cocos2d.h"
+#include "cocostudio/CCArmature.h"
 
 namespace joker
 {
@@ -34,14 +36,19 @@ namespace joker
         void addPromptSprite(float moveToTime, PromptSpriteType type);
 
     private:
-        std::queue<Sprite*> _promptSpriteQueue;
-        Sprite * _barBackground;
-        Sprite * _goal;
+        std::queue<cocostudio::Armature*> _promptSpriteQueue;
+        cocostudio::Armature * _barBackground;
+        cocos2d::Sprite * _goal;
 
         Vec2 _startPoint;
         Vec2 _endPoint;
         static const float NOT_INIT_TAG;
         float _moveTime = NOT_INIT_TAG;
+
+        static std::string backgroundAnimProj;
+        static std::string movingObjAnimProj;
+        static std::string bSat, bPerfect, bGood, bOk, bMiss;
+        static std::string mSat, mPerfect, mGood, mOk, mMiss;
     };
 }
 

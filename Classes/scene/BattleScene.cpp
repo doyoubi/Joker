@@ -80,7 +80,9 @@ namespace joker
         schedule(schedule_selector(BattleLayer::updateBackground));
 
         _battleStage = BattleStage::create();
-        _battleStage->setPosition(_size.width/2.0f, _size.height/2.0f);
+        float dx = Config::getInstance().getDoubleValue({ "BattleStage", "positionX" });
+        float dy = Config::getInstance().getDoubleValue({ "BattleStage", "positionY" });
+        _battleStage->setPosition(_size.width/2.0f + dx, _size.height/2.0f + dy);
         _battleStage->enter();
         addChild(_battleStage, -1);
 

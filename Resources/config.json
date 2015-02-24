@@ -1,7 +1,9 @@
 {
     "BattleStage" : {
         "width": 2000,
-        "height": 640
+        "height": 640,
+        "positionX": -1,
+        "positionY": 18
     },
     "Physics": {
         "gravity": 120,
@@ -122,6 +124,24 @@
         "spike": {
             "static": "static",
             "attack": "attack"
+        },
+        "PromptBar": {
+            "MovingObject": {
+                "animationProject": "mark",
+                "sat": "sat",
+                "perfect": "perfect",
+                "good": "good",
+                "ok": "ok",
+                "miss": "miss"
+            },
+            "background": {
+                "animationProject": "line2",
+                "sat": "sat",
+                "perfect": "perfect",
+                "good": "good",
+                "ok": "ok",
+                "miss": "miss"
+            }
         }
     },
     "PromptBar" : {
