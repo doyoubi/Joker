@@ -14,12 +14,12 @@ namespace joker
     class RhythmEventDispatcher
     {
     public:
-        typedef function<void(void)> EventCallBack;
+        typedef function<void(float dt)> EventCallBack;
 
         RhythmEventDispatcher(const RhythmScript & rhythmScript);
         void addEvent(vector<int> eventIndices, EventCallBack eventCallBack);
 
-        void runEvent(int eventIndex);
+        void runEvent(int eventIndex, float dt);
 
     private:
         vector<vector<int>> _RhythmEventDispatcherCallBackIndices;  // one rhythm point index  to  multiple event callback

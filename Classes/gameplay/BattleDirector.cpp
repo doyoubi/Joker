@@ -1,4 +1,5 @@
 #include <string>
+#include <limits>
 
 #include "BattleDirector.h"
 #include "scene/BattleScene.h"
@@ -33,6 +34,22 @@ namespace joker
         float moveToTime;
     };
     MusicScriptFile musicScript("music/", "alice");
+
+
+    HitResult time2HitResult(float dt)
+    {
+        static float perfectDt = Config::getInstance().getDoubleValue({ "Metronome", "perfectDt" });
+        static float goodDt = Config::getInstance().getDoubleValue({ "Metronome", "goodDt" });
+        static float okDt = Config::getInstance().getDoubleValue({ "Metronome", "okDt" });
+        static float hitDeltaTime = Config::getInstance().getDoubleValue({ "Metronome", "hitDeltaTime" });
+        DEBUGCHECK(okDt == hitDeltaTime, "okDt must equal hitDeltaTime");
+        DEBUGCHECK(dt > 0, "negative dt");
+        return 
+            dt < 0.01 ? HitResult::PERFECT :
+            dt < 0.03 ? HitResult::GOOD : 
+                        HitResult::OK;
+    }
+
 
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene)
@@ -82,89 +99,91 @@ namespace joker
         _rhythmEventDispaters.emplace("spikeHit", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("spikeMiss", RhythmEventDispatcher(getScript("battle")));
 
+        float zeroDt = 0.0f;
+        float nan = std::numeric_limits<float>::quiet_NaN();
         // prompt
-        getMetronome("prompt").setRhythmCallBack([this, moveToTime](int i){
-            getEventDispather("attackPrompt").runEvent(i);
-            getEventDispather("bombPrompt").runEvent(i);
-            getEventDispather("spikePrompt").runEvent(i);
+        getMetronome("prompt").setRhythmCallBack([this, zeroDt](int i){
+            getEventDispather("attackPrompt").runEvent(i, zeroDt);
+            getEventDispather("bombPrompt").runEvent(i, zeroDt);
+            getEventDispather("spikePrompt").runEvent(i, zeroDt);
         });
-        getEventDispather("attackPrompt").addEvent(getScript("battle").getEvent("attack"), [this, moveToTime](){
+        getEventDispather("attackPrompt").addEvent(getScript("battle").getEvent("attack"), [this, moveToTime](float){
             this->getScene()->getPromptBar()->addPromptSprite(moveToTime, PromptSpriteType::ATTACK);
         });
-        getEventDispather("bombPrompt").addEvent(getScript("battle").getEvent("bomb"), [this, moveToTime](){
+        getEventDispather("bombPrompt").addEvent(getScript("battle").getEvent("bomb"), [this, moveToTime](float){
             this->getScene()->getPromptBar()->addPromptSprite(moveToTime, PromptSpriteType::BOMB);
         });
-        getEventDispather("spikePrompt").addEvent(getScript("battle").getEvent("spikeAttack"), [this, moveToTime](){
+        getEventDispather("spikePrompt").addEvent(getScript("battle").getEvent("spikeAttack"), [this, moveToTime](float){
             this->getScene()->getPromptBar()->addPromptSprite(moveToTime, PromptSpriteType::SPIKE);
         });
 
-        getMetronome("battle").setRhythmCallBack([this](int i){
-            getEventDispather("nod").runEvent(i);
-            getEventDispather("addEnemy").runEvent(i);
-            getEventDispather("bomb").runEvent(i);
+        getMetronome("battle").setRhythmCallBack([this, zeroDt](int i){
+            getEventDispather("nod").runEvent(i, zeroDt);
+            getEventDispather("addEnemy").runEvent(i, zeroDt);
+            getEventDispather("bomb").runEvent(i, zeroDt);
         });
         getMetronome("battle").setHitCallBack([this](int index, float dt){
-            getEventDispather("hit").runEvent(index);
+            getEventDispather("hit").runEvent(index, dt);
             setBTEvent(BTEvent::NO_EVENT);
         });
-        getMetronome("battle").setMissCallBack([this](int index){
-            getEventDispather("miss").runEvent(index);
+        getMetronome("battle").setMissCallBack([this, nan](int index){
+            getEventDispather("miss").runEvent(index, nan);
             setBTEvent(BTEvent::NO_EVENT);
         });
-        getMetronome("battle").setStartHitCallBack([this](int index){
-            getEventDispather("emptyHit").runEvent(index);
+        getMetronome("battle").setStartHitCallBack([this, nan](int index){
+            getEventDispather("emptyHit").runEvent(index, nan);
         });
         getMetronome("battle").setWrongHitCallBack([this](int, float){
             getPlayer()->executeCommand(RoleAction::EMPTY_ATTACK);
         });
 
         // spike
-        getMetronome("spikeArise").setRhythmCallBack([this](int i){
-            getEventDispather("spikeArise").runEvent(i);
+        getMetronome("spikeArise").setRhythmCallBack([this, zeroDt](int i){
+            getEventDispather("spikeArise").runEvent(i, zeroDt);
         });
-        getEventDispather("spikeArise").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
+        getEventDispather("spikeArise").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float){
             getScene()->getBattleLayer()->spikeArise(getPlayer()->getPosition());
         });
 
-        getMetronome("spikeAttack").setRhythmCallBack([this](int i){
-            getEventDispather("spikeAttack").runEvent(i);
+        getMetronome("spikeAttack").setRhythmCallBack([this, zeroDt](int i){
+            getEventDispather("spikeAttack").runEvent(i, zeroDt);
         });
-        getEventDispather("spikeAttack").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
+        getEventDispather("spikeAttack").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float){
             getScene()->getBattleLayer()->spikeAttack();
         });
         // spike hit
-        getMetronome("spikeAttack").setHitCallBack([this](int i, float){
-            getEventDispather("spikeHit").runEvent(i);
+        getMetronome("spikeAttack").setHitCallBack([this](int i, float dt){
+            getEventDispather("spikeHit").runEvent(i, dt);
         });
-        getEventDispather("spikeHit").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
-            getScene()->getPromptBar()->hitSuccess();
+        getEventDispather("spikeHit").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float dt){
+            getScene()->getPromptBar()->hit(time2HitResult(dt));
         });
         // spike miss
-        getMetronome("spikeAttack").setMissCallBack([this](int i){
-            getEventDispather("spikeMiss").runEvent(i);
+        getMetronome("spikeAttack").setMissCallBack([this, nan](int i){
+            getEventDispather("spikeMiss").runEvent(i, nan);
         });
-        getEventDispather("spikeMiss").addEvent(getScript("battle").getEvent("spikeAttack"), [this](){
+        getEventDispather("spikeMiss").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float){
             getEventManager().addEvent(EventPtr(new AttackedBySpikeEvent()));
-            getScene()->getPromptBar()->miss();
+            getScene()->getPromptBar()->hit(HitResult::MISS);
         });
 
         // bomb
-        getMetronome("bombFall").setRhythmCallBack([this](int i){
-            getEventDispather("bombFall").runEvent(i);
+        getMetronome("bombFall").setRhythmCallBack([this, zeroDt](int i){
+            getEventDispather("bombFall").runEvent(i, zeroDt);
         });
-        getEventDispather("bombFall").addEvent(getScript("battle").getEvent("bomb"), [this](){
+        getEventDispather("bombFall").addEvent(getScript("battle").getEvent("bomb"), [this](float){
             float x = getPlayer()->getPosition().x;
             this->addBomb(Vec2(x, 600));
         });
-        getEventDispather("bomb").addEvent(getScript("battle").getEvent("bomb"), [this](){
+        getEventDispather("bomb").addEvent(getScript("battle").getEvent("bomb"), [this](float){
             this->getLowestBomb()->executeCommand(RoleAction::EXPLODE);
         });
 
         // enemy rush
-        getMetronome("enemyRush").setRhythmCallBack([this](int index){
-            getEventDispather("enemyRush").runEvent(index);
+        getMetronome("enemyRush").setRhythmCallBack([this, zeroDt](int index){
+            getEventDispather("enemyRush").runEvent(index, zeroDt);
         });
-        getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](){
+        getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](float){
             this->setBTEvent(BTEvent::READY_TO_ATTACK);
         });
 
@@ -174,21 +193,21 @@ namespace joker
         });*/
 
         // battle
-        getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](){
+        getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](float dt){
             getPlayer()->executeCommand(RoleAction::ATTACK);
-            getScene()->getPromptBar()->hitSuccess();
+            getScene()->getPromptBar()->hit(time2HitResult(dt));
         });
 
-        getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](){
+        getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](float){
             getClosestEnemy()->executeCommand(RoleAction::ATTACK);
-            getScene()->getPromptBar()->miss();
+            getScene()->getPromptBar()->hit(HitResult::MISS);
         });
 
-        getEventDispather("addEnemy").addEvent(getScript("battle").getEvent("addEnemy"), [this](){
+        getEventDispather("addEnemy").addEvent(getScript("battle").getEvent("addEnemy"), [this](float){
             this->supplyEnemy();
         });
 
-        getEventDispather("emptyHit").addEvent(getScript("battle").getEvent("attack"), [this](){
+        getEventDispather("emptyHit").addEvent(getScript("battle").getEvent("attack"), [this](float){
             this->enemyAttackReady();
         });
 

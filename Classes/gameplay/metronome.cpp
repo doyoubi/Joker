@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <limits>
 
 #include "utils/debug.h"
 #include "metronome.h"
@@ -12,7 +13,7 @@ namespace joker
         : _rhythmPoints(rhythmPoints.size() + 2), _hitted(rhythmPoints.size() + 2),
         _missCallBack(nullptr), _hitCallBack(nullptr),
         _rhythmCallBack(nullptr), _wrongHitCallBack(nullptr),
-        _hitDeltaTime(hitDeltaTime)
+        _hitDeltaTime(hitDeltaTime), _successfulHitDeltaTime(std::numeric_limits<float>::quiet_NaN())
     {
         DEBUGCHECK(std::all_of(begin(rhythmPoints), end(rhythmPoints),
             // or t > 2 * hitDeltaTime, if you think the left and right interval should not intersect
@@ -90,7 +91,7 @@ namespace joker
             if (_hitted[lastPointIndex])
             {
                 if (_hitCallBack)
-                    _hitCallBack(scriptIndex, _timeSinceLastPoint);
+                    _hitCallBack(scriptIndex, _successfulHitDeltaTime);
             }
             else if (_missCallBack)
             {
@@ -116,7 +117,10 @@ namespace joker
         float d = leftClosest ? dt1 : dt2;
 
         if (d <= _hitDeltaTime) // hit success
+        {
             _hitted[closestPointIndex] = 1;
+            _successfulHitDeltaTime = d;
+        }
         else
         {
             int scriptIndex = closestPointIndex - 1;
@@ -151,4 +155,4 @@ namespace joker
     }
 
 
-}
+}

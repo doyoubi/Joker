@@ -12,7 +12,10 @@
     },
     "Metronome": {
         "hitDeltaTime": 0.04,
-        "promptStartTime": 0.1
+        "promptStartTime": 0.1,
+        "perfectDt": 0.01,
+        "goodDt": 0.25,
+        "okDt": 0.04
     },
     "RoleProperty": {
         "player": {
@@ -147,7 +150,7 @@
     "PromptBar" : {
         "barPositionX": 0,
         "barPositionY": 480,
-        "startX": 200,
+        "startX": 400,
         "startY": 0,
         "endX": 0,
         "endY": 0,

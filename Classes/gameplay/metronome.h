@@ -63,6 +63,7 @@ namespace joker
 
         std::vector<float> _rhythmPoints;
         std::vector<int> _hitted;
+        float _successfulHitDeltaTime;
         bool _rhythmPointChecked;
 
         bool _startHitTag;

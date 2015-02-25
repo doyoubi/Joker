@@ -19,12 +19,12 @@ namespace joker
         }
     }
 
-    void RhythmEventDispatcher::runEvent(int eventIndex)
+    void RhythmEventDispatcher::runEvent(int eventIndex, float dt)
     {
         DEBUGCHECK(0 <= eventIndex && eventIndex < _RhythmEventDispatcherCallBackIndices.size(), "invalid eventIndex");
         for (int i : _RhythmEventDispatcherCallBackIndices[eventIndex])
         {
-            _eventCallBackArray[i]();
+            _eventCallBackArray[i](dt);
         }
     }
 

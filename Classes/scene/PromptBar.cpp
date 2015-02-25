@@ -130,7 +130,7 @@ namespace joker
         {
             FiniteTimeAction * moveTo = cocos2d::MoveTo::create(moveToTime, _endPoint);
             FiniteTimeAction * callback = cocos2d::CallFunc::create([this](){
-                hitSuccess();
+                hit(HitResult::OK);
             });
             Vector<FiniteTimeAction*> arr;
             arr.pushBack(moveTo);
@@ -139,45 +139,30 @@ namespace joker
         }
         else
         {
-            act = cocos2d::MoveTo::create(moveToTime, _endPoint - Vec2(20, 0));
+            act = cocos2d::MoveTo::create(moveToTime, _endPoint);
         }
         promptSprite->runAction(act);
     }
 
-    void PromptBar::hitSuccess()
+    void PromptBar::hit(HitResult result)
     {
+        using namespace cocostudio;
         DEBUGCHECK(_promptSpriteQueue.size() > 0, "empty queue");
         auto sprite = _promptSpriteQueue.front();
         _promptSpriteQueue.pop();
-        sprite->removeFromParent();
-
-        auto scale = cocos2d::ScaleBy::create(0.1f, 1.5f);
-        auto rev = scale->reverse();
-        auto seq = cocos2d::Sequence::create(scale, rev, nullptr);
-        _goal->runAction(seq);
-    }
-    
-    void PromptBar::hitFail()
-    {
-    }
-
-    void PromptBar::miss()
-    {
-        DEBUGCHECK(_promptSpriteQueue.size() > 0, "empty queue");
-        auto sprite = _promptSpriteQueue.front();
-        _promptSpriteQueue.pop();
-        sprite->removeFromParent();
-    }
-
-    void PromptBar::rhythm()
-    {
-        if (_promptSpriteQueue.empty()) return;
-
-        cocostudio::Armature * s = _promptSpriteQueue.front();
-        auto scale = cocos2d::ScaleBy::create(0.1f, 1.5f);
-        auto rev = scale->reverse();
-        auto seq = cocos2d::Sequence::create(scale, rev, nullptr);
-        s->runAction(seq);
+        string anim =
+            result == HitResult::PERFECT ? mPerfect :
+            result == HitResult::GOOD ? mGood :
+            result == HitResult::OK ? mOk :
+            result == HitResult::MISS ? mMiss : "invalid-anim";
+        sprite->getAnimation()->play(anim);
+        sprite->getAnimation()->setMovementEventCallFunc(
+            [sprite](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE)
+            {
+                sprite->removeFromParent();
+            }
+        });
     }
 
     void PromptBar::clearPromptSprite()
