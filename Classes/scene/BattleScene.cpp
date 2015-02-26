@@ -90,6 +90,11 @@ namespace joker
         _cakes->setPosition(0, getSize().height / 2.0f);
         addChild(_cakes, -2);
 
+        string backgroundPic = Config::getInstance().getStringValue({ "backgroundPicture" });
+        auto background = Sprite::create(backgroundPic);
+        background->setPosition(_size.width / 2.0f, _size.height / 2.0f);
+        addChild(background, -3);
+
         return true;
     }
 

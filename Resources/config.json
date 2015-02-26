@@ -7,14 +7,17 @@
     },
     "LayeringCakes" : {
         "layer1Width": 3000,
-        "layer2Width": 4000,
+        "layer2Width": 2500,
         "scale1": 0.7,
         "scale2": 0.7,
         "gap1": 400,
-        "gap2": 1200,
+        "gap2": 1400,
         "layer1Picture": "background/greencake.png",
-        "layer2Picture": "background/purplecake.png"
+        "layer2Picture": "background/purplecake.png",
+        "offsetY1": 0,
+        "offsetY2": 50
     },
+    "backgroundPicture": "background/background.png",
     "Physics": {
         "gravity": 120,
         "groundHeight": 200,

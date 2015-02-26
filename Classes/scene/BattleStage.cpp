@@ -96,9 +96,13 @@ namespace joker
         const float gap2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "gap2" });
         const string layer1Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer1Picture" });
         const string layer2Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer2Picture" });
+        const float offsetY1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY1" });
+        const float offsetY2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY2" });
 
         _layer1 = Node::create();
         _layer2 = Node::create();
+        _layer1->setPositionY(offsetY1);
+        _layer2->setPositionY(offsetY2);
         addChild(_layer1, 1);
         addChild(_layer2, 0);
         for (float i = -layer1Width / 2.0f; i < layer1Width / 2.0f; i += gap1)
@@ -128,11 +132,11 @@ namespace joker
 
         float leftmost1 = layer1Width / 2.0f;
         float rightmost1 = _stageSize.width - layer1Width / 2.0f;
-        _layer1->setPosition(lerp(leftmost1, rightmost1, cameraPosition.x / _stageSize.width), 0);
+        _layer1->setPosition(lerp(leftmost1, rightmost1, cameraPosition.x / _stageSize.width), _layer1->getPositionY());
 
         float leftmost2 = layer2Width / 2.0f;
         float rightmost2 = _stageSize.width - layer2Width / 2.0f;
-        _layer2->setPosition(lerp(leftmost2, rightmost2, cameraPosition.x / _stageSize.width), 0);
+        _layer2->setPosition(lerp(leftmost2, rightmost2, cameraPosition.x / _stageSize.width), _layer2->getPositionY());
     }
 
 
