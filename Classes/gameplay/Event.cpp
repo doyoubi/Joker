@@ -80,6 +80,8 @@ namespace joker
         RoleCommand command(RoleAction::COLLIDE);
         command.add<RoleDirection>("direction", _direction);
         director->sendCommand(director->getPlayer(), command);
+
+        director->getScene()->getBattleLayer()->shake();
     }
 
     // EmptyAttackEvent

@@ -174,15 +174,6 @@ namespace joker
         float s = std::abs(_startPoint.x - _endPoint.x);
         float t = moveToTime * std::abs(_startPoint.x - missEndPointX) / s;
 
-        float shortS = s;
-        float longS = std::abs(_startPoint.x - missEndPointX);
-        executeOnce([t, moveToTime, shortS, longS](){
-            cout << "shortS: " << shortS << endl
-                << "longS: " << longS << endl
-                << "move to time: " << moveToTime << endl
-                << "t" << t << endl;
-        });
-
         cocos2d::ActionInterval * act;
         FiniteTimeAction * moveTo = cocos2d::MoveTo::create(t, _endPoint + Vec2(missEndPointX, 0));
         auto & spriteQueue = _promptSpriteQueue;

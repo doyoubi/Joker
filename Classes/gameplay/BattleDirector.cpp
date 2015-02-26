@@ -85,7 +85,6 @@ namespace joker
         _rhythmEventDispaters.emplace("hit", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("miss", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("addEnemy", RhythmEventDispatcher(getScript("battle")));
-        _rhythmEventDispaters.emplace("emptyHit", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("enemyRush", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("bombFall", RhythmEventDispatcher(getScript("battle")));
         _rhythmEventDispaters.emplace("bomb", RhythmEventDispatcher(getScript("battle")));
@@ -129,9 +128,6 @@ namespace joker
         getMetronome("battle").setMissCallBack([this, nan](int index){
             getEventDispather("miss").runEvent(index, nan);
             setBTEvent(BTEvent::NO_EVENT);
-        });
-        getMetronome("battle").setStartHitCallBack([this, nan](int index){
-            getEventDispather("emptyHit").runEvent(index, nan);
         });
         getMetronome("battle").setWrongHitCallBack([this](int, float){
             getPlayer()->executeCommand(RoleAction::EMPTY_ATTACK);
@@ -201,10 +197,6 @@ namespace joker
 
         getEventDispather("addEnemy").addEvent(getScript("battle").getEvent("addEnemy"), [this](float){
             this->supplyEnemy();
-        });
-
-        getEventDispather("emptyHit").addEvent(getScript("battle").getEvent("attack"), [this](float){
-            this->enemyAttackReady();
         });
 
         addEnemy(Vec2(500, 200));
