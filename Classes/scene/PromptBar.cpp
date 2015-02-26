@@ -9,7 +9,9 @@ namespace joker
 {
     const float PromptBar::NOT_INIT_TAG = std::numeric_limits<float>::quiet_NaN();
     std::string PromptBar::backgroundAnimProj;
-    std::string PromptBar::movingObjAnimProj;
+    std::string PromptBar::mark0AnimProj;
+    std::string PromptBar::mark1AnimProj;
+    std::string PromptBar::mark2AnimProj;
     std::string PromptBar::bSat;
     std::string PromptBar::bPerfect;
     std::string PromptBar::bGood;
@@ -20,20 +22,20 @@ namespace joker
     std::string PromptBar::mGood;
     std::string PromptBar::mOk;
     std::string PromptBar::mMiss;
+    std::string PromptBar::enemy;
+    std::string PromptBar::spike;
+    std::string PromptBar::bomb;
 
-    PromptBar::PromptBar(Node * parent)
+    void PromptBar::addSource()
     {
-        static float barPositionX = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionX" });
-        static float barPositionY = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionY" });
-        static float startX = Config::getInstance().getDoubleValue({ "PromptBar", "startX" });
-        static float startY = Config::getInstance().getDoubleValue({ "PromptBar", "startY" });
-        static float endX = Config::getInstance().getDoubleValue({ "PromptBar", "endX" });
-        static float endY = Config::getInstance().getDoubleValue({ "PromptBar", "endY" });
-
         backgroundAnimProj = Config::getInstance().getStringValue(
         { "animation", "PromptBar", "background", "animationProject" });
-        movingObjAnimProj = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "animationProject" });
+        mark0AnimProj = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "mark", "mark0_animationProject" });
+        mark1AnimProj = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "mark", "mark1_animationProject" });
+        mark2AnimProj = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "mark", "mark2_animationProject" });
 
         bSat = Config::getInstance().getStringValue(
         { "animation", "PromptBar", "background", "sat" });
@@ -47,33 +49,60 @@ namespace joker
         { "animation", "PromptBar", "background", "miss" });
 
         mSat = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "sat" });
+        { "animation", "PromptBar", "mark", "sat" });
         mPerfect = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "perfect" });
+        { "animation", "PromptBar", "mark", "perfect" });
         mGood = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "good" });
+        { "animation", "PromptBar", "mark", "good" });
         mOk = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "ok" });
+        { "animation", "PromptBar", "mark", "ok" });
         mMiss = Config::getInstance().getStringValue(
-        { "animation", "PromptBar", "MovingObject", "miss" });
+        { "animation", "PromptBar", "mark", "miss" });
+
+        bomb = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "MovingObject", "bomb" });
+        enemy = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "MovingObject", "enemy" });
+        spike = Config::getInstance().getStringValue(
+        { "animation", "PromptBar", "MovingObject", "spike" });
+
+        string anims[] = { backgroundAnimProj, mark0AnimProj, mark1AnimProj, mark2AnimProj };
+
+        using namespace cocostudio;
+        for (string & anim : anims)
+        {
+            ArmatureDataManager::getInstance()->addArmatureFileInfo(
+                "PromptBar/" + anim + "/" + anim + ".ExportJson");
+        }
+    }
+
+
+    PromptBar::PromptBar(Node * parent)
+    {
+        static float barPositionX = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionX" });
+        static float barPositionY = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionY" });
+        static float startX = Config::getInstance().getDoubleValue({ "PromptBar", "startX" });
+        static float startY = Config::getInstance().getDoubleValue({ "PromptBar", "startY" });
+        static float endX = Config::getInstance().getDoubleValue({ "PromptBar", "endX" });
+        static float endY = Config::getInstance().getDoubleValue({ "PromptBar", "endY" });
 
         using namespace cocostudio;
         static bool addArmatureFileInfo = false;
         if (!addArmatureFileInfo)
         {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo(
-                "PromptBar/" + backgroundAnimProj + "/" + backgroundAnimProj + ".ExportJson");
-            ArmatureDataManager::getInstance()->addArmatureFileInfo(
-                "PromptBar/" + movingObjAnimProj + "/" + movingObjAnimProj + ".ExportJson");
+            addSource();
             addArmatureFileInfo = true;
         }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(backgroundAnimProj) != nullptr,
-            "missing animation: " + backgroundAnimProj);
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(movingObjAnimProj) != nullptr,
-            "missing animation: " + movingObjAnimProj);
+
         string bMovement[] = { bSat, bPerfect, bGood, bOk, bMiss };
         string mMovement[] = { mSat, mPerfect, mGood, mOk, mMiss };
-        string anims[] = { backgroundAnimProj, movingObjAnimProj };
+        string anims[] = { backgroundAnimProj, mark0AnimProj, mark1AnimProj, mark2AnimProj };
+
+        for (string & anim : anims)
+        {
+            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim) != nullptr,
+                "missing animation: " + anim);
+        }
         for (string & anim : anims)
         {
             for (string & movement : bMovement)
@@ -100,47 +129,71 @@ namespace joker
         _startPoint = Vec2(startX, startY);
         _endPoint = Vec2(endX, endY);
 
-        _goal = Sprite::create("PromptBar/Goal.png");
-        _goal->setAnchorPoint(Vec2(0.5, 0.5));
-        _goal->setPosition(_endPoint);
-        _root->addChild(_goal, 1);
+        string marks[] = { mark0AnimProj, mark1AnimProj, mark2AnimProj };
+        static float markOffsetX = Config::getInstance().getDoubleValue({ "PromptBar", "markOffsetX" });
+        static float markOffsetY = Config::getInstance().getDoubleValue({ "PromptBar", "markOffsetY" });
+        for (int i = 0; i < 3; ++i)
+        {
+            _marks[i] = Armature::create(marks[i]);
+            _marks[i]->setPosition(_endPoint + Vec2(markOffsetX, markOffsetY));
+            _root->addChild(_marks[i], i+1);
+        }
+        auto goal = Sprite::create("PromptBar/Goal.png");
+        goal->setPosition(_endPoint);
+        goal->setAnchorPoint(Vec2(0.5f, 0.5f));
+        _root->addChild(goal, 5);
     }
 
     void PromptBar::addPromptSprite(float moveToTime, PromptSpriteType type)
     {
         using namespace cocostudio;
-        Armature * promptSprite;
+        Sprite * promptSprite;
         if (type == PromptSpriteType::ATTACK)
-            promptSprite = Armature::create(movingObjAnimProj);
+            promptSprite = Sprite::create(enemy);
         else if (type == PromptSpriteType::SPIKE)
-            promptSprite = Armature::create(movingObjAnimProj);
+            promptSprite = Sprite::create(spike);
         else if (type == PromptSpriteType::BOMB)
-            promptSprite = Armature::create(movingObjAnimProj);
+            promptSprite = Sprite::create(bomb);
+
+        // only for debug
+        auto child = Sprite::create("PromptBar/Goal.Png");
+        auto size = promptSprite->getContentSize();
+        child->setPosition(size.width / 2.0f, size.height / 2.0f);
+        promptSprite->addChild(child);
+
         CHECKNULL(promptSprite);
-        promptSprite->getAnimation()->play(mSat);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
-        static float x = Config::getInstance().getDoubleValue({ "PromptBar", "MovingObjectX" });
-        static float y = Config::getInstance().getDoubleValue({ "PromptBar", "MovingObjectY" });
-        promptSprite->setPosition(_startPoint + Vec2(x, y));
+        promptSprite->setPosition(_startPoint);
         _promptSpriteQueue.push(promptSprite);
         _root->addChild(promptSprite, 2);
 
+        static float missEndPointX = Config::getInstance().getDoubleValue({ "PromptBar", "missEndX" });
+        DEBUGCHECK(missEndPointX < -30, 
+            "missEndX must be nagative and should not too small, "
+            "or it will be deleted before we decide whether success or miss");
+        float s = std::abs(_startPoint.x - _endPoint.x);
+        float t = moveToTime * std::abs(_startPoint.x - missEndPointX) / s;
+
+        float shortS = s;
+        float longS = std::abs(_startPoint.x - missEndPointX);
+        executeOnce([t, moveToTime, shortS, longS](){
+            cout << "shortS: " << shortS << endl
+                << "longS: " << longS << endl
+                << "move to time: " << moveToTime << endl
+                << "t" << t << endl;
+        });
+
         cocos2d::ActionInterval * act;
-        if (type == PromptSpriteType::BOMB)
-        {
-            FiniteTimeAction * moveTo = cocos2d::MoveTo::create(moveToTime, _endPoint);
-            FiniteTimeAction * callback = cocos2d::CallFunc::create([this](){
-                hit(HitResult::OK);
-            });
-            Vector<FiniteTimeAction*> arr;
-            arr.pushBack(moveTo);
-            arr.pushBack(callback);
-            act = cocos2d::Sequence::create(arr);
-        }
-        else
-        {
-            act = cocos2d::MoveTo::create(moveToTime, _endPoint);
-        }
+        FiniteTimeAction * moveTo = cocos2d::MoveTo::create(t, _endPoint + Vec2(missEndPointX, 0));
+        auto & spriteQueue = _promptSpriteQueue;
+        FiniteTimeAction * callback = cocos2d::CallFunc::create([promptSprite, &spriteQueue](){
+            DEBUGCHECK(promptSprite != spriteQueue.front(), "delete a sprite which is still in the queue");
+            promptSprite->removeFromParent();
+        });
+        Vector<FiniteTimeAction*> arr;
+        arr.pushBack(moveTo);
+        arr.pushBack(callback);
+        act = cocos2d::Sequence::create(arr);
         promptSprite->runAction(act);
     }
 
@@ -151,18 +204,25 @@ namespace joker
         auto sprite = _promptSpriteQueue.front();
         _promptSpriteQueue.pop();
         string anim =
+            result == HitResult::BOMB ? mOk :
             result == HitResult::PERFECT ? mPerfect :
             result == HitResult::GOOD ? mGood :
             result == HitResult::OK ? mOk :
             result == HitResult::MISS ? mMiss : "invalid-anim";
-        sprite->getAnimation()->play(anim);
-        sprite->getAnimation()->setMovementEventCallFunc(
-            [sprite](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE)
-            {
-                sprite->removeFromParent();
-            }
-        });
+        if (result != HitResult::MISS)
+        {
+            sprite->removeFromParent();
+        }
+        string sat = mSat;
+        for (auto mark : _marks)
+        {
+            mark->getAnimation()->play(anim);
+            mark->getAnimation()->setMovementEventCallFunc(
+                [mark, sat](Armature *armature, MovementEventType movementType, const std::string& movementID){
+                if (movementType == MovementEventType::COMPLETE)
+                    mark->getAnimation()->play(sat);
+            });
+        }
     }
 
     void PromptBar::clearPromptSprite()

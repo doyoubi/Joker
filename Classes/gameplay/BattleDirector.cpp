@@ -177,6 +177,7 @@ namespace joker
         });
         getEventDispather("bomb").addEvent(getScript("battle").getEvent("bomb"), [this](float){
             this->getLowestBomb()->executeCommand(RoleAction::EXPLODE);
+            getScene()->getPromptBar()->hit(HitResult::BOMB);
         });
 
         // enemy rush
@@ -186,11 +187,6 @@ namespace joker
         getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](float){
             this->setBTEvent(BTEvent::READY_TO_ATTACK);
         });
-
-        /*getEventDispather("nod").addEvent(getScript("battle").getEvent("nod"), [this](){
-            this->addEvent(EventPtr(new NodEvent()));
-            getScene()->getPromptBar()->rhythm();
-        });*/
 
         // battle
         getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](float dt){

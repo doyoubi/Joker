@@ -26,6 +26,7 @@ namespace joker
         GOOD,
         OK,
         MISS,
+        BOMB,
     };
 
     class PromptBar
@@ -41,9 +42,11 @@ namespace joker
         void addPromptSprite(float moveToTime, PromptSpriteType type);
 
     private:
-        std::queue<cocostudio::Armature*> _promptSpriteQueue;
+        static void addSource();
+
+        std::queue<cocos2d::Sprite*> _promptSpriteQueue;
         cocostudio::Armature * _barBackground;
-        cocos2d::Sprite * _goal;
+        cocostudio::Armature * _marks[3];
         cocos2d::Node * _root;
 
         Vec2 _startPoint;
@@ -52,9 +55,10 @@ namespace joker
         float _moveTime = NOT_INIT_TAG;
 
         static std::string backgroundAnimProj;
-        static std::string movingObjAnimProj;
+        static std::string mark0AnimProj, mark1AnimProj, mark2AnimProj;
         static std::string bSat, bPerfect, bGood, bOk, bMiss;
         static std::string mSat, mPerfect, mGood, mOk, mMiss;
+        static std::string enemy, spike, bomb;
     };
 }
 

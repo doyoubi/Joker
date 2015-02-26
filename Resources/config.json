@@ -130,7 +130,14 @@
         },
         "PromptBar": {
             "MovingObject": {
-                "animationProject": "mark",
+                "bomb": "PromptBar/BOMB.png",
+                "enemy": "PromptBar/ENEMY.png",
+                "spike": "PromptBar/JUMP.png"
+            },
+            "mark": {
+                "mark0_animationProject": "mark_0",
+                "mark1_animationProject": "mark_1",
+                "mark2_animationProject": "mark_2",
                 "sat": "sat",
                 "perfect": "perfect",
                 "good": "good",
@@ -154,9 +161,10 @@
         "startY": 0,
         "endX": 0,
         "endY": 0,
+        "missEndX": -100,
         "backgroundX": 100,
         "backgroundY": 0,
-        "MovingObjectX": 70,
-        "MovingObjectY": 0
+        "markOffsetX": 5,
+        "markOffsetY": 0
     }
 }

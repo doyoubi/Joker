@@ -4,15 +4,15 @@
     {
       "strVersion": "1.6.0.0",
       "version": 1.6,
-      "name": "mark",
+      "name": "mark_2",
       "bone_data": [
         {
           "name": "Layer5",
           "parent": "",
-          "dI": -1,
-          "x": -100.75,
-          "y": 7.3416748046875,
-          "z": 6,
+          "dI": 0,
+          "x": 3.25,
+          "y": 0.3416748046875,
+          "z": 5,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -41,10 +41,10 @@
         {
           "name": "Layer4",
           "parent": "",
-          "dI": -1,
-          "x": -106.75,
-          "y": 12.3416748046875,
-          "z": 5,
+          "dI": 0,
+          "x": -2.75,
+          "y": 5.3416748046875,
+          "z": 4,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -73,10 +73,10 @@
         {
           "name": "Layer3",
           "parent": "",
-          "dI": -1,
-          "x": -108.75,
-          "y": 15.3416748046875,
-          "z": 4,
+          "dI": 0,
+          "x": -4.75,
+          "y": 8.3416748046875,
+          "z": 3,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -105,10 +105,10 @@
         {
           "name": "Layer1",
           "parent": "",
-          "dI": -1,
-          "x": -102.75,
-          "y": 2.3416748046875,
-          "z": 3,
+          "dI": 0,
+          "x": 1.25,
+          "y": -4.6583251953125,
+          "z": 2,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -135,43 +135,11 @@
           ]
         },
         {
-          "name": "mark",
-          "parent": "",
-          "dI": 0,
-          "x": -97.291694641113281,
-          "y": 2.7847211360931396,
-          "z": 2,
-          "cX": 1.0,
-          "cY": 1.0,
-          "kX": 0.0,
-          "kY": 0.0,
-          "arrow_x": 0.0,
-          "arrow_y": 0.0,
-          "effectbyskeleton": false,
-          "bl": 0,
-          "display_data": [
-            {
-              "name": "jiepaiqi3.psd_Psd.Dir/mark.png",
-              "displayType": 0,
-              "skin_data": [
-                {
-                  "x": 0.0,
-                  "y": 0.0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "YS",
           "parent": "",
-          "dI": -1,
-          "x": -107.49993896484375,
-          "y": 10.379661560058594,
+          "dI": 0,
+          "x": -3.49993896484375,
+          "y": 3.3796615600585938,
           "z": 1,
           "cX": 0.654918,
           "cY": 0.654918,
@@ -203,58 +171,21 @@
   ],
   "animation_data": [
     {
-      "name": "mark",
+      "name": "mark_2",
       "mov_data": [
         {
           "name": "sat",
-          "dr": 56,
+          "dr": 0,
           "lp": true,
           "to": 0,
           "drTW": 0,
           "twE": 0,
           "sc": 0.5,
-          "mov_bone_data": [
-            {
-              "name": "mark",
-              "dl": 0.0,
-              "frame_data": [
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 0,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 55,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                }
-              ]
-            }
-          ]
+          "mov_bone_data": []
         },
         {
           "name": "perfect",
-          "dr": 16,
+          "dr": 15,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -355,72 +286,6 @@
               ]
             },
             {
-              "name": "mark",
-              "dl": 0.0,
-              "frame_data": [
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 0,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 0.8364527,
-                  "cY": 0.8364527,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 5,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 10,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 15,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                }
-              ]
-            },
-            {
               "name": "YS",
               "dl": 0.0,
               "frame_data": [
@@ -502,7 +367,7 @@
         },
         {
           "name": "good",
-          "dr": 16,
+          "dr": 15,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -597,72 +462,6 @@
                     "g": 255,
                     "b": 255
                   },
-                  "bd_src": 1,
-                  "bd_dst": 771
-                }
-              ]
-            },
-            {
-              "name": "mark",
-              "dl": 0.0,
-              "frame_data": [
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 0,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 0.8364527,
-                  "cY": 0.8364527,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 5,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 10,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 15,
-                  "twE": 0,
-                  "tweenFrame": true,
                   "bd_src": 1,
                   "bd_dst": 771
                 }
@@ -805,8 +604,8 @@
                 },
                 {
                   "dI": 0,
-                  "x": -2.0,
-                  "y": -6.0,
+                  "x": -1.0,
+                  "y": -9.0,
                   "z": 0,
                   "cX": 1.0,
                   "cY": 1.0,
@@ -815,72 +614,12 @@
                   "fi": 15,
                   "twE": 0,
                   "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                }
-              ]
-            },
-            {
-              "name": "mark",
-              "dl": 0.0,
-              "frame_data": [
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 0,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 0.8364527,
-                  "cY": 0.8364527,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 5,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 10,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 15,
-                  "twE": 0,
-                  "tweenFrame": true,
+                  "color": {
+                    "a": 0,
+                    "r": 255,
+                    "g": 255,
+                    "b": 255
+                  },
                   "bd_src": 1,
                   "bd_dst": 771
                 }
@@ -974,42 +713,6 @@
                   "bd_dst": 771
                 }
               ]
-            },
-            {
-              "name": "mark",
-              "dl": 0.0,
-              "frame_data": [
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 0,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                },
-                {
-                  "dI": 0,
-                  "x": 0.0,
-                  "y": 0.0,
-                  "z": 0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0,
-                  "fi": 15,
-                  "twE": 0,
-                  "tweenFrame": true,
-                  "bd_src": 1,
-                  "bd_dst": 771
-                }
-              ]
             }
           ]
         }
@@ -1017,14 +720,6 @@
     }
   ],
   "texture_data": [
-    {
-      "name": "jiepaiqi3.psd_Psd.Dir/mark",
-      "width": 99.0,
-      "height": 136.0,
-      "pX": 0.5,
-      "pY": 0.5,
-      "plistFile": ""
-    },
     {
       "name": "ATTECK.psd_Psd.Dir/star big",
       "width": 233.0,
@@ -1067,9 +762,9 @@
     }
   ],
   "config_file_path": [
-    "mark0.plist"
+    "mark_20.plist"
   ],
   "config_png_path": [
-    "mark0.png"
+    "mark_20.png"
   ]
 }

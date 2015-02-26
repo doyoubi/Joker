@@ -80,25 +80,6 @@
 				<key>offsetY</key>
 				<real>0</real>
 			</dict>
-			<key>jiepaiqi3.psd_Psd.Dir/mark.png</key>
-			<dict>
-				<key>width</key>
-				<integer>99</integer>
-				<key>height</key>
-				<integer>136</integer>
-				<key>originalWidth</key>
-				<integer>99</integer>
-				<key>originalHeight</key>
-				<integer>136</integer>
-				<key>x</key>
-				<integer>352</integer>
-				<key>y</key>
-				<integer>0</integer>
-				<key>offsetX</key>
-				<real>0</real>
-				<key>offsetY</key>
-				<real>0</real>
-			</dict>
 			<key>ATTECK.psd_Psd.Dir/star big.png</key>
 			<dict>
 				<key>width</key>
@@ -110,7 +91,7 @@
 				<key>originalHeight</key>
 				<integer>253</integer>
 				<key>x</key>
-				<integer>453</integer>
+				<integer>352</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -124,16 +105,16 @@
 			<key>format</key>
 			<integer>0</integer>
 			<key>textureFileName</key>
-			<string>mark0.png</string>
+			<string>mark_20.png</string>
 			<key>realTextureFileName</key>
-			<string>mark0.png</string>
+			<string>mark_20.png</string>
 			<key>size</key>
-			<string>{4096,1024}</string>
+			<string>{1024,1024}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>4096</integer>
+			<integer>1024</integer>
 			<key>height</key>
 			<integer>1024</integer>
 		</dict>
