@@ -1,11 +1,13 @@
 #include "BattleStage.h"
 
 #include "utils/debug.h"
+#include "utils/config.h"
 
 namespace joker
 {
     using cocostudio::Armature;
 
+    // BattleStage
     bool BattleStage::init()
     {
         if (!Node::init()) return false;
@@ -14,36 +16,21 @@ namespace joker
         static bool addArmatureFileInfo = false;
         if (!addArmatureFileInfo)
         {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/cake/cake.ExportJson");
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/curtain/curtain.ExportJson");
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/stage/stage.ExportJson");
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/BG/BG.ExportJson");
             addArmatureFileInfo = true;
         }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("cake") != nullptr,
-            "missing animation: cake");
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("curtain") != nullptr,
             "missing animation: curtain");
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage") != nullptr,
             "missing animation: stage");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("BG") != nullptr,
-            "missing animation: stage");
-        _background = Armature::create("BG");
-        _cake = Armature::create("cake");
         _curtain = Armature::create("curtain");
         _stage = Armature::create("stage");
-        _background->setLocalZOrder(-4);
-        _cake->setLocalZOrder(-3);
         _stage->setLocalZOrder(-2);
         _curtain->setLocalZOrder(-1);
 
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("BG")->getMovement("static") != nullptr,
-            "missing animation movement: static");
-        _background->getAnimation()->play("static");
-        addChild(_background);
-
-        Armature * arms[] = { _cake, _stage, _curtain };
-        string animationData[] = { "cake", "stage", "curtain" };
+        Armature * arms[] = { _stage, _curtain };
+        string animationData[] = { "stage", "curtain" };
         for (int i = 0; i < sizeof(arms) / sizeof(Armature *); ++i)
         {
             auto a = arms[i];
@@ -79,7 +66,74 @@ namespace joker
     void BattleStage::quake()
     {
         _stage->getAnimation()->play("quake");
-        _cake->getAnimation()->play("quake");
     }
+
+    // LayeringCakes
+    LayeringCakes * LayeringCakes::create(Size stageSize)
+    {
+        LayeringCakes * ret = new (std::nothrow) LayeringCakes();
+        if (ret && ret->init(stageSize))
+        {
+            ret->autorelease();
+        }
+        else
+        {
+            CC_SAFE_DELETE(ret);
+        }
+        return ret;
+    }
+    bool LayeringCakes::init(Size stageSize)
+    {
+        if (!Node::init()) return false;
+
+        _stageSize = stageSize;
+
+        layer1Width = Config::getInstance().getDoubleValue({"LayeringCakes", "layer1Width"});
+        layer2Width = Config::getInstance().getDoubleValue({ "LayeringCakes", "layer2Width" });
+        const float scale1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "scale1" });
+        const float scale2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "scale2" });
+        const float gap1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "gap1" });
+        const float gap2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "gap2" });
+        const string layer1Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer1Picture" });
+        const string layer2Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer2Picture" });
+
+        _layer1 = Node::create();
+        _layer2 = Node::create();
+        addChild(_layer1, 1);
+        addChild(_layer2, 0);
+        for (float i = -layer1Width / 2.0f; i < layer1Width / 2.0f; i += gap1)
+        {
+            auto n = Sprite::create(layer1Pic);
+            n->setPosition(i, 0);
+            n->setScale(scale1);
+            _layer1->addChild(n);
+        }
+        for (float i = -layer2Width / 2.0f; i < layer2Width / 2.0f; i += gap2)
+        {
+            auto n = Sprite::create(layer2Pic);
+            n->setPosition(i, 0);
+            n->setScale(scale2);
+            _layer2->addChild(n);
+        }
+    }
+
+    float lerp(float a, float b, float weight)
+    {
+        return (1 - weight) * a + weight * b;
+    }
+
+    void LayeringCakes::updatePosition(Vec2 cameraPosition)
+    {
+        float cameraX = cameraPosition.x;
+
+        float leftmost1 = layer1Width / 2.0f;
+        float rightmost1 = _stageSize.width - layer1Width / 2.0f;
+        _layer1->setPosition(lerp(leftmost1, rightmost1, cameraPosition.x / _stageSize.width), 0);
+
+        float leftmost2 = layer2Width / 2.0f;
+        float rightmost2 = _stageSize.width - layer2Width / 2.0f;
+        _layer2->setPosition(lerp(leftmost2, rightmost2, cameraPosition.x / _stageSize.width), 0);
+    }
+
 
 }

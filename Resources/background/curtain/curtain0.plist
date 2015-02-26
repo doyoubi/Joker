@@ -4,6 +4,25 @@
 	<dict>
 		<key>frames</key>
 		<dict>
+			<key>curtain.png</key>
+			<dict>
+				<key>width</key>
+				<integer>104</integer>
+				<key>height</key>
+				<integer>112</integer>
+				<key>originalWidth</key>
+				<integer>104</integer>
+				<key>originalHeight</key>
+				<integer>112</integer>
+				<key>x</key>
+				<integer>0</integer>
+				<key>y</key>
+				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
 			<key>background3.psd_Psd.Dir/RS.png</key>
 			<dict>
 				<key>width</key>
@@ -15,26 +34,7 @@
 				<key>originalHeight</key>
 				<integer>103</integer>
 				<key>x</key>
-				<integer>0</integer>
-				<key>y</key>
-				<integer>0</integer>
-				<key>offsetX</key>
-				<real>0</real>
-				<key>offsetY</key>
-				<real>0</real>
-			</dict>
-			<key>background3.psd_Psd.Dir/curtain.png</key>
-			<dict>
-				<key>width</key>
-				<integer>2678</integer>
-				<key>height</key>
-				<integer>101</integer>
-				<key>originalWidth</key>
-				<integer>2678</integer>
-				<key>originalHeight</key>
-				<integer>101</integer>
-				<key>x</key>
-				<integer>21</integer>
+				<integer>106</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -53,7 +53,7 @@
 				<key>originalHeight</key>
 				<integer>90</integer>
 				<key>x</key>
-				<integer>2701</integer>
+				<integer>127</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -72,7 +72,7 @@
 				<key>originalHeight</key>
 				<integer>296</integer>
 				<key>x</key>
-				<integer>2721</integer>
+				<integer>147</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -91,7 +91,7 @@
 				<key>originalHeight</key>
 				<integer>238</integer>
 				<key>x</key>
-				<integer>2885</integer>
+				<integer>311</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -110,7 +110,7 @@
 				<key>originalHeight</key>
 				<integer>319</integer>
 				<key>x</key>
-				<integer>2972</integer>
+				<integer>398</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -129,7 +129,7 @@
 				<key>originalHeight</key>
 				<integer>231</integer>
 				<key>x</key>
-				<integer>3106</integer>
+				<integer>532</integer>
 				<key>y</key>
 				<integer>0</integer>
 				<key>offsetX</key>
@@ -147,12 +147,12 @@
 			<key>realTextureFileName</key>
 			<string>curtain0.png</string>
 			<key>size</key>
-			<string>{4096,1024}</string>
+			<string>{1024,1024}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>4096</integer>
+			<integer>1024</integer>
 			<key>height</key>
 			<integer>1024</integer>
 		</dict>

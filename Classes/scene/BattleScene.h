@@ -65,6 +65,7 @@ namespace joker
         Size _size;
         
         SpikesSprite * _spikes; // strong reference, it's retain() by BattleLayer
+        LayeringCakes * _cakes;
     };
 
 

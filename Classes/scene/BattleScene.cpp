@@ -86,6 +86,10 @@ namespace joker
         _battleStage->enter();
         addChild(_battleStage, -1);
 
+        _cakes = LayeringCakes::create(getSize());
+        _cakes->setPosition(0, getSize().height / 2.0f);
+        addChild(_cakes, -2);
+
         return true;
     }
 
@@ -156,6 +160,9 @@ namespace joker
         float formerBgLeft = getPositionX();
         float delta = bgLeft - formerBgLeft;
         setPosition(formerBgLeft + delta / 10.0f, 0);
+
+        float cameraPosition = visibleSize.width / 2.0f - bgLeft;
+        _cakes->updatePosition(Vec2(cameraPosition, visibleSize.height / 2.0f));
     }
 
     void BattleLayer::spikeArise(const cocos2d::Vec2 & position)
