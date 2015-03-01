@@ -125,6 +125,8 @@ namespace joker
         float v = (_direction == RoleDirection::LEFT ? 1 : -1) * attackedFallBackSpeed;
         role->getPhysicsBody()->setVelocityX(v);
         role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
+
+        role->getBattleDirector()->getBattleJudge().reducePlayerHp();
     }
 
     void PlayerAttackedState::execute(Role * role)
@@ -234,6 +236,8 @@ namespace joker
         float v = (_direction == RoleDirection::LEFT ? -1 : 1) * collideFallBackSpeed;
         role->getPhysicsBody()->setVelocityX(v);
         role->getPhysicsBody()->setResistanceX(joker::PhysicsWorld::getInstance()->getResistance());
+
+        role->getBattleDirector()->getBattleJudge().reducePlayerHp();
     }
 
     void CollideState::exitState(Role * role)

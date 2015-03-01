@@ -14,6 +14,7 @@
 #include "role/Role.h"
 #include "sound/SoundManager.h"
 #include "AI/BehaviorTree.h"
+#include "BattleJudge.h"
 
 
 namespace joker
@@ -40,6 +41,8 @@ namespace joker
         void update(float dt);
         DirectorEventManager & getEventManager() { return _eventManager; }
         void addEvent(EventPtr && event){ _eventManager.addEvent(std::move(event)); }
+
+        BattleJudge & getBattleJudge() { return _battleJudge; }
 
         void addPlayer(const cocos2d::Vec2 & position);
         Role * getPlayer();
@@ -76,6 +79,7 @@ namespace joker
 
         EnemyConductor _enemyConductor;
         DirectorEventManager _eventManager;
+        BattleJudge _battleJudge;
 
         RolePtr _player;
 

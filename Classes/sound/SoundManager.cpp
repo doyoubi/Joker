@@ -32,6 +32,7 @@ namespace joker
 
     void SoundManager::playBackGroundSound(const char * soundName)
     {
+        DEBUGCHECK(FileUtils::getInstance()->isFileExist(soundName), string(soundName) + " file not exist");
         SimpleAudioEngine::getInstance()->playBackgroundMusic(soundName);
     }
 

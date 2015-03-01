@@ -33,25 +33,18 @@ namespace joker
         }
     };
 
-    HitResult time2HitResult(float dt)
-    {
-        static float perfectDt = Config::getInstance().getDoubleValue({ "Metronome", "perfectDt" });
-        static float goodDt = Config::getInstance().getDoubleValue({ "Metronome", "goodDt" });
-        static float okDt = Config::getInstance().getDoubleValue({ "Metronome", "okDt" });
-        static float hitDeltaTime = Config::getInstance().getDoubleValue({ "Metronome", "hitDeltaTime" });
-        DEBUGCHECK(okDt == hitDeltaTime, "okDt must equal hitDeltaTime");
-        DEBUGCHECK(dt > 0, "negative dt");
-        return 
-            dt < 0.01 ? HitResult::PERFECT :
-            dt < 0.03 ? HitResult::GOOD : 
-                        HitResult::OK;
-    }
-
 
     BattleDirector::BattleDirector(BattleScene * battleScene)
         : _battleScene(battleScene)
     {
         CHECKNULL(battleScene);
+
+        getBattleJudge().hpChangedCallback = [](int hp){
+            cout << "hp: " << hp << endl;
+        };
+        getBattleJudge().scoreChangedCallback = [](int score){
+            cout << "score: " << score << endl;
+        };
 
         auto physicsWorld = joker::PhysicsWorld::getInstance();
         physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getSize().width);
@@ -149,7 +142,8 @@ namespace joker
             getEventDispather("spikeHit").runEvent(i, dt);
         });
         getEventDispather("spikeHit").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float dt){
-            getScene()->getPromptBar()->hit(time2HitResult(dt));
+            getScene()->getPromptBar()->hit(BattleJudge::time2HitResult(dt));
+            getBattleJudge().applyResult(BattleJudge::time2HitResult(dt));
         });
         // spike miss
         getMetronome("spikeAttack").setMissCallBack([this, nan](int i){
@@ -158,6 +152,7 @@ namespace joker
         getEventDispather("spikeMiss").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float){
             getEventManager().addEvent(EventPtr(new AttackedBySpikeEvent()));
             getScene()->getPromptBar()->hit(HitResult::MISS);
+            getBattleJudge().applyResult(HitResult::MISS);
         });
 
         // bomb
@@ -184,12 +179,14 @@ namespace joker
         // battle
         getEventDispather("hit").addEvent(getScript("battle").getEvent("attack"), [this](float dt){
             getPlayer()->executeCommand(RoleAction::ATTACK);
-            getScene()->getPromptBar()->hit(time2HitResult(dt));
+            getScene()->getPromptBar()->hit(BattleJudge::time2HitResult(dt));
+            getBattleJudge().applyResult(BattleJudge::time2HitResult(dt));
         });
 
         getEventDispather("miss").addEvent(getScript("battle").getEvent("attack"), [this](float){
             getClosestEnemy()->executeCommand(RoleAction::ATTACK);
             getScene()->getPromptBar()->hit(HitResult::MISS);
+            getBattleJudge().applyResult(HitResult::MISS);
         });
 
         getEventDispather("addEnemy").addEvent(getScript("battle").getEvent("addEnemy"), [this](float){

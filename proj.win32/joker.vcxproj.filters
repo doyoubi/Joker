@@ -107,6 +107,9 @@
     <ClCompile Include="..\Classes\scene\BattleStage.cpp">
       <Filter>Classes\scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\gameplay\BattleJudge.cpp">
+      <Filter>Classes\gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\scene\BattleStage.h">
       <Filter>Classes\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\gameplay\BattleJudge.h">
+      <Filter>Classes\gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

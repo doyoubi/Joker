@@ -7,6 +7,8 @@
 #include "cocos2d.h"
 #include "cocostudio/CCArmature.h"
 
+#include "gameplay/BattleJudge.h"
+
 namespace joker
 {
     using cocos2d::Vec2;
@@ -18,15 +20,6 @@ namespace joker
         ATTACK,
         BOMB,
         SPIKE,
-    };
-
-    enum class HitResult
-    {
-        PERFECT,
-        GOOD,
-        OK,
-        MISS,
-        BOMB,
     };
 
     class PromptBar
