@@ -175,6 +175,10 @@ namespace joker
         static float height = Config::getInstance().getDoubleValue({ "RoleProperty", "spike", "positionY" });
         _spikes->setPosition(position.x, height);
         _spikes->arise();
+        _spikes->setName("spikes");
+        DEBUGCHECK(getChildByName("spikes") == nullptr, 
+            "spikes arise again before former spikes finish its animation. "
+            "the interval between two spikes event should not too close");
         addChild(_spikes);
     }
 
