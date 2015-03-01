@@ -24,10 +24,12 @@ namespace joker
             "missing animation: curtain");
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage") != nullptr,
             "missing animation: stage");
+        static float curtainOffsetY = Config::getInstance().getDoubleValue({ "BattleStage", "curtainOffsetY" });
         _curtain = Armature::create("curtain");
         _stage = Armature::create("stage");
         _stage->setLocalZOrder(-2);
         _curtain->setLocalZOrder(-1);
+        _curtain->setPositionY(curtainOffsetY);
 
         Armature * arms[] = { _stage, _curtain };
         string animationData[] = { "stage", "curtain" };
@@ -94,10 +96,29 @@ namespace joker
         const float scale2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "scale2" });
         const float gap1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "gap1" });
         const float gap2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "gap2" });
-        const string layer1Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer1Picture" });
-        const string layer2Pic = Config::getInstance().getStringValue({ "LayeringCakes", "layer2Picture" });
+        const string layer1Anim = Config::getInstance().getStringValue({ "LayeringCakes", "layer1Anim" });
+        const string layer2Anim = Config::getInstance().getStringValue({ "LayeringCakes", "layer2Anim" });
         const float offsetY1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY1" });
         const float offsetY2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY2" });
+
+        using namespace cocostudio;
+        static bool addArmatureFileInfo = false;
+        if (!addArmatureFileInfo)
+        {
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/" + layer1Anim + "/" + layer1Anim + ".ExportJson");
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/" + layer2Anim + "/" + layer2Anim + ".ExportJson");
+            addArmatureFileInfo = true;
+        }
+        auto anims = std::vector<string>({ layer1Anim, layer2Anim });
+        for (auto anim : anims)
+        {
+            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim) != nullptr,
+                "missing animation: " + anim);
+            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim)->getMovement("show") != nullptr,
+                anim + " missing movement: show");
+            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim)->getMovement("static") != nullptr,
+                anim + " missing movement: static");
+        }
 
         _layer1 = Node::create();
         _layer2 = Node::create();
@@ -107,14 +128,16 @@ namespace joker
         addChild(_layer2, 0);
         for (float i = -layer1Width / 2.0f; i < layer1Width / 2.0f; i += gap1)
         {
-            auto n = Sprite::create(layer1Pic);
+            auto n = Armature::create(layer1Anim);
+            n->getAnimation()->play("show");
             n->setPosition(i, 0);
             n->setScale(scale1);
             _layer1->addChild(n);
         }
         for (float i = -layer2Width / 2.0f; i < layer2Width / 2.0f; i += gap2)
         {
-            auto n = Sprite::create(layer2Pic);
+            auto n = Armature::create(layer2Anim);
+            n->getAnimation()->play("show");
             n->setPosition(i, 0);
             n->setScale(scale2);
             _layer2->addChild(n);

@@ -4,20 +4,58 @@
 	<dict>
 		<key>frames</key>
 		<dict>
-			<key>background3.psd_Psd.Dir/stage.png</key>
+			<key>background4.2.psd_Psd.Dir/stage 副本 4.png</key>
 			<dict>
 				<key>width</key>
-				<integer>2998</integer>
+				<integer>2070</integer>
 				<key>height</key>
 				<integer>424</integer>
 				<key>originalWidth</key>
-				<integer>2998</integer>
+				<integer>2070</integer>
 				<key>originalHeight</key>
 				<integer>424</integer>
 				<key>x</key>
 				<integer>0</integer>
 				<key>y</key>
 				<integer>0</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>background4.2.psd_Psd.Dir/stage 副本 3.png</key>
+			<dict>
+				<key>width</key>
+				<integer>2070</integer>
+				<key>height</key>
+				<integer>424</integer>
+				<key>originalWidth</key>
+				<integer>2070</integer>
+				<key>originalHeight</key>
+				<integer>424</integer>
+				<key>x</key>
+				<integer>0</integer>
+				<key>y</key>
+				<integer>426</integer>
+				<key>offsetX</key>
+				<real>0</real>
+				<key>offsetY</key>
+				<real>0</real>
+			</dict>
+			<key>background4.psd_Psd.Dir/stage 副本 2.png</key>
+			<dict>
+				<key>width</key>
+				<integer>2019</integer>
+				<key>height</key>
+				<integer>424</integer>
+				<key>originalWidth</key>
+				<integer>2019</integer>
+				<key>originalHeight</key>
+				<integer>424</integer>
+				<key>x</key>
+				<integer>2072</integer>
+				<key>y</key>
+				<integer>426</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>

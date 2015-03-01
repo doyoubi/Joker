@@ -8,17 +8,18 @@
         "width": 2000,
         "height": 640,
         "positionX": -1,
-        "positionY": 18
+        "positionY": 18,
+        "curtainOffsetY": 10
     },
     "LayeringCakes" : {
         "layer1Width": 3000,
         "layer2Width": 2500,
         "scale1": 0.7,
         "scale2": 0.7,
-        "gap1": 400,
+        "gap1": 1400,
         "gap2": 1400,
-        "layer1Picture": "background/greencake.png",
-        "layer2Picture": "background/purplecake.png",
+        "layer1Anim": "greencake",
+        "layer2Anim": "purplecake",
         "offsetY1": 0,
         "offsetY2": 50
     },

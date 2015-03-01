@@ -158,7 +158,6 @@ namespace joker
         getEventDispather("spikeMiss").addEvent(getScript("battle").getEvent("spikeAttack"), [this](float){
             getEventManager().addEvent(EventPtr(new AttackedBySpikeEvent()));
             getScene()->getPromptBar()->hit(HitResult::MISS);
-            getScene()->getBattleLayer()->shake();
         });
 
         // bomb
