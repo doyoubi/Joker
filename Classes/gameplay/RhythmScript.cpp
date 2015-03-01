@@ -28,7 +28,7 @@ namespace joker
             );
 
         // get rhythm points
-        rapidjson::Value & rhythmPoints = doc["rhythmPoints"];
+        rapidjson::Value & rhythmPoints = doc["RhythmPoints"];
         DEBUGCHECK(!rhythmPoints.IsNull(), "rhythmPoints parsed to null");
         DEBUGCHECK(rhythmPoints.IsArray(), "type of rhythmPoints is not array");
         DEBUGCHECK(rhythmPoints.Size() > 1, "there should be at least one rhythm point");
@@ -40,7 +40,7 @@ namespace joker
         }
 
         // get rhythm event
-        rapidjson::Value & events = doc["rhythmEvents"];
+        rapidjson::Value & events = doc["RhythmEvents"];
         DEBUGCHECK(!events.IsNull(), "rhythmEvents parsed to null");
         DEBUGCHECK(events.IsObject(), "type of rhythmEvents is not object");
         for (rapidjson::Value::ConstMemberIterator it = events.MemberonBegin();

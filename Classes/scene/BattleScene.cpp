@@ -296,7 +296,8 @@ namespace joker
                 command.add<RoleDirection>("direction", RoleDirection::LEFT);
                 director->sendCommand(director->getPlayer(), command);
             }
-            else if (touchEvent == Widget::TouchEventType::ENDED)
+            else if (touchEvent == Widget::TouchEventType::ENDED
+                || touchEvent == Widget::TouchEventType::CANCELED)
             {
                 RoleCommand command(RoleAction::STOP);
                 command.add<RoleDirection>("direction", RoleDirection::LEFT);
@@ -311,7 +312,8 @@ namespace joker
                 command.add<RoleDirection>("direction", RoleDirection::RIGHT);
                 director->sendCommand(director->getPlayer(), command);
             }
-            else if (touchEvent == Widget::TouchEventType::ENDED)
+            else if (touchEvent == Widget::TouchEventType::ENDED
+                || touchEvent == Widget::TouchEventType::CANCELED)
             {
                 RoleCommand command(RoleAction::STOP);
                 command.add<RoleDirection>("direction", RoleDirection::RIGHT);
