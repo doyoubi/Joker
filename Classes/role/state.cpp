@@ -78,7 +78,8 @@ namespace joker
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+            role->getStateManager()->changeState(FastRunState::create(
+            command.get<RoleDirection>("direction"), command.get<RoleActionNode*>("btActionNode")));
         else if (roleAction == RoleAction::ATTACK && role->isPlayer())
             role->getStateManager()->changeState(PlayerAttackState::create());
         else if (roleAction == RoleAction::ATTACKED && role->isPlayer())
@@ -154,7 +155,8 @@ namespace joker
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+            role->getStateManager()->changeState(FastRunState::create(
+            command.get<RoleDirection>("direction"), command.get<RoleActionNode*>("btActionNode")));
         else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(SlowDownState::create(
                     role->getPhysicsBody()->getVelocityX()
@@ -223,7 +225,8 @@ namespace joker
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+            role->getStateManager()->changeState(FastRunState::create(
+            command.get<RoleDirection>("direction"), command.get<RoleActionNode*>("btActionNode")));
         else if (roleAction == RoleAction::ATTACK && role->isPlayer())
             role->getStateManager()->changeState(PlayerAttackState::create());
         else if (roleAction == RoleAction::ATTACKED && role->isPlayer())

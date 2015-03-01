@@ -174,11 +174,13 @@ namespace joker
     {
         RoleCommand command(_moveAction);
         command.add<RoleDirection>("direction", getRole()->getDirection());
+        command.add<RoleActionNode*>("btActionNode", this);
         setExit(!getRole()->executeCommand(command));
     }
 
     void KeepDistanceNode::onExit()
     {
+        if (_exit) return; // if _exit is true, executeCommand fail on onEnter, or the corresponding state exit
         RoleCommand command(RoleAction::STOP);
         command.add("direction", getRole()->getDirection());
         getRole()->executeCommand(command);

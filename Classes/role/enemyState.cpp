@@ -184,7 +184,8 @@ namespace joker
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+            role->getStateManager()->changeState(FastRunState::create(
+            command.get<RoleDirection>("direction"), command.get<RoleActionNode*>("btActionNode")));
         else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(DefenceState::create());
         else if (roleAction == RoleAction::ATTACK)
@@ -207,8 +208,8 @@ namespace joker
         return "fast run";
     }
 
-    FastRunState::FastRunState(RoleDirection direction)
-        : _direction(direction)
+    FastRunState::FastRunState(RoleDirection direction, RoleActionNode * btActionNode)
+        : _direction(direction), _btActionNode(btActionNode)
     {
     }
 
@@ -229,6 +230,7 @@ namespace joker
     {
         role->getPhysicsBody()->setVelocityX(0);
         role->getPhysicsBody()->setResistanceX(0);
+        _btActionNode->setExit(true);
     }
 
     bool FastRunState::executeCommand(Role * role, const RoleCommand & command)
@@ -243,7 +245,8 @@ namespace joker
         if (roleAction == RoleAction::RUN)
             role->getStateManager()->changeState(RunState::create(command.get<RoleDirection>("direction")));
         else if (roleAction == RoleAction::FAST_RUN)
-            role->getStateManager()->changeState(FastRunState::create(command.get<RoleDirection>("direction")));
+            role->getStateManager()->changeState(FastRunState::create(
+            command.get<RoleDirection>("direction"), command.get<RoleActionNode*>("btActionNode")));
         else if (roleAction == RoleAction::STOP && command.get<RoleDirection>("direction") == role->getDirection())
             role->getStateManager()->changeState(SlowDownState::create(role->getPhysicsBody()->getVelocityX()));
         else if (roleAction == RoleAction::ATTACK)

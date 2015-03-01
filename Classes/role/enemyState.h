@@ -77,11 +77,12 @@ namespace joker
         RoleDirection _direction;
     };
 
+    class RoleActionNode;
     class FastRunState : public State
     {
     public:
-        static StatePtr create(RoleDirection direction) { return StatePtr(new FastRunState(direction)); }
-        FastRunState(RoleDirection direction);
+        static StatePtr create(RoleDirection direction, RoleActionNode * btActionNode) { return StatePtr(new FastRunState(direction, btActionNode)); }
+        FastRunState(RoleDirection direction, RoleActionNode * btActionNode);
         void enterState(Role * role) override;
         void exitState(Role * role) override;
         void execute(Role * role) override {};
@@ -89,6 +90,7 @@ namespace joker
         std::string getDebugString() override;
     private:
         RoleDirection _direction;
+        RoleActionNode * _btActionNode;
     };
 
     class AttackReadyState : public State
