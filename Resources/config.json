@@ -1,4 +1,9 @@
 {
+    "MusicScript":{
+        "winMusicFile": "music/BeethovenOr.wav",
+        "androidMusicFile": "music/BeethovenOr.ogg",
+        "script": "music/BeethovenOr.json"
+    },
     "BattleStage": {
         "width": 2000,
         "height": 640,

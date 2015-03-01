@@ -12,29 +12,26 @@ namespace joker
 {
     using std::string;
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    const string musicFmt = ".ogg";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-    const string musicFmt = ".wav";
-#else
-    ERRORMSG("music for current platform is not supported");
-#endif
 
-    struct MusicScriptFile
+    struct MusicScript
     {
-        MusicScriptFile(const string path, const string & name)
-        : musicName(name), musicFileName(path + name + musicFmt),
-        scriptName(path + name + ".json"), promptName(path + name + "_prompt.json")
+        static const string getMusicFileName()
         {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+            static string file = Config::getInstance().getStringValue({"MusicScript", "androidMusicFile"});
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+            static string file = Config::getInstance().getStringValue({"MusicScript", "winMusicFile"});
+#else
+            ERRORMSG("music for current platform is not supported");
+#endif
+            return file;
         }
-        const string musicName;
-        const string musicFileName;
-        const string scriptName;
-        const string promptName;
-        float moveToTime;
+        static const string getScriptName()
+        {
+            static string file = Config::getInstance().getStringValue({ "MusicScript", "script" });
+            return file;
+        }
     };
-    MusicScriptFile musicScript("music/", "alice");
-
 
     HitResult time2HitResult(float dt)
     {
@@ -63,10 +60,10 @@ namespace joker
         physicsWorld->setResistance(Config::getInstance().getDoubleValue({ "Physics", "resistance" }));
 
         const float hitDeltaTime = Config::getInstance().getDoubleValue({ "Metronome", "hitDeltaTime" });
-        _rhythmScripts.emplace("battle", musicScript.scriptName.c_str());
+        _rhythmScripts.emplace("battle", MusicScript::getScriptName().c_str());
         _metronomes.emplace("battle", Metronome(getScript("battle").getOffsetRhythmScript(0), hitDeltaTime));
         const float moveToTime = getScript("battle").getOffsetRhythmScript(0)[0] - Config::getInstance().getDoubleValue({ "Metronome", "promptStartTime" });
-        _rhythmScripts.emplace("prompt", RhythmScript(musicScript.scriptName.c_str()));
+        _rhythmScripts.emplace("prompt", RhythmScript(MusicScript::getScriptName().c_str()));
         _metronomes.emplace("prompt", Metronome(getScript("battle").getOffsetRhythmScript(-1 * moveToTime), 0.02f));
         // here we will not tab promptMetronome, and we don't care hitDeltaTime, we set it to 0.02
         _metronomes.emplace("enemyRush", Metronome(getScript("battle").getOffsetRhythmScript(
@@ -242,7 +239,7 @@ namespace joker
             kv.second.reset();
             kv.second.start();
         }
-        getSoundManager()->playBackGroundSound(musicScript.musicFileName.c_str());
+        getSoundManager()->playBackGroundSound(MusicScript::getMusicFileName().c_str());
         getScene()->getPromptBar()->clearPromptSprite();
     }
 

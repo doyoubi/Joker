@@ -17,6 +17,8 @@ namespace joker
     using std::string;
     using namespace cocos2d;
 
+    const bool JOKER_DEBUG_ON = true;
+
     const float errorThreshold = 0.00000001f;
 
     std::ostream & operator << (std::ostream & out, const Vec2 & v);

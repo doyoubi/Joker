@@ -35,7 +35,8 @@ namespace joker
         else ERRORMSG("invalid role type");
 
         _roleSprite->setScale(spriteScale);
-        _roleSprite->addRoleSpriteDebug(this);
+        if (JOKER_DEBUG_ON)
+            _roleSprite->addRoleSpriteDebug(this);
     }
 
     Role::~Role()

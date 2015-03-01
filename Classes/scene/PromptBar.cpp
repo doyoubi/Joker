@@ -138,11 +138,14 @@ namespace joker
             _marks[i]->setPosition(_endPoint + Vec2(markOffsetX, markOffsetY));
             _root->addChild(_marks[i], i+1);
         }
-        auto goal = Sprite::create("PromptBar/goal.png");
-        CHECKNULL(goal);
-        goal->setPosition(_endPoint);
-        goal->setAnchorPoint(Vec2(0.5f, 0.5f));
-        _root->addChild(goal, 5);
+        if (JOKER_DEBUG_ON)
+        {
+            auto goal = Sprite::create("PromptBar/goal.png");
+            CHECKNULL(goal);
+            goal->setPosition(_endPoint);
+            goal->setAnchorPoint(Vec2(0.5f, 0.5f));
+            _root->addChild(goal, 5);
+        }
     }
 
     void PromptBar::addPromptSprite(float moveToTime, PromptSpriteType type)
@@ -157,10 +160,13 @@ namespace joker
             promptSprite = Sprite::create(bomb);
 
         // only for debug
-        auto child = Sprite::create("PromptBar/goal.png");
-        auto size = promptSprite->getContentSize();
-        child->setPosition(size.width / 2.0f, size.height / 2.0f);
-        promptSprite->addChild(child);
+        if (JOKER_DEBUG_ON)
+        {
+            auto child = Sprite::create("PromptBar/goal.png");
+            auto size = promptSprite->getContentSize();
+            child->setPosition(size.width / 2.0f, size.height / 2.0f);
+            promptSprite->addChild(child);
+        }
 
         CHECKNULL(promptSprite);
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
