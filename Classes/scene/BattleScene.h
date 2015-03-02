@@ -85,6 +85,16 @@ namespace joker
 #endif
     };
 
+    class LoadingScene : public cocos2d::Scene
+    {
+    public:
+        CREATE_FUNC(LoadingScene);
+        void update(float dt); // only to load BattleScene
+        void onEnter() override;
+    private:
+        bool init() override;
+    };
+
 }
 
 #endif

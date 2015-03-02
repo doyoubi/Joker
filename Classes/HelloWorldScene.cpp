@@ -79,7 +79,8 @@ bool HelloWorld::init()
         "CloseNormal.png",
         "CloseSelected.png",
         [](Ref *){
-        Director::getInstance()->replaceScene(joker::BattleScene::create());
+        auto scene = joker::LoadingScene::create();
+        Director::getInstance()->replaceScene(scene);
     });
     auto container = Menu::create(button, nullptr);
     container->setPosition(200, 200);

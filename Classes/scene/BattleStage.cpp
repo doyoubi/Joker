@@ -142,6 +142,7 @@ namespace joker
             n->setScale(scale2);
             _layer2->addChild(n);
         }
+        return true;
     }
 
     float lerp(float a, float b, float weight)

@@ -399,4 +399,28 @@ namespace joker
     }
 #endif
 
+    // LoadingScene
+    bool LoadingScene::init()
+    {
+        if (!Scene::init()) return false;
+
+        Label * loadingTxt = Label::createWithTTF("loading...", "fonts/Marker Felt.ttf", 30);
+        auto size = Director::getInstance()->getVisibleSize();
+        loadingTxt->setPosition(size.width / 2.0f, size.height / 2.0f);
+        addChild(loadingTxt);
+    }
+
+    void LoadingScene::onEnter()
+    {
+        Scene::onEnter();
+        getScheduler()->scheduleUpdate(this, 0, false);
+    }
+
+    void LoadingScene::update(float dt)
+    {
+        getScheduler()->unscheduleUpdate(this);
+        auto battleScene = BattleScene::create();
+        Director::getInstance()->replaceScene(battleScene);
+    }
+
 }

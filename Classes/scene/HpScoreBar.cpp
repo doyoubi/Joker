@@ -19,6 +19,7 @@ namespace joker
             addChild(heart);
             _hearts.pushBack(heart);
         }
+        return true;
     }
 
     void HpBar::changeHeartNum(int heartNum)
@@ -54,6 +55,7 @@ namespace joker
 
         _score = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
         addChild(_score);
+        return true;
     }
 
     void ScoreDisplayer::changeScore(int score)
