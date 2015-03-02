@@ -30,6 +30,7 @@ namespace joker
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
         unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
         HpBar * getHpBar() { return _hpBar; }
+        ScoreDisplayer * getScoreDisplayer() { return _scoreDisplayer; }
 
     private:
         bool init() override;
@@ -37,6 +38,7 @@ namespace joker
         unique_ptr<BattleDirector> _battleDirector;
         unique_ptr<PromptBar> _promptBar;
         HpBar * _hpBar; // weak reference
+        ScoreDisplayer * _scoreDisplayer; // weak reference
     };
 
     class SpikesSprite;

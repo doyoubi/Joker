@@ -42,8 +42,8 @@ namespace joker
         getBattleJudge().hpChangedCallback = [this](int hp){
             getScene()->getHpBar()->changeHeartNum(hp);
         };
-        getBattleJudge().scoreChangedCallback = [](int score){
-            cout << "score: " << score << endl;
+        getBattleJudge().scoreChangedCallback = [this](int score){
+            getScene()->getScoreDisplayer()->changeScore(score);
         };
 
         auto physicsWorld = joker::PhysicsWorld::getInstance();

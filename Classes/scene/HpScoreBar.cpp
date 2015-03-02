@@ -46,4 +46,18 @@ namespace joker
             }
         }
     }
+
+    // ScoreDisplay
+    bool ScoreDisplayer::init()
+    {
+        if (!Node::init()) return false;
+
+        _score = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
+        addChild(_score);
+    }
+
+    void ScoreDisplayer::changeScore(int score)
+    {
+        _score->setString(std::to_string(score));
+    }
 }

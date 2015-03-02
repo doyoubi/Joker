@@ -4,6 +4,10 @@
             "heartInterval": 70,
             "positionX": 70,
             "positionY": 600
+        },
+        "score":{
+            "positionX": 70,
+            "positionY": 500
         }
     },
     "MusicScript":{

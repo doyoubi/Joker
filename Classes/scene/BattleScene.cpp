@@ -42,6 +42,12 @@ namespace joker
         _hpBar->setPosition(hpBarX, hpBarY);
         addChild(_hpBar);
 
+        float scoreX = Config::getInstance().getDoubleValue({ "UI", "score", "positionX" });
+        float scoreY = Config::getInstance().getDoubleValue({ "UI", "score", "positionY" });
+        _scoreDisplayer = ScoreDisplayer::create();
+        _scoreDisplayer->setPosition(scoreX, scoreY);
+        addChild(_scoreDisplayer);
+
         return true;
     }
 
