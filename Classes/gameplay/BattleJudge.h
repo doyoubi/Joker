@@ -22,7 +22,6 @@ namespace joker
     {
     public:
         static HitResult time2HitResult(float dt);
-        static const int PlayerInitHp = 10;
 
         BattleJudge();
         void applyResult(HitResult result);

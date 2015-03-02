@@ -31,6 +31,7 @@ namespace joker
         unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
         HpBar * getHpBar() { return _hpBar; }
         ScoreDisplayer * getScoreDisplayer() { return _scoreDisplayer; }
+        void showResult(int score);
 
     private:
         bool init() override;
@@ -83,6 +84,15 @@ namespace joker
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         void registerKeyBoard(unique_ptr<BattleDirector> & director);
 #endif
+    };
+
+    class BattleResultPanel : public cocos2d::Node
+    {
+    public:
+        CREATE_FUNC(BattleResultPanel);
+        void setScore(int score);
+    private:
+        bool init() override;
     };
 
     class LoadingScene : public cocos2d::Scene

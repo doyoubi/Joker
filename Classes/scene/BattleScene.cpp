@@ -3,6 +3,7 @@
 #include "cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 #include "ui/UIHelper.h"
+#include "ui/UIButton.h"
 #include "cocostudio/CCArmature.h"
 
 #include "BattleScene.h"
@@ -399,6 +400,43 @@ namespace joker
     }
 #endif
 
+    void BattleScene::showResult(int score)
+    {
+        static bool tag = false;
+        if (tag) return;
+        tag = true;
+        Director::getInstance()->pause();
+        auto resultPanel = BattleResultPanel::create();
+        resultPanel->setScore(score);
+        auto size = Director::getInstance()->getVisibleSize();
+        resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
+        addChild(resultPanel);
+    }
+
+    // BattleResultPanel
+    bool BattleResultPanel::init()
+    {
+        if (!Node::init()) return false;
+        auto background = Sprite::create("UI/ScorePanel.png");
+        addChild(background, -1);
+        using namespace cocos2d::ui;
+        auto btn = Button::create("UI/ScorePanelExit.png", "UI/ScorePanelExit.png", "UI/ScorePanelExit.png");
+        btn->setPosition(Vec2(-100, -100));
+        addChild(btn);
+        btn->addTouchEventListener([](Ref*, Widget::TouchEventType touchEvent){
+            Director::getInstance()->end();
+        });
+        return true;
+    }
+
+    void BattleResultPanel::setScore(int score)
+    {
+        Label * scoreLabel = Label::createWithTTF(std::to_string(score), "fonts/Marker Felt.ttf", 100);
+        scoreLabel->setColor(Color3B(255, 0, 0));
+        addChild(scoreLabel);
+    }
+
+
     // LoadingScene
     bool LoadingScene::init()
     {
@@ -408,6 +446,7 @@ namespace joker
         auto size = Director::getInstance()->getVisibleSize();
         loadingTxt->setPosition(size.width / 2.0f, size.height / 2.0f);
         addChild(loadingTxt);
+        return true;
     }
 
     void LoadingScene::onEnter()

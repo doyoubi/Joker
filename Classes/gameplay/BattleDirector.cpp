@@ -41,6 +41,7 @@ namespace joker
 
         getBattleJudge().hpChangedCallback = [this](int hp){
             getScene()->getHpBar()->changeHeartNum(hp);
+            if (hp == 0) getScene()->showResult(getBattleJudge().getScore());
         };
         getBattleJudge().scoreChangedCallback = [this](int score){
             getScene()->getScoreDisplayer()->changeScore(score);

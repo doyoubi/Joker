@@ -19,8 +19,9 @@ namespace joker
     }
 
     BattleJudge::BattleJudge()
-        : _playerHp(PlayerInitHp)
     {
+        static const int PlayerInitHp = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "hp" });
+        _playerHp = PlayerInitHp;
         for (int & c : _resultCount)
         {
             c = 0;
