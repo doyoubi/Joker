@@ -238,6 +238,7 @@ namespace joker
         }
         getSoundManager()->playBackGroundSound(MusicScript::getMusicFileName().c_str());
         getScene()->getPromptBar()->clearPromptSprite();
+        _musicStarted = true;
     }
 
     void BattleDirector::addPlayer(const cocos2d::Vec2 & position)
@@ -292,6 +293,12 @@ namespace joker
 
     void BattleDirector::update(float dt)
     {
+        if (_musicStarted && !getSoundManager()->isBackgroundPlaying())
+        {
+            _musicStarted = false;
+            getScene()->showResult(getBattleJudge().getScore());
+        }
+
         _eventManager.executeEvent(this);
         BTParam param;
         param.playerWidth = getPlayer()->getPhysicsBody()->getWidth();

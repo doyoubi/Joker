@@ -36,4 +36,9 @@ namespace joker
         SimpleAudioEngine::getInstance()->playBackgroundMusic(soundName);
     }
 
+    bool SoundManager::isBackgroundPlaying()
+    {
+        return SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
+    }
+
 }

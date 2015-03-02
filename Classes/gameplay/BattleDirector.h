@@ -84,6 +84,7 @@ namespace joker
         RolePtr _player;
 
         BTEvent _btEvent = BTEvent::NO_EVENT;
+        bool _musicStarted = false;
 
         vector<RolePtr> _bombs;
 
