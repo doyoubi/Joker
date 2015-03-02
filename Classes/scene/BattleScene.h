@@ -8,6 +8,7 @@
 #include "gameplay/BattleDirector.h"
 #include "PromptBar.h"
 #include "BattleStage.h"
+#include "HpScoreBar.h"
 
 namespace joker
 {
@@ -28,12 +29,14 @@ namespace joker
         BattleUILayer * getUIBattleLayer();
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
         unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
+        HpBar * getHpBar() { return _hpBar; }
 
     private:
         bool init() override;
 
         unique_ptr<BattleDirector> _battleDirector;
         unique_ptr<PromptBar> _promptBar;
+        HpBar * _hpBar; // weak reference
     };
 
     class SpikesSprite;

@@ -221,6 +221,13 @@ namespace joker
                     mark->getAnimation()->play(sat);
             });
         }
+        anim =
+            result == HitResult::BOMB ? mOk :
+            result == HitResult::PERFECT ? mPerfect :
+            result == HitResult::GOOD ? mGood :
+            result == HitResult::OK ? mOk :
+            result == HitResult::MISS ? mMiss : "invalid-anim";
+        _barBackground->getAnimation()->play(anim);
     }
 
     void PromptBar::clearPromptSprite()

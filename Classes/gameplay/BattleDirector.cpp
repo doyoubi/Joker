@@ -39,8 +39,8 @@ namespace joker
     {
         CHECKNULL(battleScene);
 
-        getBattleJudge().hpChangedCallback = [](int hp){
-            cout << "hp: " << hp << endl;
+        getBattleJudge().hpChangedCallback = [this](int hp){
+            getScene()->getHpBar()->changeHeartNum(hp);
         };
         getBattleJudge().scoreChangedCallback = [](int score){
             cout << "score: " << score << endl;

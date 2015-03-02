@@ -1,4 +1,11 @@
 {
+    "UI": {
+        "HP":{
+            "heartInterval": 70,
+            "positionX": 70,
+            "positionY": 600
+        }
+    },
     "MusicScript":{
         "winMusicFile": "music/BeethovenOr.wav",
         "androidMusicFile": "music/BeethovenOr.ogg",
@@ -54,7 +61,8 @@
             "initPositionY": 200,
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
-            "localZ": 1
+            "localZ": 1,
+            "hp": 10
         },
         "enemy": {
             "animationName": "enemy",

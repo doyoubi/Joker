@@ -110,6 +110,9 @@
     <ClCompile Include="..\Classes\gameplay\BattleJudge.cpp">
       <Filter>Classes\gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\scene\HpScoreBar.cpp">
+      <Filter>Classes\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -191,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\gameplay\BattleJudge.h">
       <Filter>Classes\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\scene\HpScoreBar.h">
+      <Filter>Classes\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

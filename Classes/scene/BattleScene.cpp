@@ -36,6 +36,12 @@ namespace joker
         uiLayer->setName("BattleUILayer");
         addChild(uiLayer);
 
+        float hpBarX = Config::getInstance().getDoubleValue({ "UI", "HP", "positionX" });
+        float hpBarY = Config::getInstance().getDoubleValue({ "UI", "HP", "positionY" });
+        _hpBar = HpBar::create();
+        _hpBar->setPosition(hpBarX, hpBarY);
+        addChild(_hpBar);
+
         return true;
     }
 
