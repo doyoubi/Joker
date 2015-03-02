@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "Classes/scene/BattleScene.h"
 
 USING_NS_CC;
 
@@ -41,7 +42,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->getOpenGLView()->setDesignResolutionSize(960, 640, ResolutionPolicy::FIXED_HEIGHT);
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = joker::EnterGameScene::create();
 
     // run
     director->runWithScene(scene);

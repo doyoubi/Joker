@@ -423,8 +423,8 @@ namespace joker
         auto btn = Button::create("UI/ScorePanelExit.png", "UI/ScorePanelExit.png", "UI/ScorePanelExit.png");
         btn->setPosition(Vec2(-100, -100));
         addChild(btn);
-        btn->addTouchEventListener([](Ref*, Widget::TouchEventType touchEvent){
-            Director::getInstance()->end();
+        btn->addTouchEventListener([](Ref*, Widget::TouchEventType){
+            Director::getInstance()->replaceScene(EnterGameScene::create());
         });
         return true;
     }
@@ -460,6 +460,21 @@ namespace joker
         getScheduler()->unscheduleUpdate(this);
         auto battleScene = BattleScene::create();
         Director::getInstance()->replaceScene(battleScene);
+    }
+
+    // EnterGameScene
+    bool EnterGameScene::init()
+    {
+        if (!Scene::init()) return false;
+
+        using namespace cocos2d::ui;
+        auto start = Button::create("UI/EnterGame.png", "UI/EnterGame.png", "UI/EnterGame.png");
+        auto size = Director::getInstance()->getVisibleSize();
+        start->setPosition(Vec2(size.width / 2.0f, size.height / 2.0f));
+        addChild(start);
+        start->addTouchEventListener([](Ref*, Widget::TouchEventType){
+            Director::getInstance()->replaceScene(LoadingScene::create());
+        });
     }
 
 }

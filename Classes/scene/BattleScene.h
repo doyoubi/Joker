@@ -105,6 +105,14 @@ namespace joker
         bool init() override;
     };
 
+    class EnterGameScene : public cocos2d::Scene
+    {
+    public:
+        CREATE_FUNC(EnterGameScene);
+    private:
+        bool init() override;
+    };
+
 }
 
 #endif
