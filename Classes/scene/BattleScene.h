@@ -113,6 +113,14 @@ namespace joker
         bool init() override;
     };
 
+    class InstructionScene : public cocos2d::Scene
+    {
+    public:
+        CREATE_FUNC(InstructionScene);
+    private:
+        bool init() override;
+    };
+
 }
 
 #endif

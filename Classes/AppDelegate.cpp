@@ -1,6 +1,8 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-#include "Classes/scene/BattleScene.h"
+#include "scene/BattleScene.h"
+#include "utils/config.h"
+#include "scene/RoleSprite.h"
 
 USING_NS_CC;
 
@@ -40,6 +42,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // support multiple resolution
     director->getOpenGLView()->setDesignResolutionSize(960, 640, ResolutionPolicy::FIXED_HEIGHT);
+
+    // joker: global init
+    joker::Config::setUsable();
+    joker::RoleSprite::loadAnimationSource();
 
     // create a scene. it's an autorelease object
     auto scene = joker::EnterGameScene::create();

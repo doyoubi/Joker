@@ -19,10 +19,6 @@ namespace joker
     bool BattleScene::init()
     {
         if (!Scene::init()) return false;
-        
-        // global init
-        Config::setUsable();
-        RoleSprite::loadAnimationSource();
 
         auto battleLayer = BattleLayer::create();
         battleLayer->setName("BattleLayer");
@@ -467,14 +463,33 @@ namespace joker
     {
         if (!Scene::init()) return false;
 
+        static float startX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionX" });
+        static float startY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionY" });
+        static float instructionX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionX" });
+        static float instructionY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionY" });
+
         using namespace cocos2d::ui;
-        auto start = Button::create("UI/EnterGame.png", "UI/EnterGame.png", "UI/EnterGame.png");
         auto size = Director::getInstance()->getVisibleSize();
-        start->setPosition(Vec2(size.width / 2.0f, size.height / 2.0f));
+        auto start = Button::create("UI/EnterGame.png", "UI/EnterGame.png", "UI/EnterGame.png");
+        auto instruction = Button::create("UI/EnterInstruction.png", "UI/EnterInstruction.png", "UI/EnterInstruction.png");
+        start->setPosition(Vec2(size.width / 2.0f + startX, size.height / 2.0f + startY));
+        instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
         addChild(start);
+        addChild(instruction);
         start->addTouchEventListener([](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(LoadingScene::create());
         });
+        instruction->addTouchEventListener([](Ref*, Widget::TouchEventType){
+            Director::getInstance()->replaceScene(InstructionScene::create());
+        });
+        return true;
+    }
+
+    // InstructionScene
+    bool InstructionScene::init()
+    {
+        if (!Scene::init()) return false;
+        return true;
     }
 
 }

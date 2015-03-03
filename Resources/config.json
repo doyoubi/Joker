@@ -8,6 +8,12 @@
         "score":{
             "positionX": 70,
             "positionY": 500
+        },
+        "EnterScene": {
+            "enterButtonPositionX": 0,
+            "enterButtonPositionY": 150,
+            "instructionButtonPositionX": 0,
+            "instructionButtonPositionY": -150
         }
     },
     "MusicScript":{
