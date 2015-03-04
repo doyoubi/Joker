@@ -83,7 +83,7 @@ namespace joker
         DEBUGCHECK(!_dead, "can't kill a dead Role");
         _dead = true;
         if (_roleType == RoleType::PLAYER)
-            ERRORMSG("can't remove player now");
+            ;
         else if (_roleType == RoleType::ENEMY)
             _battleDirector->addEvent(EventPtr(new RemoveRoleEvent(this)));
         else if (_roleType == RoleType::BOMB)

@@ -2,6 +2,7 @@
 #define JOKER_ROLE_SPRITE
 
 #include <string>
+#include <functional>
 
 #include "cocos2d.h"
 #include "cocostudio/CCArmature.h"
@@ -28,6 +29,7 @@ namespace joker
         cocostudio::Armature * getArmature() { return _armature; }
 
         void die();
+        std::function<void()> deadCallback;
 
     private:
         void removeRoleSpriteDebug();

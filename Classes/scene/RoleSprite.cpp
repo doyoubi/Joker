@@ -65,6 +65,8 @@ namespace joker
             [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
             if (movementType == MovementEventType::COMPLETE && movementID == "dead")
             {
+                if (this->deadCallback)
+                    deadCallback();
                 this->removeFromParent();
             }
         });

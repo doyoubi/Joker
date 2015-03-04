@@ -62,6 +62,21 @@ namespace joker
         return ret;
     }
 
+    void BattleScene::showResult(int score)
+    {
+        auto resultPanel = BattleResultPanel::create();
+        resultPanel->setScore(score);
+        auto size = Director::getInstance()->getVisibleSize();
+        resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
+        addChild(resultPanel);
+    }
+
+    void BattleScene::endBattle()
+    {
+        getPromptBar()->clearPromptSprite();
+        getBattleLayer()->endBattle();
+    }
+
     // BattleLayer
 
     // SpikesSprite 
@@ -84,7 +99,8 @@ namespace joker
         _size.width = Config::getInstance().getDoubleValue({ "BattleStage", "width" });
         _size.height = Config::getInstance().getDoubleValue({ "BattleStage", "height" });
         _spikes = SpikesSprite::create();
-        _spikes->retain();
+        addChild(_spikes);
+        _spikes->setVisible(false);
 
         schedule(schedule_selector(BattleLayer::updateBackground));
 
@@ -108,7 +124,6 @@ namespace joker
     }
 
     BattleLayer::~BattleLayer() {
-        _spikes->release();
         unschedule(schedule_selector(BattleLayer::updateBackground));
     }
 
@@ -143,6 +158,11 @@ namespace joker
         const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "localZ" });
         _player->setLocalZOrder(localZ);
         addChild(_player);
+        _player->deadCallback = [this](){
+            BattleScene * scene = dynamic_cast<BattleScene*>(this->getParent());
+            CHECKNULL(scene);
+            scene->showResult(scene->getBattleDirector()->getBattleJudge().getScore());
+        };
         return _player;
     }
 
@@ -179,16 +199,18 @@ namespace joker
         _cakes->updatePosition(Vec2(cameraPosition, visibleSize.height / 2.0f));
     }
 
+    void BattleLayer::endBattle()
+    {
+        unschedule(schedule_selector(BattleLayer::updateBackground));
+        _spikes->setVisible(false);
+    }
+
     void BattleLayer::spikeArise(const cocos2d::Vec2 & position)
     {
         static float height = Config::getInstance().getDoubleValue({ "RoleProperty", "spike", "positionY" });
         _spikes->setPosition(position.x, height);
         _spikes->arise();
-        _spikes->setName("spikes");
-        DEBUGCHECK(getChildByName("spikes") == nullptr, 
-            "spikes arise again before former spikes finish its animation. "
-            "the interval between two spikes event should not too close");
-        addChild(_spikes);
+        _spikes->setVisible(true);
     }
 
     void BattleLayer::spikeAttack()
@@ -260,7 +282,7 @@ namespace joker
             [this](Armature *armature, MovementEventType movementType, const std::string & movementID){
             if (movementType == MovementEventType::COMPLETE)
             {
-                this->removeFromParent();
+                this->setVisible(false);
             }
         });
     }
@@ -336,7 +358,7 @@ namespace joker
 
         attack->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
-                director->tagMetronome();
+                director->tabMetronome();
         });
 
         jump->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -375,7 +397,7 @@ namespace joker
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_J)
             {
-                director->tagMetronome();
+                director->tabMetronome();
             }
         };
         listener->onKeyReleased = [&director](EventKeyboard::KeyCode keyCode, Event* event){
@@ -395,19 +417,6 @@ namespace joker
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     }
 #endif
-
-    void BattleScene::showResult(int score)
-    {
-        static bool tag = false;
-        if (tag) return;
-        tag = true;
-        Director::getInstance()->pause();
-        auto resultPanel = BattleResultPanel::create();
-        resultPanel->setScore(score);
-        auto size = Director::getInstance()->getVisibleSize();
-        resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
-        addChild(resultPanel);
-    }
 
     // BattleResultPanel
     bool BattleResultPanel::init()

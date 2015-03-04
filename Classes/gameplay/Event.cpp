@@ -25,6 +25,7 @@ namespace joker
         for (auto & p : _eventPool)
         {
             p->execute(director);
+            if (director->isBattleEnded()) break;
         }
         _eventPool.clear();
         _addEventLock = false;
@@ -107,6 +108,8 @@ namespace joker
             director->removeEnemy(_role);
         else if (_role->getRoleType() == RoleType::BOMB)
             director->removeBomb(_role);
+        else if (_role->getRoleType() == RoleType::PLAYER)
+            ;
         else ERRORMSG("invalid role type");
     }
 

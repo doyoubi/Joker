@@ -31,6 +31,7 @@ namespace joker
         unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
         HpBar * getHpBar() { return _hpBar; }
         ScoreDisplayer * getScoreDisplayer() { return _scoreDisplayer; }
+        void endBattle();
         void showResult(int score);
 
     private:
@@ -54,12 +55,14 @@ namespace joker
         void spikeArise(const cocos2d::Vec2 & position);
         void spikeAttack();
         void removeEnemySprite(RoleSprite * enemy);
+        void removePlayerSprite();
         void shake(){ _battleStage->shake(); }
         void quake(){ _battleStage->quake(); }
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         Size getSize() { return _size; }
 
         ~BattleLayer();
+        void endBattle();
 
     private:
         bool init() override;

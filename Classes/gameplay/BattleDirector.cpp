@@ -41,7 +41,7 @@ namespace joker
 
         getBattleJudge().hpChangedCallback = [this](int hp){
             getScene()->getHpBar()->changeHeartNum(hp);
-            if (hp == 0) getScene()->showResult(getBattleJudge().getScore());
+            if (hp == 0) endBattle();
         };
         getBattleJudge().scoreChangedCallback = [this](int score){
             getScene()->getScoreDisplayer()->changeScore(score);
@@ -121,7 +121,7 @@ namespace joker
             setBTEvent(BTEvent::NO_EVENT);
         });
         getMetronome("battle").setWrongHitCallBack([this](int, float){
-            getPlayer()->executeCommand(RoleAction::EMPTY_ATTACK);
+            sendCommand(getPlayer(), RoleAction::EMPTY_ATTACK);
         });
 
         // spike
@@ -204,10 +204,12 @@ namespace joker
     BattleDirector::~BattleDirector()
     {
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+        getSoundManager()->stopBackgroundSound();
     }
 
     void BattleDirector::sendCommand(Role * role, const RoleCommand & command)
     {
+        if (_battleEnded) return;
         CHECKNULL(role);
         role->executeCommand(command);
     }
@@ -224,7 +226,7 @@ namespace joker
         return *it;
     }
 
-    void BattleDirector::tagMetronome()
+    void BattleDirector::tabMetronome()
     {
         getMetronome("battle").tab();
     }
@@ -293,13 +295,17 @@ namespace joker
 
     void BattleDirector::update(float dt)
     {
+        _eventManager.executeEvent(this);
+
+        if (_battleEnded) return;
         if (_musicStarted && !getSoundManager()->isBackgroundPlaying())
         {
             _musicStarted = false;
             getScene()->showResult(getBattleJudge().getScore());
+            _battleEnded = true;
+            return;
         }
 
-        _eventManager.executeEvent(this);
         BTParam param;
         param.playerWidth = getPlayer()->getPhysicsBody()->getWidth();
         param.playerPosition = getPlayer()->getPosition().x;
@@ -392,6 +398,18 @@ namespace joker
              || (lhs->isAlive() && lhs->getPhysicsBody()->getHeight() < rhs->getPhysicsBody()->getHeight());
         });
         return *it;
+    }
+
+    void BattleDirector::endBattle()
+    {
+        _battleEnded = true;
+        auto enemys = _enemyConductor.getEnemyArray();
+        for (auto & enemy : enemys)
+            enemy->executeCommand(RoleAction::IDLE);
+        for (auto & metro : _metronomes)
+            metro.second.stop();
+        getScene()->endBattle();
+        _player.reset(nullptr);
     }
 
 

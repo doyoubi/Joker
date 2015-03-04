@@ -17,9 +17,9 @@
         }
     },
     "MusicScript":{
-        "winMusicFile": "music/BeethovenOr.wav",
-        "androidMusicFile": "music/BeethovenOr.ogg",
-        "script": "music/BeethovenOr.json"
+        "winMusicFile": "music/theGrimoireOfAlice.wav",
+        "androidMusicFile": "music/theGrimoireOfAlice.ogg",
+        "script": "music/theGrimoireOfAlice.json"
     },
     "BattleStage": {
         "width": 2000,
@@ -72,7 +72,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 10
+            "hp": 5
         },
         "enemy": {
             "animationName": "enemy",

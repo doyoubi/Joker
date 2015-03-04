@@ -78,7 +78,7 @@ namespace joker
             return lhs->getX() < rhs->getX();
         });
 
-        for (int i = 0; i < phyList.size() - 1; i++)
+        for (int i = 0; i < int(phyList.size()) - 1; i++)
         {
             auto left = phyList[i];
             auto right = phyList[i + 1];

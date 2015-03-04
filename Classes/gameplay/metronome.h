@@ -14,6 +14,7 @@ namespace joker
 
         void reset(); // reset the Metronome to start point
         void start();
+        void stop();
         void update(float dt);
         
         void tab();

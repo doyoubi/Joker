@@ -34,7 +34,7 @@ namespace joker
 
         Metronome & getMetronome(const char * key);
         void restartMetronome();
-        void tagMetronome();
+        void tabMetronome();
 
         RhythmEventDispatcher & getEventDispather(const char * eventName);
 
@@ -64,6 +64,8 @@ namespace joker
         void setBTEvent(BTEvent event) { _btEvent = event; }
 
         RolePtr & getLowestBomb();
+        void endBattle();
+        bool isBattleEnded() const { return _battleEnded; }
 
     private:
 
@@ -85,6 +87,7 @@ namespace joker
 
         BTEvent _btEvent = BTEvent::NO_EVENT;
         bool _musicStarted = false;
+        bool _battleEnded = false;
 
         vector<RolePtr> _bombs;
 

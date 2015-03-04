@@ -41,4 +41,9 @@ namespace joker
         return SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying();
     }
 
+    void SoundManager::stopBackgroundSound()
+    {
+        SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    }
+
 }

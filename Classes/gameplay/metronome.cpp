@@ -56,6 +56,11 @@ namespace joker
         Director::getInstance()->getScheduler()->resumeTarget(this);
     }
 
+    void Metronome::stop()
+    {
+        Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+    }
+
     void Metronome::update(float dt)
     {
         _passedTime += dt;

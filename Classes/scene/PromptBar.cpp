@@ -185,7 +185,7 @@ namespace joker
         FiniteTimeAction * moveTo = cocos2d::MoveTo::create(t, _endPoint + Vec2(missEndPointX, 0));
         auto & spriteQueue = _promptSpriteQueue;
         FiniteTimeAction * callback = cocos2d::CallFunc::create([promptSprite, &spriteQueue](){
-            DEBUGCHECK(spriteQueue.empty() || promptSprite != spriteQueue.front(), "delete a sprite which is still in the queue");
+            DEBUGCHECK(spriteQueue.empty() || promptSprite != spriteQueue.front(), "queue empty or delete a sprite which is still in the queue");
             promptSprite->removeFromParent();
         });
         Vector<FiniteTimeAction*> arr;
