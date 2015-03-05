@@ -32,6 +32,11 @@ namespace joker
         reset();
     }
 
+    Metronome::~Metronome()
+    {
+        Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+    }
+
     void Metronome::reset()
     {
         _passedTime = 0.0f;
@@ -46,6 +51,8 @@ namespace joker
 
         auto scheduler = Director::getInstance()->getScheduler();
         scheduler->scheduleUpdate(this, 0, true);
+
+        _ended = false;
     }
 
     void Metronome::start()
@@ -59,6 +66,7 @@ namespace joker
     void Metronome::stop()
     {
         Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+        _ended = true;
     }
 
     void Metronome::update(float dt)
@@ -110,6 +118,7 @@ namespace joker
 
     void Metronome::tab()
     {
+        if (_ended) return;
         if (_nextRhythmPointsIndex >= _rhythmPoints.size()) return;
         float timeInterval = _rhythmPoints[_nextRhythmPointsIndex];
         float dt1 = _timeSinceLastPoint;

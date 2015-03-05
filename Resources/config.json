@@ -26,7 +26,8 @@
         "height": 640,
         "positionX": -1,
         "positionY": 18,
-        "curtainOffsetY": 10
+        "curtainX": 0,
+        "curtainY": 20
     },
     "LayeringCakes" : {
         "layer1Width": 3000,

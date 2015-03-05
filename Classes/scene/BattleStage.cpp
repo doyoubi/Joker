@@ -16,47 +16,24 @@ namespace joker
         static bool addArmatureFileInfo = false;
         if (!addArmatureFileInfo)
         {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/curtain/curtain.ExportJson");
             ArmatureDataManager::getInstance()->addArmatureFileInfo("background/stage/stage.ExportJson");
             addArmatureFileInfo = true;
         }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("curtain") != nullptr,
-            "missing animation: curtain");
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage") != nullptr,
             "missing animation: stage");
-        static float curtainOffsetY = Config::getInstance().getDoubleValue({ "BattleStage", "curtainOffsetY" });
-        _curtain = Armature::create("curtain");
         _stage = Armature::create("stage");
-        _stage->setLocalZOrder(-2);
-        _curtain->setLocalZOrder(-1);
-        _curtain->setPositionY(curtainOffsetY);
 
-        Armature * arms[] = { _stage, _curtain };
-        string animationData[] = { "stage", "curtain" };
-        for (int i = 0; i < sizeof(arms) / sizeof(Armature *); ++i)
-        {
-            auto a = arms[i];
-            string & animData = animationData[i];
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animData)->getMovement("show") != nullptr,
-                "missing animation movement: " + animData);
-            addChild(a);
-            a->getAnimation()->play("show");
-            a->pause();
-        }
-        _curtain->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "show")
-            {
-                _curtain->getAnimation()->play("static");
-            }
-        });
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage")->getMovement("show") != nullptr,
+            "missing animation movement: show");
+        addChild(_stage);
+        _stage->getAnimation()->play("show");
+        _stage->pause();
+
         return true;
     }
 
     void BattleStage::enter()
     {
-        _stage->resume();
-        _curtain->resume();
         _stage->resume();
     }
 
@@ -68,6 +45,41 @@ namespace joker
     void BattleStage::quake()
     {
         _stage->getAnimation()->play("quake");
+    }
+
+    // Curtain
+    void Curtain::enter()
+    {
+        _curtain->resume();
+    }
+
+    bool Curtain::init()
+    {
+        if (!Node::init()) return false;
+
+        using namespace cocostudio;
+        static bool addArmatureFileInfo = false;
+        if (!addArmatureFileInfo)
+        {
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/curtain/curtain.ExportJson");
+            addArmatureFileInfo = true;
+        }
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("curtain") != nullptr,
+            "missing animation: curtain");
+        _curtain = Armature::create("curtain");
+
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage")->getMovement("show") != nullptr,
+            "missing animation movement: show");
+        addChild(_curtain);
+        _curtain->getAnimation()->play("show");
+        _curtain->pause();
+        _curtain->getAnimation()->setMovementEventCallFunc(
+            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE && movementID == "show")
+            {
+                _curtain->getAnimation()->play("static");
+            }
+        });
     }
 
     // LayeringCakes

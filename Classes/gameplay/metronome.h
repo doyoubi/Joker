@@ -11,6 +11,7 @@ namespace joker
     public:
         // the first element of rhythmPoints should be zero
         Metronome(const std::vector<float> & rhythmPoints, float hitDeltaTime);
+        ~Metronome();
 
         void reset(); // reset the Metronome to start point
         void start();
@@ -72,6 +73,8 @@ namespace joker
         int _nextRhythmPointsIndex;
         float _passedTime;
         float _timeSinceLastPoint;
+
+        bool _ended;
 
         void operator=(const Metronome &) = delete;
         //Metronome(const Metronome &) = delete;  need default copy constructor

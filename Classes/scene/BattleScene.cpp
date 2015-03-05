@@ -98,9 +98,6 @@ namespace joker
 
         _size.width = Config::getInstance().getDoubleValue({ "BattleStage", "width" });
         _size.height = Config::getInstance().getDoubleValue({ "BattleStage", "height" });
-        _spikes = SpikesSprite::create();
-        addChild(_spikes);
-        _spikes->setVisible(false);
 
         schedule(schedule_selector(BattleLayer::updateBackground));
 
@@ -110,6 +107,16 @@ namespace joker
         _battleStage->setPosition(_size.width/2.0f + dx, _size.height/2.0f + dy);
         _battleStage->enter();
         addChild(_battleStage, -1);
+
+        auto curtain = Curtain::create();
+        static float curtainX = Config::getInstance().getDoubleValue({ "BattleStage", "curtainX" });
+        static float curtainY = Config::getInstance().getDoubleValue({ "BattleStage", "curtainY" });
+        curtain->setPosition(_size.width / 2.0f + curtainX, _size.height / 2.0f + curtainY);
+        addChild(curtain, 5);
+
+        _spikes = SpikesSprite::create();
+        _spikes->setVisible(false);
+        addChild(_spikes, 1);
 
         _cakes = LayeringCakes::create(getSize());
         _cakes->setPosition(0, getSize().height / 2.0f);

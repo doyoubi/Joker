@@ -15,8 +15,17 @@ namespace joker
         void quake();
     private:
         bool init() override;
-        cocostudio::Armature * _curtain; // weak ref
         cocostudio::Armature * _stage;   // weak ref
+    };
+
+    class Curtain : public cocos2d::Node
+    {
+    public:
+        CREATE_FUNC(Curtain);
+        void enter();
+    private:
+        bool init() override;
+        cocostudio::Armature * _curtain; // weak ref
     };
 
     class LayeringCakes : public cocos2d::Node

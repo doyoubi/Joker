@@ -228,11 +228,13 @@ namespace joker
 
     void BattleDirector::tabMetronome()
     {
+        if (_battleEnded) return;
         getMetronome("battle").tab();
     }
 
     void BattleDirector::restartMetronome()
     {
+        DEBUGCHECK(!_battleEnded, "can't restart after battle has ended");
         for (auto & kv : _metronomes)
         {
             kv.second.reset();
