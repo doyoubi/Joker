@@ -73,7 +73,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 5
+            "hp": 12
         },
         "enemy": {
             "animationName": "enemy",

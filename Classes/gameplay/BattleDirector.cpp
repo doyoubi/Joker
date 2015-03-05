@@ -47,6 +47,7 @@ namespace joker
             getScene()->getScoreDisplayer()->changeScore(score);
         };
 
+        joker::PhysicsWorld::setGlobalPhysicsWorld(&_physicsWorld);
         auto physicsWorld = joker::PhysicsWorld::getInstance();
         physicsWorld->setWorldWidth(getScene()->getBattleLayer()->getSize().width);
         physicsWorld->setGravity(Config::getInstance().getDoubleValue({ "Physics", "gravity" }));

@@ -15,6 +15,7 @@
 #include "sound/SoundManager.h"
 #include "AI/BehaviorTree.h"
 #include "BattleJudge.h"
+#include "SimplePhysics/PhysicsWorld.h"
 
 
 namespace joker
@@ -70,6 +71,7 @@ namespace joker
     private:
 
         SoundManager  _soundManager;
+        joker::PhysicsWorld _physicsWorld;
 
         BattleScene * _battleScene = nullptr;   // weak reference
 

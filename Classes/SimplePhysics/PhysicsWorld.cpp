@@ -7,10 +7,18 @@
 
 namespace joker
 {
+    PhysicsWorld * PhysicsWorld::globalPhysicsWorld= nullptr;
+
     PhysicsWorld * PhysicsWorld::getInstance()
     {
-        static PhysicsWorld physicsWorld;
-        return &physicsWorld;
+        CHECKNULL(globalPhysicsWorld);
+        return globalPhysicsWorld;
+    }
+
+    void PhysicsWorld::setGlobalPhysicsWorld(PhysicsWorld * physicsWorld)
+    {
+        CHECKNULL(physicsWorld);
+        globalPhysicsWorld = physicsWorld;
     }
 
     PhysicsWorld::PhysicsWorld()
@@ -21,6 +29,7 @@ namespace joker
     PhysicsWorld::~PhysicsWorld()
     {
         cocos2d::Director::getInstance()->getScheduler()->unscheduleUpdate(this);
+        globalPhysicsWorld = nullptr;
     }
 
     void PhysicsWorld::addPhysicsBody(PhysicsBody * physicsBody)
