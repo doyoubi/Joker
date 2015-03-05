@@ -67,7 +67,7 @@ namespace joker
     void IdleState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({"animation", "role", "IdleState"});
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(role, animName));
         role->getArmature()->getAnimation()->play(animName);
     }
@@ -122,7 +122,7 @@ namespace joker
     void RunState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "role", "RunState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(role, animName));
         role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_direction);
@@ -197,7 +197,7 @@ namespace joker
     void SlowDownState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "role", "SlowDownState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName),
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
             missingAnimation(role, animName));
         role->getArmature()->getAnimation()->play(animName);
         role->setDirection(_velocityX > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT);
@@ -249,6 +249,27 @@ namespace joker
             role->getStateManager()->changeState(EmptyAttackState::create());
         else return false;
         return true;
+    }
+
+    // EnterState
+    std::string EnterState::getDebugString()
+    {
+        return "enter state";
+    }
+
+    void EnterState::enterState(Role * role)
+    {
+        const char * roleTypeName = role->isPlayer() ? "player" : "enemy";
+        static const string animName = Config::getInstance().getStringValue({ "animation", roleTypeName, "EnterState" });
+        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
+            missingAnimation(role, animName));
+        role->getArmature()->getAnimation()->play(animName);
+    }
+
+    void EnterState::execute(Role * role)
+    {
+        if (role->getArmature()->getAnimation()->isComplete())
+            role->getStateManager()->changeState(IdleState::create());
     }
 
     

@@ -80,6 +80,7 @@ namespace joker
                 _curtain->getAnimation()->play("static");
             }
         });
+        return true;
     }
 
     // LayeringCakes

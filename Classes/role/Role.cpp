@@ -20,13 +20,13 @@ namespace joker
         _simplePhysicsBody.setCollidable(false);
 
         // require roleSprite->_armature initialized
-        if (_roleType == RoleType::PLAYER || _roleType == RoleType::BOMB)
+        if (_roleType == RoleType::BOMB)
         {
             _stateManager = std::move(std::unique_ptr<StateManager>(
                 new StateManager(this, IdleState::create())
                 ));
         }
-        else if (roleType == RoleType::ENEMY)
+        else if (_roleType == RoleType::PLAYER || roleType == RoleType::ENEMY)
         {
             _stateManager = std::move(std::unique_ptr<StateManager>(
                 new StateManager(this, EnterState::create())

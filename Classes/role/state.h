@@ -90,6 +90,17 @@ namespace joker
         float _velocityX;
     };
 
+    class EnterState : public State
+    {
+    public:
+        static StatePtr create() { return StatePtr(new EnterState()); }
+        void enterState(Role * role) override;
+        void exitState(Role * role) override {};
+        void execute(Role * role) override;
+        bool executeCommand(Role * role, const RoleCommand & command) override { return false; };
+        std::string getDebugString() override;
+    };
+
 }
 
 #endif

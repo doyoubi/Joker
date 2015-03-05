@@ -31,7 +31,8 @@ namespace joker
     RoleSprite * RoleSprite::create(const string & animationName, string animationDirection)
     {
         // check if animation has been loaded
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName), "missing animation: " + animationName);
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName) != nullptr,
+            "missing animation: " + animationName);
         Armature * armature = Armature::create(animationName);
 
         RoleSprite * role = new (std::nothrow) RoleSprite(armature, animationDirection);
@@ -58,7 +59,7 @@ namespace joker
     {
         auto missingAnimation = [](const string & animName) { return "RoleSprite::die(): missing '" + animName + "' movement."; };
         static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "role", "dead" });
-        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName),
+        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName) != nullptr,
             missingAnimation(deadAnimName));
         getArmature()->getAnimation()->play(deadAnimName);
         getArmature()->getAnimation()->setMovementEventCallFunc(
