@@ -3,11 +3,12 @@
         "HP":{
             "heartInterval": 70,
             "positionX": 70,
-            "positionY": 600
+            "positionY": 600,
+            "rowHeartNumber": 5
         },
         "score":{
             "positionX": 70,
-            "positionY": 500
+            "positionY": 450
         },
         "EnterScene": {
             "enterButtonPositionX": 0,
@@ -73,7 +74,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 3
+            "hp": 10
         },
         "enemy": {
             "animationName": "enemy",

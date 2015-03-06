@@ -34,7 +34,7 @@ namespace joker
         void sendCommand(Role * role, const RoleCommand & command);
 
         Metronome & getMetronome(const char * key);
-        void restartMetronome();
+        void startBattle();
         void tabMetronome();
 
         RhythmEventDispatcher & getEventDispather(const char * eventName);

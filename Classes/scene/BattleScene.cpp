@@ -48,6 +48,12 @@ namespace joker
         return true;
     }
 
+    void BattleScene::onEnterTransitionDidFinish()
+    {
+        Scene::onEnterTransitionDidFinish();
+        getBattleDirector()->startBattle();
+    }
+
     BattleLayer * BattleScene::getBattleLayer()
     {
         BattleLayer * ret = dynamic_cast<BattleLayer*>(getChildByName("BattleLayer"));
@@ -244,7 +250,7 @@ namespace joker
         black->setPosition(-x + size.width / 2.0f, size.height / 2.0f);  // camera position
         black->setOpacity(0);
         addChild(black, 4);
-        auto darkenAnim = FadeTo::create(1, 150);
+        auto darkenAnim = FadeTo::create(2, 150);
         black->runAction(darkenAnim);
     }
 
@@ -409,8 +415,8 @@ namespace joker
                 director->sendCommand(director->getPlayer(), RoleAction::JUMP);
         });
 
-        rhythmStart->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
-            director->restartMetronome();
+        rhythmStart->addTouchEventListener([&director](Ref*, Widget::TouchEventType){
+            director->startBattle();
         });
 
         return true;

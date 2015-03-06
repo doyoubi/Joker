@@ -24,6 +24,7 @@ namespace joker
     {
     public:
         CREATE_FUNC(BattleScene);
+        void onEnterTransitionDidFinish() override;
 
         BattleLayer * getBattleLayer();
         BattleUILayer * getUIBattleLayer();

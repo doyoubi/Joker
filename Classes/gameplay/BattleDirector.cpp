@@ -233,7 +233,7 @@ namespace joker
         getMetronome("battle").tab();
     }
 
-    void BattleDirector::restartMetronome()
+    void BattleDirector::startBattle()
     {
         DEBUGCHECK(!_battleEnded, "can't restart after battle has ended");
         for (auto & kv : _metronomes)

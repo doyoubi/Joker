@@ -5,17 +5,25 @@
 namespace joker
 {
     // HpBar
+    Vec2 heartIndex2Position(int i)
+    {
+        static int rowSize = Config::getInstance().getDoubleValue({ "UI", "HP", "rowHeartNumber" });
+        int positionInterval = Config::getInstance().getDoubleValue({ "UI", "HP", "heartInterval" });
+        int row = i / rowSize;
+        int column = i % rowSize;
+        return Vec2(positionInterval * column, - positionInterval * row);
+    }
+
     bool HpBar::init()
     {
         if (!Node::init()) return false;
 
         int hp = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "hp" });
-        int positionInterval = Config::getInstance().getDoubleValue({ "UI", "HP", "heartInterval" });
         
         for (int i = 0; i < hp; ++i)
         {
             auto heart = Sprite::create("UI/heart.jpg");
-            heart->setPositionX(i * positionInterval);
+            heart->setPosition(heartIndex2Position(i));
             addChild(heart);
             _hearts.pushBack(heart);
         }
@@ -32,7 +40,7 @@ namespace joker
             for (int i = _hearts.size(); i < heartNum; ++i)
             {
                 auto heart = Sprite::create("UI/heart.jpg");
-                heart->setPositionX(i * positionInterval);
+                heart->setPosition(heartIndex2Position(i));
                 addChild(heart);
                 _hearts.pushBack(heart);
             }
