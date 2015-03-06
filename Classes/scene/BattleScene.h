@@ -48,7 +48,6 @@ namespace joker
     class BattleLayer : public cocos2d::Layer
     {
     public:
-        static void loadBlackImg();
         CREATE_FUNC(BattleLayer);
         RoleSprite * getPlayerSprite() { return _player; }
         RoleSprite * addEnemySprite(const cocos2d::Vec2 & position);
@@ -115,6 +114,8 @@ namespace joker
     {
     public:
         CREATE_FUNC(EnterGameScene);
+        void onEnterTransitionDidFinish() override;
+        static void loadBlackImg();
     private:
         bool init() override;
     };

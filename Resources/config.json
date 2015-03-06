@@ -15,6 +15,10 @@
             "enterButtonPositionY": 150,
             "instructionButtonPositionX": 0,
             "instructionButtonPositionY": -150
+        },
+        "InstructionScene": {
+            "backButtonPositionX": 0,
+            "backButtonPositionY": 0
         }
     },
     "MusicScript":{
