@@ -47,6 +47,7 @@ namespace joker
     class BattleLayer : public cocos2d::Layer
     {
     public:
+        static void loadBlackImg();
         CREATE_FUNC(BattleLayer);
         RoleSprite * getPlayerSprite() { return _player; }
         RoleSprite * addEnemySprite(const cocos2d::Vec2 & position);
@@ -58,6 +59,7 @@ namespace joker
         void removePlayerSprite();
         void shake(){ _battleStage->shake(); }
         void quake(){ _battleStage->quake(); }
+        void darken();
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         Size getSize() { return _size; }
 

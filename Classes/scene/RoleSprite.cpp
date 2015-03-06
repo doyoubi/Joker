@@ -30,6 +30,12 @@ namespace joker
 
     RoleSprite * RoleSprite::create(const string & animationName, string animationDirection)
     {
+        static bool loadOnceTag = false;
+        if (!loadOnceTag)
+        {
+            RoleSprite::loadAnimationSource();
+            loadOnceTag = true;
+        }
         // check if animation has been loaded
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName) != nullptr,
             "missing animation: " + animationName);

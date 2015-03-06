@@ -2,7 +2,6 @@
 #include "HelloWorldScene.h"
 #include "scene/BattleScene.h"
 #include "utils/config.h"
-#include "scene/RoleSprite.h"
 
 USING_NS_CC;
 
@@ -45,7 +44,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // joker: global init
     joker::Config::setUsable();
-    joker::RoleSprite::loadAnimationSource();
 
     // create a scene. it's an autorelease object
     auto scene = joker::EnterGameScene::create();

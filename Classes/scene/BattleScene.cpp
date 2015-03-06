@@ -69,6 +69,7 @@ namespace joker
         auto size = Director::getInstance()->getVisibleSize();
         resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
         addChild(resultPanel);
+        getBattleLayer()->darken();
     }
 
     void BattleScene::endBattle()
@@ -95,6 +96,12 @@ namespace joker
     bool BattleLayer::init()
     {
         if (!Layer::init()) return false;
+        static bool loadOnceTag = false;
+        if (!loadOnceTag)
+        {
+            loadBlackImg();
+            loadOnceTag = true;
+        }
 
         _size.width = Config::getInstance().getDoubleValue({ "BattleStage", "width" });
         _size.height = Config::getInstance().getDoubleValue({ "BattleStage", "height" });
@@ -210,6 +217,35 @@ namespace joker
     {
         unschedule(schedule_selector(BattleLayer::updateBackground));
         _spikes->setVisible(false);
+        darken();
+    }
+
+    void BattleLayer::loadBlackImg()
+    {
+        auto size = Director::getInstance()->getVisibleSize();
+        Texture2D * blackTex = new Texture2D();
+        struct RGB{ unsigned r, g, b; };
+        int width = 32, height = 32;
+        vector<unsigned char> rawData(width * height * sizeof(RGB));
+        memset(rawData.data(), 0, rawData.size());
+        blackTex->initWithData(rawData.data(), width *  height * sizeof(RGB),
+            Texture2D::PixelFormat::RGB888, width, height, Size()); // the last size param is not actually used
+        Rect rect(0, 0, size.width, size.height);
+        auto spriteFrame = SpriteFrame::createWithTexture(blackTex, rect);
+        SpriteFrameCache::getInstance()->addSpriteFrame(spriteFrame, "blackSpriteFrame");
+    }
+
+    void BattleLayer::darken()
+    {
+        auto black = Sprite::createWithSpriteFrame(
+            SpriteFrameCache::getInstance()->getSpriteFrameByName("blackSpriteFrame"));
+        auto size = Director::getInstance()->getVisibleSize();
+        float x = this->getPositionX();
+        black->setPosition(-x + size.width / 2.0f, size.height / 2.0f);  // camera position
+        black->setOpacity(0);
+        addChild(black, 4);
+        auto darkenAnim = FadeTo::create(1, 150);
+        black->runAction(darkenAnim);
     }
 
     void BattleLayer::spikeArise(const cocos2d::Vec2 & position)
