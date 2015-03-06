@@ -514,22 +514,26 @@ namespace joker
     bool EnterGameScene::init()
     {
         if (!Scene::init()) return false;
+        using namespace cocostudio;
         static bool loadOnceTag = false;
         if (!loadOnceTag)
         {
             loadBlackImg();
             loadOnceTag = true;
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("UI/title/title.ExportJson");
         }
 
+        using namespace cocos2d::ui;
         static float startX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionX" });
         static float startY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionY" });
         static float instructionX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionX" });
         static float instructionY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionY" });
 
-        using namespace cocos2d::ui;
         auto size = Director::getInstance()->getVisibleSize();
-        auto start = Button::create("UI/EnterGame.png", "UI/EnterGame.png", "UI/EnterGame.png");
-        auto instruction = Button::create("UI/EnterInstruction.png", "UI/EnterInstruction.png", "UI/EnterInstruction.png");
+        auto start = Button::create(
+            "UI/EnterGameButton.png", "UI/EnterGameButton.png", "UI/EnterGameButton.png");
+        auto instruction = Button::create(
+            "UI/EnterInstructionButton.png", "UI/EnterInstructionButton.png", "UI/EnterInstructionButton.png");
         start->setPosition(Vec2(size.width / 2.0f + startX, size.height / 2.0f + startY));
         instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
         addChild(start);
@@ -540,6 +544,28 @@ namespace joker
         instruction->addTouchEventListener([](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(InstructionScene::create());
         });
+
+        static string bgAnim = Config::getInstance().getStringValue({ "UI", "EnterScene", "animation" });
+        static string bgMove = Config::getInstance().getStringValue({ "UI", "EnterScene", "movement" });
+        static float bgScale = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundScale" });
+        static float bgX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundPositionX" });
+        static float bgY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundPositionY" });
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(bgAnim) != nullptr,
+            "missing animation: " + bgAnim);
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(bgAnim)->getMovement(bgMove) != nullptr,
+            "missing movement: " + bgMove);
+        auto bg = Armature::create(bgAnim);
+        bg->getAnimation()->play(bgMove);
+        bg->setScale(bgScale);
+        bg->setPosition(Vec2(size.width / 2.0f + bgX, size.height / 2.0f + bgY));
+        addChild(bg, -1);
+
+        auto backgroundPic = Sprite::create("UI/EnterGameBG.png");
+        backgroundPic->setScale(std::max(size.width / backgroundPic->getContentSize().width,
+            size.height / backgroundPic->getContentSize().height));
+        backgroundPic->setPosition(size.width / 2.0f, size.height / 2.0f);
+        addChild(backgroundPic, -2);
+
         return true;
     }
 

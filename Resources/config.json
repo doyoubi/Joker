@@ -14,7 +14,12 @@
             "enterButtonPositionX": 0,
             "enterButtonPositionY": 150,
             "instructionButtonPositionX": 0,
-            "instructionButtonPositionY": -150
+            "instructionButtonPositionY": -150,
+            "backgroundPositionX": 22,
+            "backgroundPositionY": 15,
+            "backgroundScale": 0.9,
+            "animation": "title",
+            "movement": "st"
         },
         "InstructionScene": {
             "backButtonPositionX": 0,
