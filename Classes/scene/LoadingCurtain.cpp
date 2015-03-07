@@ -4,6 +4,7 @@
 #include "utils/config.h"
 #include "utils/debug.h"
 #include "BattleScene.h"
+#include "Scene.h"
 
 namespace joker
 {

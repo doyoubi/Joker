@@ -20,8 +20,6 @@ namespace joker
     class BattleLayer;
     class BattleUILayer;
 
-    class LoadingCurtain;
-
     class BattleScene : public cocos2d::Scene
     {
     public:
@@ -97,36 +95,6 @@ namespace joker
     public:
         CREATE_FUNC(BattleResultPanel);
         void setScore(int score);
-    private:
-        bool init() override;
-    };
-
-    class LoadingScene : public cocos2d::Scene
-    {
-    public:
-        CREATE_FUNC(LoadingScene);
-        void update(float dt); // only to load BattleScene
-        void onEnter() override;
-    private:
-        bool init() override;
-        LoadingCurtain * _loadingCurtain;
-    };
-
-    class EnterGameScene : public cocos2d::Scene
-    {
-    public:
-        CREATE_FUNC(EnterGameScene);
-        void onEnterTransitionDidFinish() override;
-        static void loadBlackImg();
-    private:
-        bool init() override;
-        LoadingCurtain * _loadingCurtain;
-    };
-
-    class InstructionScene : public cocos2d::Scene
-    {
-    public:
-        CREATE_FUNC(InstructionScene);
     private:
         bool init() override;
     };

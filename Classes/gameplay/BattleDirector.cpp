@@ -304,7 +304,7 @@ namespace joker
         if (_musicStarted && !getSoundManager()->isBackgroundPlaying())
         {
             _musicStarted = false;
-            getScene()->showResult(getBattleJudge().getScore());
+            getScene()->endBattle();
             _battleEnded = true;
             return;
         }

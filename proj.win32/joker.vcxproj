@@ -158,6 +158,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\scene\LoadingCurtain.cpp" />
     <ClCompile Include="..\Classes\scene\PromptBar.cpp" />
     <ClCompile Include="..\Classes\scene\RoleSprite.cpp" />
+    <ClCompile Include="..\Classes\scene\Scene.cpp" />
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsBody.cpp" />
     <ClCompile Include="..\Classes\SimplePhysics\PhysicsWorld.cpp" />
     <ClCompile Include="..\Classes\sound\SoundManager.cpp" />
@@ -189,6 +190,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\scene\LoadingCurtain.h" />
     <ClInclude Include="..\Classes\scene\PromptBar.h" />
     <ClInclude Include="..\Classes\scene\RoleSprite.h" />
+    <ClInclude Include="..\Classes\scene\Scene.h" />
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsBody.h" />
     <ClInclude Include="..\Classes\SimplePhysics\PhysicsWorld.h" />
     <ClInclude Include="..\Classes\sound\SoundManager.h" />
