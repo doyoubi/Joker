@@ -24,6 +24,11 @@
         "InstructionScene": {
             "backButtonPositionX": 0,
             "backButtonPositionY": 0
+        },
+        "LoadingScene": {
+            "curtainX": 0,
+            "curtainY": 50,
+            "curtainScale": 1.067
         }
     },
     "MusicScript":{

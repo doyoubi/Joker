@@ -12,6 +12,7 @@
 #include "utils/debug.h"
 #include "SimplePhysics/PhysicsWorld.h"
 #include "utils/config.h"
+#include "LoadingCurtain.h"
 
 namespace joker
 {
@@ -45,13 +46,22 @@ namespace joker
         _scoreDisplayer->setPosition(scoreX, scoreY);
         addChild(_scoreDisplayer);
 
-        return true;
-    }
+        auto size = Director::getInstance()->getVisibleSize();
+        Vec2 center(size.width / 2.0f, size.height / 2.0f);
+        auto loadingCurtain = LoadingCurtain::create();
+        loadingCurtain->setPosition(center);
+        addChild(loadingCurtain, 5);
+        loadingCurtain->drawUp();
+        loadingCurtain->setDrawUpEndCallback([this](
+            cocostudio::Armature *armature,
+            cocostudio::MovementEventType movementType,
+            const std::string& movementID){
+            BattleScene * scene = dynamic_cast<BattleScene*>(getScene());
+            CHECKNULL(scene);
+            scene->getBattleDirector()->startBattle();
+        });
 
-    void BattleScene::onEnterTransitionDidFinish()
-    {
-        Scene::onEnterTransitionDidFinish();
-        getBattleDirector()->startBattle();
+        return true;
     }
 
     BattleLayer * BattleScene::getBattleLayer()
@@ -470,10 +480,13 @@ namespace joker
     {
         if (!Scene::init()) return false;
 
-        Label * loadingTxt = Label::createWithTTF("loading...", "fonts/Marker Felt.ttf", 30);
         auto size = Director::getInstance()->getVisibleSize();
-        loadingTxt->setPosition(size.width / 2.0f, size.height / 2.0f);
-        addChild(loadingTxt);
+        Vec2 center(size.width / 2.0f, size.height / 2.0f);
+        _loadingCurtain = LoadingCurtain::create();
+        _loadingCurtain->setPosition(center);
+        addChild(_loadingCurtain, 5);
+        _loadingCurtain->loading();
+
         return true;
     }
 
@@ -525,6 +538,8 @@ namespace joker
         static float instructionY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionY" });
 
         auto size = Director::getInstance()->getVisibleSize();
+        Vec2 center(size.width / 2.0f, size.height / 2.0f);
+
         auto start = Button::create(
             "UI/EnterGameButton.png", "UI/EnterGameButton2.png", "UI/EnterGameButton.png");
         auto instruction = Button::create(
@@ -533,8 +548,8 @@ namespace joker
         instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
         addChild(start);
         addChild(instruction);
-        start->addTouchEventListener([](Ref*, Widget::TouchEventType){
-            Director::getInstance()->replaceScene(LoadingScene::create());
+        start->addTouchEventListener([this](Ref*, Widget::TouchEventType){
+            _loadingCurtain->fallDown();
         });
         instruction->addTouchEventListener([](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(InstructionScene::create());
@@ -560,6 +575,10 @@ namespace joker
             size.height / backgroundPic->getContentSize().height));
         backgroundPic->setPosition(size.width / 2.0f, size.height / 2.0f);
         addChild(backgroundPic, -2);
+
+        _loadingCurtain = LoadingCurtain::create();
+        _loadingCurtain->setPosition(center);
+        addChild(_loadingCurtain, 5);
 
         return true;
     }

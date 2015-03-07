@@ -322,7 +322,7 @@ namespace joker
 
     void BattleDirector::supplyEnemy()
     {
-        static int maxEnemyNum = Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "maxQuantity"});
+        static unsigned int maxEnemyNum = Config::getInstance().getDoubleValue({"RoleProperty", "enemy", "maxQuantity"});
         if (_enemyConductor.getEnemyArray().size() >= maxEnemyNum) return;
         const int width = joker::PhysicsWorld::getInstance()->getWorldWidth();
         int posi = getPlayer()->getPosition().x;
