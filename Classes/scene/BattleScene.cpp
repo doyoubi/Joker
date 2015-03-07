@@ -17,29 +17,30 @@
 
 namespace joker
 {
+
     // BattleScene
     bool BattleScene::init()
     {
         if (!Scene::init()) return false;
 
-        auto battleLayer = BattleLayer::create();
-        battleLayer->setName("BattleLayer");
-        addChild(battleLayer);
+        _battleLayer = BattleLayer::create();
+        _battleLayer->retain();
 
-        _promptBar = unique_ptr<PromptBar>(new PromptBar(this));
+        _promptBar = PromptBar::create();
+        addChild(_promptBar, 4);
 
         // _battleDirector should be init after _promptBar, battleLayer and before uiLayer
         _battleDirector = unique_ptr<BattleDirector>(new BattleDirector(this));
 
         auto uiLayer = BattleUILayer::create(getBattleDirector());
         uiLayer->setName("BattleUILayer");
-        addChild(uiLayer);
+        addChild(uiLayer, 4);
 
         float hpBarX = Config::getInstance().getDoubleValue({ "UI", "HP", "positionX" });
         float hpBarY = Config::getInstance().getDoubleValue({ "UI", "HP", "positionY" });
         _hpBar = HpBar::create();
         _hpBar->setPosition(hpBarX, hpBarY);
-        addChild(_hpBar);
+        addChild(_hpBar, 4);
 
         float scoreX = Config::getInstance().getDoubleValue({ "UI", "score", "positionX" });
         float scoreY = Config::getInstance().getDoubleValue({ "UI", "score", "positionY" });
@@ -59,22 +60,28 @@ namespace joker
             const std::string& movementID){
             BattleScene * scene = dynamic_cast<BattleScene*>(getScene());
             CHECKNULL(scene);
+            addChild(getBattleLayer());
             scene->getBattleDirector()->startBattle();
         });
 
         return true;
     }
 
+    void BattleScene::onExit()
+    {
+        Scene::onExit();
+        _battleLayer->release();
+    }
+
     BattleLayer * BattleScene::getBattleLayer()
     {
-        BattleLayer * ret = dynamic_cast<BattleLayer*>(getChildByName("BattleLayer"));
-        CHECKNULL(ret);
-        return ret;
+        CHECKNULL(_battleLayer);
+        return _battleLayer;
     }
 
     BattleUILayer * BattleScene::getUIBattleLayer()
     {
-        BattleUILayer * ret = dynamic_cast<BattleUILayer*>(getChildByName("BattleLayer"));
+        BattleUILayer * ret = dynamic_cast<BattleUILayer*>(getChildByName("BattleUILayer"));
         CHECKNULL(ret);
         return ret;
     }
@@ -85,7 +92,7 @@ namespace joker
         resultPanel->setScore(score);
         auto size = Director::getInstance()->getVisibleSize();
         resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
-        addChild(resultPanel);
+        addChild(resultPanel, 4);
         getBattleLayer()->darken();
     }
 

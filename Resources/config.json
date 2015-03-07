@@ -54,8 +54,8 @@
         "gap2": 1400,
         "layer1Anim": "greencake",
         "layer2Anim": "purplecake",
-        "offsetY1": 0,
-        "offsetY2": 50
+        "offsetY1": -30,
+        "offsetY2": -30
     },
     "backgroundPicture": "background/background.png",
     "Physics": {

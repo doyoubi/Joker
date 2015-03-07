@@ -156,4 +156,27 @@ namespace joker
 
         return true;
     }
+
+    // GameOverScene
+    bool GameOverScene::init()
+    {
+        if (!Scene::init()) return false;
+
+        auto size = Director::getInstance()->getVisibleSize();
+        Vec2 center(size.width / 2.0f, size.height / 2.0f);
+
+        using namespace cocos2d::ui;
+        auto btn = Button::create("UI/ScorePanelExit.png", "UI/ScorePanelExit.png", "UI/ScorePanelExit.png");
+        btn->setPosition(center);
+        addChild(btn);
+        btn->addTouchEventListener([](Ref*, Widget::TouchEventType){
+            Director::getInstance()->replaceScene(EnterGameScene::create());
+        });
+
+        auto scoreLabel = Label::create(std::to_string(_score), "fonts/Marker Felt.ttf", 20);
+        scoreLabel->setPosition(center);
+        addChild(scoreLabel, 2);
+        return true;
+    }
+
 }

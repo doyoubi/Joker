@@ -36,6 +36,17 @@ namespace joker
     private:
         bool init() override;
     };
+
+    class GameOverScene : public cocos2d::Scene
+    {
+    public:
+        CREATE_FUNC(GameOverScene);
+        void setScore(int score) { _score = score; }
+    private:
+        bool init() override;
+        int _score;
+    };
+
 }
 
 #endif

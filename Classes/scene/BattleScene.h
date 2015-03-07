@@ -24,11 +24,12 @@ namespace joker
     {
     public:
         CREATE_FUNC(BattleScene);
+        void onExit() override;
 
         BattleLayer * getBattleLayer();
         BattleUILayer * getUIBattleLayer();
         unique_ptr<BattleDirector> & getBattleDirector() { return _battleDirector; }
-        unique_ptr<PromptBar> & getPromptBar() { return _promptBar; }
+        PromptBar * getPromptBar() { return _promptBar; }
         HpBar * getHpBar() { return _hpBar; }
         ScoreDisplayer * getScoreDisplayer() { return _scoreDisplayer; }
         void endBattle();
@@ -36,9 +37,10 @@ namespace joker
 
     private:
         bool init() override;
+        BattleLayer * _battleLayer = nullptr; // strong reference
 
         unique_ptr<BattleDirector> _battleDirector;
-        unique_ptr<PromptBar> _promptBar;
+        PromptBar * _promptBar;
         HpBar * _hpBar; // weak reference
         ScoreDisplayer * _scoreDisplayer; // weak reference
     };

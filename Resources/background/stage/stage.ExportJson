@@ -12,7 +12,7 @@
           "dI": -1,
           "x": -14.3748779296875,
           "y": -126.64576721191406,
-          "z": 5,
+          "z": 3,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -44,7 +44,7 @@
           "dI": -1,
           "x": -11.875,
           "y": -136.64584350585938,
-          "z": 4,
+          "z": 2,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -76,7 +76,7 @@
           "dI": 0,
           "x": 16.249778747558594,
           "y": -129.29167175292969,
-          "z": 3,
+          "z": 1,
           "cX": 1.0,
           "cY": 1.0,
           "kX": 0.0,
@@ -101,70 +101,6 @@
               ]
             }
           ]
-        },
-        {
-          "name": "Layer4",
-          "parent": "",
-          "dI": -1,
-          "x": 149.16696166992188,
-          "y": 1452.8055419921875,
-          "z": 2,
-          "cX": 1.0,
-          "cY": 1.0,
-          "kX": 0.0,
-          "kY": 0.0,
-          "arrow_x": 0.0,
-          "arrow_y": 0.0,
-          "effectbyskeleton": false,
-          "bl": 0,
-          "display_data": [
-            {
-              "name": "background4.psd_Psd.Dir/图层 3.png",
-              "displayType": 0,
-              "skin_data": [
-                {
-                  "x": 0.0,
-                  "y": 0.0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Layer5",
-          "parent": "",
-          "dI": -1,
-          "x": -84.166259765625,
-          "y": 1449.4720458984375,
-          "z": 1,
-          "cX": 1.0,
-          "cY": 1.0,
-          "kX": 0.0,
-          "kY": 0.0,
-          "arrow_x": 0.0,
-          "arrow_y": 0.0,
-          "effectbyskeleton": false,
-          "bl": 0,
-          "display_data": [
-            {
-              "name": "background4.psd_Psd.Dir/图层 2.png",
-              "displayType": 0,
-              "skin_data": [
-                {
-                  "x": 0.0,
-                  "y": 0.0,
-                  "cX": 1.0,
-                  "cY": 1.0,
-                  "kX": 0.0,
-                  "kY": 0.0
-                }
-              ]
-            }
-          ]
         }
       ]
     }
@@ -175,7 +111,7 @@
       "mov_data": [
         {
           "name": "show",
-          "dr": 26,
+          "dr": 56,
           "lp": false,
           "to": 0,
           "drTW": 0,
@@ -210,7 +146,7 @@
                   "cY": 0.9056604,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 8,
+                  "fi": 12,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,
@@ -218,14 +154,29 @@
                 },
                 {
                   "dI": 0,
-                  "x": -10.0,
-                  "y": 379.99993896484375,
+                  "x": -16.833332061767578,
+                  "y": 79.6666259765625,
                   "z": 0,
                   "cX": 1.0,
-                  "cY": 1.23584926,
+                  "cY": 1.18081784,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 11,
+                  "fi": 15,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 0,
+                  "x": -16.018518447875977,
+                  "y": 192.70365905761719,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.41491973,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 19,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,
@@ -240,7 +191,7 @@
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 17,
+                  "fi": 24,
                   "twE": 26,
                   "tweenFrame": true,
                   "bd_src": 1,
@@ -255,7 +206,22 @@
                   "cY": 1.0,
                   "kX": 0.0,
                   "kY": 0.0,
-                  "fi": 25,
+                  "fi": 32,
+                  "twE": 0,
+                  "tweenFrame": true,
+                  "bd_src": 1,
+                  "bd_dst": 771
+                },
+                {
+                  "dI": 0,
+                  "x": 0.0,
+                  "y": 0.0,
+                  "z": 0,
+                  "cX": 1.0,
+                  "cY": 1.0,
+                  "kX": 0.0,
+                  "kY": 0.0,
+                  "fi": 55,
                   "twE": 0,
                   "tweenFrame": true,
                   "bd_src": 1,
@@ -575,32 +541,12 @@
       "pX": 0.5,
       "pY": 0.5,
       "plistFile": ""
-    },
-    {
-      "name": "background4.psd_Psd.Dir/图层 3",
-      "width": 2109.0,
-      "height": 596.0,
-      "pX": 0.5,
-      "pY": 0.5,
-      "plistFile": ""
-    },
-    {
-      "name": "background4.psd_Psd.Dir/图层 2",
-      "width": 1995.0,
-      "height": 623.0,
-      "pX": 0.5,
-      "pY": 0.5,
-      "plistFile": ""
     }
   ],
   "config_file_path": [
-    "stage0.plist",
-    "stage1.plist",
-    "stage2.plist"
+    "stage0.plist"
   ],
   "config_png_path": [
-    "stage0.png",
-    "stage1.png",
-    "stage2.png"
+    "stage0.png"
   ]
 }

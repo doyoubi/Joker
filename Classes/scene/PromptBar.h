@@ -22,10 +22,10 @@ namespace joker
         SPIKE,
     };
 
-    class PromptBar
+    class PromptBar : public cocos2d::Node
     {
     public:
-        PromptBar(cocos2d::Node * parent);
+        CREATE_FUNC(PromptBar);
         void clearPromptSprite();
         // When click start metronome, sometime we will have a double click,
         // and PromptBar will generate two prompt sprite.
@@ -35,12 +35,12 @@ namespace joker
         void addPromptSprite(float moveToTime, PromptSpriteType type);
 
     private:
+        bool init() override;
         static void addSource();
 
         std::queue<cocos2d::Sprite*> _promptSpriteQueue;
         cocostudio::Armature * _barBackground;
         cocostudio::Armature * _marks[3];
-        cocos2d::Node * _root;
 
         Vec2 _startPoint;
         Vec2 _endPoint;

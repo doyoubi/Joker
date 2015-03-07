@@ -77,8 +77,10 @@ namespace joker
     }
 
 
-    PromptBar::PromptBar(Node * parent)
+    bool PromptBar::init()
     {
+        if (!Node::init()) return false;
+
         static float barPositionX = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionX" });
         static float barPositionY = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionY" });
         static float startX = Config::getInstance().getDoubleValue({ "PromptBar", "startX" });
@@ -113,10 +115,8 @@ namespace joker
             }
         }
 
-        _root = Node::create();
-        parent->addChild(_root);
         auto size = Director::getInstance()->getVisibleSize();
-        _root->setPosition(size.width / 2 + barPositionX, barPositionY);
+        this->setPosition(size.width / 2 + barPositionX, barPositionY);
 
         static float bgX = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundX" });
         static float bgY = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundY" });
@@ -124,7 +124,7 @@ namespace joker
         _barBackground->setPosition(bgX, bgY);
         CHECKNULL(_barBackground);
         _barBackground->getAnimation()->play(bSat);
-        _root->addChild(_barBackground, 0);
+        this->addChild(_barBackground, 0);
 
         _startPoint = Vec2(startX, startY);
         _endPoint = Vec2(endX, endY);
@@ -136,7 +136,7 @@ namespace joker
         {
             _marks[i] = Armature::create(marks[i]);
             _marks[i]->setPosition(_endPoint + Vec2(markOffsetX, markOffsetY));
-            _root->addChild(_marks[i], i+1);
+            this->addChild(_marks[i], i+1);
         }
         if (JOKER_DEBUG_ON)
         {
@@ -144,8 +144,10 @@ namespace joker
             CHECKNULL(goal);
             goal->setPosition(_endPoint);
             goal->setAnchorPoint(Vec2(0.5f, 0.5f));
-            _root->addChild(goal, 5);
+            this->addChild(goal, 5);
         }
+
+        return true;
     }
 
     void PromptBar::addPromptSprite(float moveToTime, PromptSpriteType type)
@@ -172,7 +174,7 @@ namespace joker
         promptSprite->setAnchorPoint(Vec2(0.5, 0.5));
         promptSprite->setPosition(_startPoint);
         _promptSpriteQueue.push(promptSprite);
-        _root->addChild(promptSprite, 2);
+        this->addChild(promptSprite, 2);
 
         static float missEndPointX = Config::getInstance().getDoubleValue({ "PromptBar", "missEndX" });
         DEBUGCHECK(missEndPointX < -30, 
