@@ -4,17 +4,18 @@
             "heartInterval": 70,
             "positionX": 70,
             "positionY": 600,
-            "rowHeartNumber": 5
+            "rowHeartNumber": 5,
+            "scale": 0.6
         },
         "score":{
             "positionX": 70,
             "positionY": 450
         },
         "EnterScene": {
-            "enterButtonPositionX": 0,
-            "enterButtonPositionY": 150,
-            "instructionButtonPositionX": 0,
-            "instructionButtonPositionY": -150,
+            "enterButtonPositionX": 260,
+            "enterButtonPositionY": -120,
+            "instructionButtonPositionX": 260,
+            "instructionButtonPositionY": -220,
             "backgroundPositionX": 22,
             "backgroundPositionY": 15,
             "backgroundScale": 0.9,
@@ -26,9 +27,9 @@
             "backButtonPositionY": 0
         },
         "LoadingScene": {
-            "curtainX": 0,
+            "curtainX": 8,
             "curtainY": 50,
-            "curtainScale": 1.067
+            "curtainScale": 1.07
         }
     },
     "MusicScript":{
@@ -42,7 +43,7 @@
         "positionX": -1,
         "positionY": 18,
         "curtainX": 0,
-        "curtainY": 20
+        "curtainY": 30
     },
     "LayeringCakes" : {
         "layer1Width": 3000,
@@ -59,7 +60,7 @@
     "backgroundPicture": "background/background.png",
     "Physics": {
         "gravity": 120,
-        "groundHeight": 200,
+        "groundHeight": 180,
         "resistance": 480
     },
     "Metronome": {
@@ -120,7 +121,7 @@
         },
         "spike": {
             "animationName": "spike",
-            "positionY": 213,
+            "positionY": 193,
             "spriteWidth": 100,
             "spriteScale": 1,
             "spikeAriseTime": -0.5,

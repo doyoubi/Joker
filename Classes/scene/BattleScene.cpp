@@ -541,18 +541,20 @@ namespace joker
         Vec2 center(size.width / 2.0f, size.height / 2.0f);
 
         auto start = Button::create(
-            "UI/EnterGameButton.png", "UI/EnterGameButton2.png", "UI/EnterGameButton.png");
+            "UI/EnterGameButton.png", "UI/EnterGameButton2.png", "UI/EnterGameButton2.png");
         auto instruction = Button::create(
-            "UI/EnterInstructionButton.png", "UI/EnterInstructionButton2.png", "UI/EnterInstructionButton.png");
+            "UI/EnterInstructionButton.png", "UI/EnterInstructionButton2.png", "UI/EnterInstructionButton2.png");
         start->setPosition(Vec2(size.width / 2.0f + startX, size.height / 2.0f + startY));
         instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
         addChild(start);
         addChild(instruction);
-        start->addTouchEventListener([this](Ref*, Widget::TouchEventType){
+        start->addTouchEventListener([this, start](Ref*, Widget::TouchEventType){
             _loadingCurtain->fallDown();
+            start->setTouchEnabled(false);
         });
-        instruction->addTouchEventListener([](Ref*, Widget::TouchEventType){
+        instruction->addTouchEventListener([instruction](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(InstructionScene::create());
+            instruction->setTouchEnabled(false);
         });
 
         static string bgAnim = Config::getInstance().getStringValue({ "UI", "EnterScene", "animation" });

@@ -18,12 +18,14 @@ namespace joker
     {
         if (!Node::init()) return false;
 
-        int hp = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "hp" });
-        
+        static int hp = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "hp" });
+        static float scale = Config::getInstance().getDoubleValue({ "UI", "HP", "scale" });
+
         for (int i = 0; i < hp; ++i)
         {
-            auto heart = Sprite::create("UI/heart.jpg");
+            auto heart = Sprite::create("UI/heart.png");
             heart->setPosition(heartIndex2Position(i));
+            heart->setScale(scale);
             addChild(heart);
             _hearts.pushBack(heart);
         }

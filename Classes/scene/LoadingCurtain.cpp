@@ -37,8 +37,10 @@ namespace joker
         static float curtainX = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainX" });
         static float curtainY = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainY" });
         static float curtainScale = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainScale" });
-        _loadingCurtain->setScale(curtainScale);
         _loadingCurtain->setPosition(curtainX, curtainY);
+        auto size = Director::getInstance()->getVisibleSize();
+        auto curSize = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+        _loadingCurtain->setScale(curtainScale * size.width / curSize.width, curtainScale * size.height / curSize.height);
 
         return true;
     }
