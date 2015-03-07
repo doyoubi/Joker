@@ -342,14 +342,13 @@ namespace joker
 
         using namespace cocostudio;
         using namespace cocos2d::ui;
-        auto battleUI = GUIReader::getInstance()->widgetFromJsonFile("battleUI/battleUI.json");
+        auto battleUI = GUIReader::getInstance()->widgetFromJsonFile("UI/battleUI/battleUI.json");
         addChild(battleUI);
 
         auto leftRun = Helper::seekWidgetByName(battleUI, "leftRun");
         auto rightRun = Helper::seekWidgetByName(battleUI, "rightRun");
         auto attack = Helper::seekWidgetByName(battleUI, "attack");
         auto jump = Helper::seekWidgetByName(battleUI, "jump");
-        auto rhythmStart = Helper::seekWidgetByName(battleUI, "rhythmStart");
 
         using namespace std;
         leftRun->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
@@ -392,10 +391,6 @@ namespace joker
         jump->addTouchEventListener([&director](Ref*, Widget::TouchEventType touchEvent){
             if (touchEvent == Widget::TouchEventType::BEGAN)
                 director->sendCommand(director->getPlayer(), RoleAction::JUMP);
-        });
-
-        rhythmStart->addTouchEventListener([&director](Ref*, Widget::TouchEventType){
-            director->startBattle();
         });
 
         return true;
@@ -531,9 +526,9 @@ namespace joker
 
         auto size = Director::getInstance()->getVisibleSize();
         auto start = Button::create(
-            "UI/EnterGameButton.png", "UI/EnterGameButton.png", "UI/EnterGameButton.png");
+            "UI/EnterGameButton.png", "UI/EnterGameButton2.png", "UI/EnterGameButton.png");
         auto instruction = Button::create(
-            "UI/EnterInstructionButton.png", "UI/EnterInstructionButton.png", "UI/EnterInstructionButton.png");
+            "UI/EnterInstructionButton.png", "UI/EnterInstructionButton2.png", "UI/EnterInstructionButton.png");
         start->setPosition(Vec2(size.width / 2.0f + startX, size.height / 2.0f + startY));
         instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
         addChild(start);
@@ -589,7 +584,7 @@ namespace joker
         if (!Scene::init()) return false;
 
         string instructionText = FileUtils::getInstance()->getStringFromFile("instruction.txt");
-        auto label = LabelTTF::create(instructionText, "Arial", 24);
+        auto label = Label::createWithSystemFont(instructionText, "Arial", 24);
         addChild(label);
         auto size = Director::getInstance()->getVisibleSize();
         label->setPosition(size.width / 2.0f, size.height / 2.0f);
