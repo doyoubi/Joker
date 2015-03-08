@@ -175,6 +175,7 @@ namespace joker
             getEventDispather("enemyRush").runEvent(index, zeroDt);
         });
         getEventDispather("enemyRush").addEvent(getScript("battle").getEvent("attack"), [this](float){
+            supplyEnemy();
             this->setBTEvent(BTEvent::READY_TO_ATTACK);
         });
 
@@ -195,7 +196,8 @@ namespace joker
             this->supplyEnemy();
         });
 
-        addEnemy(Vec2(500, 200));
+        addEnemy(Vec2(Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "initPositionX" }),
+            Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "initPositionY" })));
         addPlayer(Vec2(Config::getInstance().getDoubleValue({"RoleProperty", "player", "initPositionX"}),
             Config::getInstance().getDoubleValue({ "RoleProperty", "player", "initPositionY" })));
 
@@ -305,6 +307,7 @@ namespace joker
         {
             _musicStarted = false;
             getScene()->endBattle();
+            getScene()->showResult(getBattleJudge().getScore());
             _battleEnded = true;
             return;
         }

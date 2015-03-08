@@ -24,8 +24,8 @@ namespace joker
         _addEventLock = true;
         for (auto & p : _eventPool)
         {
-            p->execute(director);
-            if (director->isBattleEnded()) break;
+            if (!director->isBattleEnded() || p->stillRunAfterEndBattle())
+                p->execute(director);
         }
         _eventPool.clear();
         _addEventLock = false;
@@ -50,8 +50,6 @@ namespace joker
         sufferer->executeCommand(command);
 
         director->getSoundManager()->playSound("hit");
-
-        director->supplyEnemy();
     }
 
     // EnemyAttackEvent

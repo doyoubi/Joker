@@ -41,6 +41,11 @@ namespace joker
 
     Role::~Role()
     {
+        if (_roleType == RoleType::ENEMY)
+        {
+            int debug = 0;
+            debug = 1;
+        }
         _roleSprite->die();
     }
 
@@ -80,7 +85,10 @@ namespace joker
 
     void Role::die()
     {
-        DEBUGCHECK(!_dead, "can't kill a dead Role");
+        DEBUGCHECK(!_dead, string("can't kill a dead Role: ") + string(
+            _roleType == RoleType::PLAYER ? "player" :
+            _roleType == RoleType::ENEMY ? "enemy" :
+            _roleType == RoleType::BOMB ? "bomb" : "invalid role type"));
         _dead = true;
         if (_roleType == RoleType::PLAYER)
             ;

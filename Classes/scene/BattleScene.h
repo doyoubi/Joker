@@ -64,6 +64,8 @@ namespace joker
         vector<RoleSprite*> & getEnemySpriteArray() { return _enemyArray; }
         Size getSize() { return _size; }
 
+        void setEnterAnimFinishCallback(std::function<void(void)> callback);
+
         ~BattleLayer();
         void endBattle();
 

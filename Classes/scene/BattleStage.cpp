@@ -47,6 +47,18 @@ namespace joker
         _stage->getAnimation()->play("quake");
     }
 
+    void BattleStage::setEnterAnimFinishCallback(std::function<void(void)> callback)
+    {
+        using namespace cocostudio;
+        _stage->getAnimation()->setMovementEventCallFunc(
+            [this, callback](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE && movementID == "show")
+            {
+                callback();
+            }
+        });
+    }
+
     // Curtain
     void Curtain::enter()
     {

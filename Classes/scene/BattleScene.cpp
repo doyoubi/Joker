@@ -25,6 +25,7 @@ namespace joker
 
         _battleLayer = BattleLayer::create();
         _battleLayer->retain();
+        _battleLayer->setEnterAnimFinishCallback([this](){ getBattleDirector()->startBattle(); });
 
         _promptBar = PromptBar::create();
         addChild(_promptBar, 4);
@@ -61,7 +62,6 @@ namespace joker
             BattleScene * scene = dynamic_cast<BattleScene*>(getScene());
             CHECKNULL(scene);
             addChild(getBattleLayer());
-            scene->getBattleDirector()->startBattle();
         });
 
         return true;
@@ -158,6 +158,11 @@ namespace joker
 
     BattleLayer::~BattleLayer() {
         unschedule(schedule_selector(BattleLayer::updateBackground));
+    }
+
+    void BattleLayer::setEnterAnimFinishCallback(std::function<void(void)> callback)
+    {
+        _battleStage->setEnterAnimFinishCallback(callback);
     }
 
     RoleSprite * BattleLayer::addEnemySprite(const Vec2 & position)

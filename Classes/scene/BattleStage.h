@@ -13,6 +13,7 @@ namespace joker
         void enter();
         void shake();
         void quake();
+        void setEnterAnimFinishCallback(std::function<void(void)> callback);
     private:
         bool init() override;
         cocostudio::Armature * _stage;   // weak ref

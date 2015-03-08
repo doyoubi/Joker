@@ -262,6 +262,10 @@ namespace joker
         static float scoreX = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreX" });
         static float scoreY = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreY" });
         scoreLabel->setPosition(center + Vec2(scoreX, scoreY));
+        static float scoreR = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreR" });
+        static float scoreG = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreG" });
+        static float scoreB = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreB" });
+        scoreLabel->setColor(Color3B(scoreR, scoreG, scoreB));
     }
 
     void GameOverAnim::over()

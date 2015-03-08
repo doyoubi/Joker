@@ -40,8 +40,11 @@
             "buttonX": 0,
             "buttonY": -150,
             "scoreX": 0,
-            "scoreY": -70,
-            "scoreFontSize": 50
+            "scoreY": -60,
+            "scoreFontSize": 50,
+            "scoreR": 231,
+            "scoreG": 202,
+            "scoreB": 184
         }
     },
     "MusicScript":{
@@ -101,7 +104,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 1
+            "hp": 20
         },
         "enemy": {
             "animationName": "enemy",
@@ -117,7 +120,9 @@
             "attackScope": 200,
             "attackedFallBackSpeed": 400,
             "defenceFallBackSpeed": 100,
-            "localZ": 0
+            "localZ": 0,
+            "initPositionX": 600,
+            "initPositionY": 200
         },
         "bomb": {
             "animationName": "bomb",

@@ -32,6 +32,7 @@ namespace joker
     {
     public:
         virtual void execute(BattleDirector * director) = 0;
+        virtual bool stillRunAfterEndBattle() { return false; }
     };
 
     class PlayerAttackEvent : public DirectorEvent
@@ -73,6 +74,7 @@ namespace joker
     public:
         RemoveRoleEvent(Role * role) : _role(role) {}
         void execute(BattleDirector * director) override;
+        bool stillRunAfterEndBattle() override { return true; }
     private:
         Role * _role;
     };
@@ -82,7 +84,6 @@ namespace joker
     public:
         void execute(BattleDirector * director) override;
     };
-
 
 }
 
