@@ -1,4 +1,3 @@
-#include "cocostudio/CocoStudio.h"
 #include "ui/UIButton.h"
 
 #include "Scene.h"
@@ -83,12 +82,12 @@ namespace joker
         addChild(start);
         addChild(instruction);
         start->addTouchEventListener([this, start](Ref*, Widget::TouchEventType){
-            _loadingCurtain->fallDown();
             start->setTouchEnabled(false);
+            _loadingCurtain->fallDown();
         });
         instruction->addTouchEventListener([instruction](Ref*, Widget::TouchEventType){
-            Director::getInstance()->replaceScene(InstructionScene::create());
             instruction->setTouchEnabled(false);
+            Director::getInstance()->replaceScene(InstructionScene::create());
         });
 
         static string bgAnim = Config::getInstance().getStringValue({ "UI", "EnterScene", "animation" });
@@ -165,18 +164,121 @@ namespace joker
         auto size = Director::getInstance()->getVisibleSize();
         Vec2 center(size.width / 2.0f, size.height / 2.0f);
 
+        _gameoverAnim = GameOverAnim::create();
+        addChild(_gameoverAnim);
+        _gameoverAnim->setPosition(center);
+        _gameoverAnim->move();
+
+        return true;
+    }
+
+    // GameOverAnim
+    bool GameOverAnim::init()
+    {
+        if (!Node::init()) return false;
+        using namespace cocostudio;
+        static bool loadOnceTag = false;
+        if (!loadOnceTag)
+        {
+            loadOnceTag = true;
+            ArmatureDataManager::getInstance()->addArmatureFileInfo("UI/gameover/gameover.ExportJson");
+        }
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover") != nullptr,
+            "missing animation: gameover");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("show") != nullptr,
+            "missing movement: show");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("move") != nullptr,
+            "missing movement: move");
+        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("over") != nullptr,
+            "missing movement: over");
+        _curtain = Armature::create("gameover");
+        CHECKNULL(_curtain);
+        addChild(_curtain);
+        static float scale = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "scale" });
+        static float x = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "x" });
+        static float y = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "y" });
+        _curtain->setPosition(x, y);
+        auto size = Director::getInstance()->getVisibleSize();
+        auto curSize = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+        _curtain->setScale(scale * size.width / curSize.width, scale * size.height / curSize.height);
+        return true;
+    }
+
+    void GameOverAnim::show(int score)
+    {
+        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("show") != nullptr,
+            "missing movement: show");
+        _curtain->getAnimation()->play("show");
+        using namespace cocostudio;
+        _curtain->getAnimation()->setMovementEventCallFunc(
+            [this, score](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE && movementID == "show")
+            {
+                auto scene = GameOverScene::create();
+                scene->setScore(score);
+                Director::getInstance()->replaceScene(scene);
+            }
+        });
+    }
+
+    void GameOverAnim::move()
+    {
+        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("move") != nullptr,
+            "missing movement: move");
+        _curtain->getAnimation()->play("move");
+        using namespace cocostudio;
+        _curtain->getAnimation()->setMovementEventCallFunc(
+            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE && movementID == "move")
+            {
+                this->showScore();
+            }
+        });
+    }
+
+    void GameOverAnim::showScore()
+    {
+        Vec2 center(0, 0);
+
         using namespace cocos2d::ui;
-        auto btn = Button::create("UI/ScorePanelExit.png", "UI/ScorePanelExit.png", "UI/ScorePanelExit.png");
-        btn->setPosition(center);
-        addChild(btn);
+        auto btn = Button::create("UI/ReturnToMainPage.png", "UI/ReturnToMainPage2.png", "UI/ReturnToMainPage2.png");
+        addChild(btn, 1);
+        btn->setName("returnButton");
         btn->addTouchEventListener([](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(EnterGameScene::create());
         });
+        static float btnX = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "buttonX" });
+        static float btnY = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "buttonY" });
+        btn->setPosition(center + Vec2(btnX, btnY));
+        btn->addTouchEventListener([this, btn](Ref*, Widget::TouchEventType){
+            btn->setTouchEnabled(false);
+            this->over();
+        });
 
-        auto scoreLabel = Label::create(std::to_string(_score), "fonts/Marker Felt.ttf", 20);
-        scoreLabel->setPosition(center);
-        addChild(scoreLabel, 2);
-        return true;
+        static int fontSize = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreFontSize" });
+        auto scoreLabel = Label::create(std::to_string(_score), "fonts/Marker Felt.ttf", fontSize);
+        addChild(scoreLabel, 1);
+        scoreLabel->setName("scoreLabel");
+        static float scoreX = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreX" });
+        static float scoreY = Config::getInstance().getDoubleValue({ "UI", "GameOverScene", "scoreY" });
+        scoreLabel->setPosition(center + Vec2(scoreX, scoreY));
+    }
+
+    void GameOverAnim::over()
+    {
+        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("show") != nullptr,
+            "missing movement: over");
+        _curtain->getAnimation()->play("over");
+        removeChildByName("returnButton");
+        removeChildByName("scoreLabel");
+        using namespace cocostudio;
+        _curtain->getAnimation()->setMovementEventCallFunc(
+            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
+            if (movementType == MovementEventType::COMPLETE && movementID == "over")
+            {
+                Director::getInstance()->replaceScene(EnterGameScene::create());
+            }
+        });
     }
 
 }

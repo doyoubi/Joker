@@ -88,11 +88,12 @@ namespace joker
 
     void BattleScene::showResult(int score)
     {
-        auto resultPanel = BattleResultPanel::create();
-        resultPanel->setScore(score);
         auto size = Director::getInstance()->getVisibleSize();
-        resultPanel->setPosition(size.width / 2.0f, size.height / 2.0f);
-        addChild(resultPanel, 4);
+        Vec2 center(size.width / 2.0f, size.height / 2.0f);
+        auto curtain = GameOverAnim::create();
+        curtain->setPosition(center);
+        addChild(curtain, 5);
+        curtain->show(score);
         getBattleLayer()->darken();
     }
 
@@ -235,7 +236,6 @@ namespace joker
     {
         unschedule(schedule_selector(BattleLayer::updateBackground));
         _spikes->setVisible(false);
-        darken();
     }
 
     void BattleLayer::darken()
@@ -247,7 +247,7 @@ namespace joker
         black->setPosition(-x + size.width / 2.0f, size.height / 2.0f);  // camera position
         black->setOpacity(0);
         addChild(black, 4);
-        auto darkenAnim = FadeTo::create(2, 150);
+        auto darkenAnim = FadeTo::create(0.8, 150);
         black->runAction(darkenAnim);
     }
 

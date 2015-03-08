@@ -1,6 +1,7 @@
 #ifndef JOKER_SCENE
 #define JOKER_SCENE
 
+#include "cocostudio/CocoStudio.h"
 #include "cocos2d.h"
 
 namespace joker
@@ -37,14 +38,29 @@ namespace joker
         bool init() override;
     };
 
+    class GameOverAnim : public cocos2d::Node
+    {
+    public:
+        CREATE_FUNC(GameOverAnim);
+        void show(int score);
+        void move();
+        void over();
+        void showScore();
+        void setScore(int score) { _score = score; }
+    private:
+        bool init() override;
+        cocostudio::Armature * _curtain;
+        int _score;
+    };
+
     class GameOverScene : public cocos2d::Scene
     {
     public:
         CREATE_FUNC(GameOverScene);
-        void setScore(int score) { _score = score; }
+        void setScore(int score) { _gameoverAnim->setScore(score); }
     private:
         bool init() override;
-        int _score;
+        GameOverAnim * _gameoverAnim; // weak reference
     };
 
 }

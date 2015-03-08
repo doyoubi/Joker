@@ -30,6 +30,18 @@
             "curtainX": 8,
             "curtainY": 50,
             "curtainScale": 1.07
+        },
+        "GameOverAnim": {
+            "scale": 1,
+            "x": 7,
+            "y": 30
+        },
+        "GameOverScene": {
+            "buttonX": 0,
+            "buttonY": -150,
+            "scoreX": 0,
+            "scoreY": -70,
+            "scoreFontSize": 50
         }
     },
     "MusicScript":{
@@ -89,7 +101,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 10
+            "hp": 1
         },
         "enemy": {
             "animationName": "enemy",
