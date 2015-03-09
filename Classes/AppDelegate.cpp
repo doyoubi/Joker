@@ -2,6 +2,7 @@
 #include "HelloWorldScene.h"
 #include "scene/Scene.h"
 #include "utils/config.h"
+#include "utils/GlobalValue.h"
 
 USING_NS_CC;
 
@@ -29,7 +30,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("My Game");
+        glview = GLViewImpl::create("Joker");
         director->setOpenGLView(glview);
     }
 
@@ -40,7 +41,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
 
     // support multiple resolution
-    director->getOpenGLView()->setDesignResolutionSize(960, 640, ResolutionPolicy::FIXED_HEIGHT);
+    director->getOpenGLView()->setDesignResolutionSize(
+        joker::DesignSizeWidth, joker::DesignSizeHeight, ResolutionPolicy::FIXED_HEIGHT);
 
     // joker: global init
     joker::Config::setUsable();

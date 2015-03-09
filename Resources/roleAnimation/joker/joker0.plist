@@ -433,9 +433,9 @@
 				<key>originalHeight</key>
 				<integer>61</integer>
 				<key>x</key>
-				<integer>2029</integer>
-				<key>y</key>
 				<integer>0</integer>
+				<key>y</key>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -452,9 +452,9 @@
 				<key>originalHeight</key>
 				<integer>116</integer>
 				<key>x</key>
-				<integer>2101</integer>
+				<integer>72</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -471,9 +471,9 @@
 				<key>originalHeight</key>
 				<integer>117</integer>
 				<key>x</key>
-				<integer>2161</integer>
+				<integer>132</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -490,9 +490,9 @@
 				<key>originalHeight</key>
 				<integer>226</integer>
 				<key>x</key>
-				<integer>2208</integer>
+				<integer>179</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -509,9 +509,9 @@
 				<key>originalHeight</key>
 				<integer>462</integer>
 				<key>x</key>
-				<integer>2371</integer>
+				<integer>342</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -528,9 +528,9 @@
 				<key>originalHeight</key>
 				<integer>166</integer>
 				<key>x</key>
-				<integer>2448</integer>
+				<integer>419</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -547,9 +547,9 @@
 				<key>originalHeight</key>
 				<integer>176</integer>
 				<key>x</key>
-				<integer>2639</integer>
+				<integer>610</integer>
 				<key>y</key>
-				<integer>0</integer>
+				<integer>302</integer>
 				<key>offsetX</key>
 				<real>0</real>
 				<key>offsetY</key>
@@ -565,14 +565,14 @@
 			<key>realTextureFileName</key>
 			<string>joker0.png</string>
 			<key>size</key>
-			<string>{4096,512}</string>
+			<string>{2048,1024}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>4096</integer>
+			<integer>2048</integer>
 			<key>height</key>
-			<integer>512</integer>
+			<integer>1024</integer>
 		</dict>
 	</dict>
 </plist>

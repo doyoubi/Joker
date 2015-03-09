@@ -3,6 +3,7 @@
 #include "LoadingCurtain.h"
 #include "utils/config.h"
 #include "utils/debug.h"
+#include "utils/GlobalValue.h"
 #include "BattleScene.h"
 #include "Scene.h"
 
@@ -40,8 +41,8 @@ namespace joker
         static float curtainScale = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainScale" });
         _loadingCurtain->setPosition(curtainX, curtainY);
         auto size = Director::getInstance()->getVisibleSize();
-        auto curSize = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-        _loadingCurtain->setScale(curtainScale * size.width / curSize.width, curtainScale * size.height / curSize.height);
+        _loadingCurtain->setScale(
+            curtainScale * size.width / DesignSizeWidth, curtainScale * size.height / DesignSizeHeight);
 
         return true;
     }

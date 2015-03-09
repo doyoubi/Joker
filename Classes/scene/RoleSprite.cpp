@@ -77,7 +77,8 @@ namespace joker
                 this->removeFromParent();
             }
         });
-        removeRoleSpriteDebug();
+        if (JOKER_DEBUG_ON)
+            removeRoleSpriteDebug();
     }
 
     void RoleSprite::setDirection(RoleDirection direction)

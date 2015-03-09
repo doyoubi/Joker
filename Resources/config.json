@@ -9,7 +9,11 @@
         },
         "score":{
             "positionX": 70,
-            "positionY": 450
+            "positionY": 450,
+            "scoreFontSize": 30,
+            "scoreR": 74,
+            "scoreG": 14,
+            "scoreB": 22
         },
         "EnterScene": {
             "enterButtonPositionX": 260,
@@ -20,11 +24,14 @@
             "backgroundPositionY": 15,
             "backgroundScale": 0.9,
             "animation": "title",
-            "movement": "st"
+            "movement": "st",
+            "exitButtonX": 380,
+            "exitButtonY": 270,
+            "exitScale": 0.8
         },
         "InstructionScene": {
             "backButtonPositionX": 0,
-            "backButtonPositionY": 0
+            "backButtonPositionY": -140
         },
         "LoadingScene": {
             "curtainX": 8,
@@ -41,7 +48,7 @@
             "buttonY": -150,
             "scoreX": 0,
             "scoreY": -60,
-            "scoreFontSize": 50,
+            "scoreFontSize": 70,
             "scoreR": 231,
             "scoreG": 202,
             "scoreB": 184
@@ -104,7 +111,7 @@
             "collideFallBackSpeed": 400,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
-            "hp": 20
+            "hp": 10
         },
         "enemy": {
             "animationName": "enemy",

@@ -17,7 +17,7 @@ namespace joker
     using std::string;
     using namespace cocos2d;
 
-    const bool JOKER_DEBUG_ON = true;
+    const bool JOKER_DEBUG_ON = false;
 
     const float errorThreshold = 0.00000001f;
 

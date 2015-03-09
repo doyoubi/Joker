@@ -63,7 +63,12 @@ namespace joker
     {
         if (!Node::init()) return false;
 
-        _score = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 30);
+        static float fontSize = Config::getInstance().getDoubleValue({ "UI", "score", "scoreFontSize" });
+        _score = Label::createWithTTF("0", "fonts/Marker Felt.ttf", fontSize);
+        static float scoreR = Config::getInstance().getDoubleValue({ "UI", "score", "scoreR" });
+        static float scoreG = Config::getInstance().getDoubleValue({ "UI", "score", "scoreG" });
+        static float scoreB = Config::getInstance().getDoubleValue({ "UI", "score", "scoreB" });
+        _score->setColor(Color3B(scoreR, scoreG, scoreB));
         addChild(_score);
         return true;
     }

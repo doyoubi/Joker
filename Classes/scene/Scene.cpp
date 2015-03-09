@@ -5,6 +5,7 @@
 #include "LoadingCurtain.h"
 #include "utils/config.h"
 #include "utils/debug.h"
+#include "utils/GlobalValue.h"
 
 namespace joker
 {
@@ -69,6 +70,9 @@ namespace joker
         static float startY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionY" });
         static float instructionX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionX" });
         static float instructionY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "instructionButtonPositionY" });
+        static float exitX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "exitButtonX" });
+        static float exitY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "exitButtonY" });
+        static float exitScale = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "exitScale" });
 
         auto size = Director::getInstance()->getVisibleSize();
         Vec2 center(size.width / 2.0f, size.height / 2.0f);
@@ -77,10 +81,14 @@ namespace joker
             "UI/EnterGameButton.png", "UI/EnterGameButton2.png", "UI/EnterGameButton2.png");
         auto instruction = Button::create(
             "UI/EnterInstructionButton.png", "UI/EnterInstructionButton2.png", "UI/EnterInstructionButton2.png");
-        start->setPosition(Vec2(size.width / 2.0f + startX, size.height / 2.0f + startY));
-        instruction->setPosition(Vec2(size.width / 2.0f + instructionX, size.height / 2.0f + instructionY));
+        auto exit = Button::create("UI/exit.png", "UI/exit.png", "UI/exit.png");
+        start->setPosition(Vec2(center.x + startX, center.y + startY));
+        instruction->setPosition(Vec2(center.x + instructionX, center.y + instructionY));
+        exit->setPosition(Vec2(center.x + exitX, center.y + exitY));
+        exit->setScale(exitScale);
         addChild(start);
         addChild(instruction);
+        addChild(exit);
         start->addTouchEventListener([this, start](Ref*, Widget::TouchEventType){
             start->setTouchEnabled(false);
             _loadingCurtain->fallDown();
@@ -88,6 +96,9 @@ namespace joker
         instruction->addTouchEventListener([instruction](Ref*, Widget::TouchEventType){
             instruction->setTouchEnabled(false);
             Director::getInstance()->replaceScene(InstructionScene::create());
+        });
+        exit->addTouchEventListener([this, start](Ref*, Widget::TouchEventType){
+            Director::getInstance()->end();
         });
 
         static string bgAnim = Config::getInstance().getStringValue({ "UI", "EnterScene", "animation" });
@@ -198,9 +209,8 @@ namespace joker
         static float x = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "x" });
         static float y = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "y" });
         _curtain->setPosition(x, y);
-        auto size = Director::getInstance()->getVisibleSize();
-        auto curSize = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-        _curtain->setScale(scale * size.width / curSize.width, scale * size.height / curSize.height);
+        auto size = Director::getInstance()->getWinSize();
+        _curtain->setScale(scale * size.width / DesignSizeWidth, scale * size.height / DesignSizeHeight);
         return true;
     }
 

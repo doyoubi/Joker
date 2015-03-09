@@ -47,7 +47,7 @@ namespace joker
         float scoreY = Config::getInstance().getDoubleValue({ "UI", "score", "positionY" });
         _scoreDisplayer = ScoreDisplayer::create();
         _scoreDisplayer->setPosition(scoreX, scoreY);
-        addChild(_scoreDisplayer);
+        addChild(_scoreDisplayer, 4);
 
         auto size = Director::getInstance()->getVisibleSize();
         Vec2 center(size.width / 2.0f, size.height / 2.0f);
