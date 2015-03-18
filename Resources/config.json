@@ -108,7 +108,7 @@
             "attackScope": 200,
             "initPositionX": 200,
             "initPositionY": 200,
-            "collideFallBackSpeed": 400,
+            "collideFallBackSpeed": 300,
             "attackedFallBackSpeed": 200,
             "localZ": 1,
             "hp": 10
