@@ -1,8 +1,15 @@
 bin/*
-proj.android/*
 proj.ios_mac/*
 proj.linux/*
 proj.wp8-xaml/*
+
+proj.android/assets
+proj.android/gen
+proj.android/bin
+proj.android/obj
+proj.android/res
+proj.android/libs
+
 
 cocos2d/cocos/**/*.vcxproj.user
 
