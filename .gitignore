@@ -13,10 +13,6 @@ proj.win32/*.sdf
 proj.win32/*.opensdf
 *.aps
 *.vcxproj.user
-*.dll
-*.lib
-*.so
-*.a
 
 # ignore file for debug output
 Resources/debugOutput.txt
