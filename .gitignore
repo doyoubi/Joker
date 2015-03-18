@@ -3,7 +3,6 @@ proj.android/*
 proj.ios_mac/*
 proj.linux/*
 proj.wp8-xaml/*
-cocos2d/
 
 cocos2d/cocos/**/*.vcxproj.user
 cocos2d/cocos/platform/
@@ -15,6 +14,10 @@ proj.win32/*.sdf
 proj.win32/*.opensdf
 *.aps
 *.vcxproj.user
+*.dll
+*.lib
+*.so
+*.a
 
 # ignore file for debug output
 Resources/debugOutput.txt
