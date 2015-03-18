@@ -5,7 +5,6 @@ proj.linux/*
 proj.wp8-xaml/*
 
 cocos2d/cocos/**/*.vcxproj.user
-cocos2d/cocos/platform/
 
 **/Debug.win32/
 **/Release.win32/
