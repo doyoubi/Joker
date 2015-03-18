@@ -12,7 +12,6 @@ cocos2d/cocos/**/*.vcxproj.user
 proj.win32/*.sdf
 proj.win32/*.opensdf
 *.aps
-*.vcxproj.user
 
 # ignore file for debug output
 Resources/debugOutput.txt
