@@ -9,7 +9,8 @@ namespace joker
     class Metronome
     {
     public:
-        // the first element of rhythmPoints should be zero
+        // the first element of rhythmPoints should not be zero,
+        // ctor will insert an extra zero to the head
         Metronome(const std::vector<float> & rhythmPoints, float hitDeltaTime);
         ~Metronome();
 
@@ -45,7 +46,7 @@ namespace joker
             timeSinceLastPoint += dt
             if(timeSinceLastPoint >= rhythmPoints[i])
             {
-                timeSinceLastPoint -= dt
+                timeSinceLastPoint -= rhythmPoints[i]
                 i++
             }
             // And the following invariants hold true:

@@ -43,7 +43,7 @@ namespace joker
         BTNode(BTprecondition && precondition);
 
         BTNodeStatus tick(const BTParam & param);
-        virtual void setInitStatus() = 0;
+        virtual void setInitStatus() = 0; // should only be called by parent
         virtual void addChild(BTNodePtr && node) = 0;
 
     private:

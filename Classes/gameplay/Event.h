@@ -12,8 +12,8 @@ namespace joker
     class BattleDirector;
     typedef std::unique_ptr<DirectorEvent> EventPtr;
 
-    // This event manager is mainly used for postpone function call
-    // from event happen time to the beginning of Director::update()
+    // This event manager is mainly used for postponing function call
+    // from when event happen to the beginning of Director::update()
 
     class DirectorEventManager
     {

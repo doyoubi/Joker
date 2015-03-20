@@ -79,39 +79,42 @@ namespace joker
     // Selector
     BTNodeStatus Selector::traverse(const BTParam & param)
     {
+        // if there is a child's status that is success or running, return that status.
+        // only if all children's status are failue, return failure.
+        // after the first success or running node has been found,
+        // the left nodes will not tick() and will be setInitStatus()
         BTNodeStatus s = BTNodeStatus::FAILURE;
         // Keep going until a child says its running.
         for (auto & ptr : _children)
         {
-            BTNodeStatus status = ptr->tick(param);
-            if (s == BTNodeStatus::FAILURE && (status == BTNodeStatus::RUNNING || status == BTNodeStatus::SUCCESS))
-            {
-                s = status;
-            }
-            else
+            if (s != BTNodeStatus::FAILURE)
             {
                 ptr->setInitStatus();
+                continue;
             }
+            BTNodeStatus status = ptr->tick(param);
+            if (status != BTNodeStatus::FAILURE)
+                s = status;
         }
-        return s; // return failure when there is not running node
+        return s;
     }
 
     // Parallel
     BTNodeStatus Parallel::traverse(const BTParam & param)
     {
+        // if there is a child's status is running, return running
+        // only if all children's status are failue, return failure
+        // if there is no running child but success child exist, return success
         BTNodeStatus status = BTNodeStatus::FAILURE;
         for (auto & ptr : _children)
         {
-            status = ptr->tick(param);
-            if (status == BTNodeStatus::RUNNING)
-            {
+            auto s = ptr->tick(param);
+            if (s == BTNodeStatus::RUNNING)
                 status = BTNodeStatus::RUNNING;
-            }
-            else if (status == BTNodeStatus::SUCCESS)
-            {
+            else if (status == BTNodeStatus::FAILURE && s == BTNodeStatus::SUCCESS)
                 status = BTNodeStatus::SUCCESS;
-            }
-            else if (status == BTNodeStatus::FAILURE)
+
+            if (s == BTNodeStatus::FAILURE)
                 ptr->setInitStatus();
         }
         return status;
@@ -120,9 +123,16 @@ namespace joker
     // Sequence
     BTNodeStatus Sequence::traverse(const BTParam & param)
     {
+        // except for the first child, any other child will not tick until the former child return success.
+        // if the current child return failure,
+        // then Sequence return failure and start from the first child next time.
+        // only if the last child return success,
+        // it would return success and start from the first child next time.
+        // otherwise return running
         BTNodeStatus status = _children[_currNode]->tick(param);
         if (status == BTNodeStatus::SUCCESS)
         {
+            _children[_currNode]->setInitStatus();
             ++_currNode;
             if (_currNode == _children.size())
             {
@@ -180,7 +190,7 @@ namespace joker
 
     void KeepDistanceNode::onExit()
     {
-        if (_exit) return; // if _exit is true, executeCommand fail on onEnter, or the corresponding state exit
+        if (_exit) return; // if _exit is true, executeCommand fail in onEnter, or the corresponding state exit
         RoleCommand command(RoleAction::STOP);
         command.add("direction", getRole()->getDirection());
         getRole()->executeCommand(command);
