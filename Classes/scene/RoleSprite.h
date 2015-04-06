@@ -5,36 +5,33 @@
 #include <functional>
 
 #include "cocos2d.h"
-#include "cocostudio/CCArmature.h"
 
 #include "role/RoleEnumType.h"
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
     class Role;
 
-    class RoleSprite : public cocos2d::Node
+    class RoleSprite : public cocos2d::Node, public AnimationSpriteProxy
     {
     public:
-        // load animation project to ArmatureDataManager
-        // should be called once before using Role::create
-        static void loadAnimationSource();
-        static RoleSprite * create(const std::string & animationName, std::string animationDirection);
+        static RoleSprite * create(const std::string & animationName, const std::string & exportJsonFile, std::string animationDirection);
 
         void setDirection(RoleDirection direction);
         RoleDirection getDirection() const;
 
         void addRoleSpriteDebug(Role * role);
 
-        cocostudio::Armature * getArmature() { return _armature; }
-
         void die();
         std::function<void()> deadCallback;
 
+        AnimationSprite * getAnimationSprite() { return _animationSprite; }
+
     private:
         void removeRoleSpriteDebug();
-        RoleSprite(cocostudio::Armature * armature, std::string animationDirection);
-        cocostudio::Armature * _armature;
+        RoleSprite(AnimationSprite * animationSprite, std::string animationDirection);
+        AnimationSprite * _animationSprite;
         int _animationDirection; // -1 for left, 1 for right
     };
 

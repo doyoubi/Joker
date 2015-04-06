@@ -24,9 +24,7 @@ namespace joker
     void FallingState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "bomb", "FallingState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
-            missingAnimation(animName));
-        role->getArmature()->getAnimation()->play(animName);
+        role->getRoleSprite()->playAnimAction(animName);
     }
 
     void FallingState::exitState(Role * role)

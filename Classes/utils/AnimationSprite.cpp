@@ -8,6 +8,39 @@ namespace joker
     using cocostudio::ArmatureDataManager;
     using std::string;
 
+    // AnimationSpriteProxy
+    void AnimationSpriteProxy::playAnimAction(const std::string & animActionName)
+    {
+        return getAnimationSprite()->playAnimAction(animActionName);
+    }
+
+    void AnimationSpriteProxy::pause()
+    {
+        return getAnimationSprite()->pause();
+    }
+
+    void AnimationSpriteProxy::resume()
+    {
+        return getAnimationSprite()->pause();
+    }
+
+    void AnimationSpriteProxy::setActionCompleteCallback(
+        std::string actionName, std::function<void(void)> callback, bool allAction)
+    {
+        getAnimationSprite()->setActionCompleteCallback(actionName, std::move(callback), allAction);
+    }
+
+    bool AnimationSpriteProxy::isPlaying()
+    {
+        return getAnimationSprite()->isPlaying();
+    }
+
+    bool AnimationSpriteProxy::isComplete()
+    {
+        return getAnimationSprite()->isComplete();
+    }
+
+    // AnimationSprite
     AnimationSprite * AnimationSprite::create(const std::string & animationName, const std::string & exportJsonFile)
     {
         AnimationSprite * ret = new AnimationSprite();
@@ -47,6 +80,17 @@ namespace joker
     {
         _armature->resume();
     }
+
+    bool AnimationSprite::isPlaying()
+    {
+        return _armature->getAnimation()->isPlaying();
+    }
+
+    bool AnimationSprite::isComplete()
+    {
+        return _armature->getAnimation()->isComplete();
+    }
+
 
     void AnimationSprite::setActionCompleteCallback(string actionName, std::function<void(void)> callback, bool allAction)
     {

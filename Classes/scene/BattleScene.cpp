@@ -165,6 +165,7 @@ namespace joker
     {
         RoleSprite * enemy = RoleSprite::create(
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationName" }),
+            Config::getInstance().getStringValue({ "RoleProperty", "enemy", "exportJsonFile" }),
             Config::getInstance().getStringValue({ "RoleProperty", "enemy", "animationDirection" }));
         enemy->setPosition(position);
         const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "enemy", "localZ" });
@@ -188,6 +189,7 @@ namespace joker
         DEBUGCHECK(_player == nullptr, "player already exist");
         _player = RoleSprite::create(
             Config::getInstance().getStringValue({"RoleProperty", "player", "animationName"}),
+            Config::getInstance().getStringValue({ "RoleProperty", "player", "exportJsonFile" }),
             Config::getInstance().getStringValue({ "RoleProperty", "player", "animationDirection" }));
         const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "localZ" });
         _player->setLocalZOrder(localZ);
@@ -204,6 +206,7 @@ namespace joker
     {
         auto bomb = RoleSprite::create(
             Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationName" }),
+            Config::getInstance().getStringValue({ "RoleProperty", "bomb", "exportJsonFile" }),
             Config::getInstance().getStringValue({ "RoleProperty", "bomb", "animationDirection" }));
         const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "bomb", "localZ" });
         bomb->setLocalZOrder(localZ);

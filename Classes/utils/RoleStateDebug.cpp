@@ -29,7 +29,7 @@ namespace joker
     {
         CHECKNULL(role);
         _role = role;
-        float height = role->getArmature()->getContentSize().height;
+        float height = role->getRoleSprite()->getContentSize().height;
         this->setPositionY(height);
     }
 

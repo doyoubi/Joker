@@ -95,6 +95,7 @@
     "RoleProperty": {
         "player": {
             "animationName": "joker",
+            "exportJsonFile": "roleAnimation/joker/joker.ExportJson",
             "animationDirection": "right",
             "spriteScale": 0.6,
             "width": 50,
@@ -115,6 +116,7 @@
         },
         "enemy": {
             "animationName": "enemy",
+            "exportJsonFile": "roleAnimation/enemy/enemy.ExportJson",
             "animationDirection": "left",
             "spriteScale": 0.6,
             "width": 50,
@@ -133,6 +135,7 @@
         },
         "bomb": {
             "animationName": "bomb",
+            "exportJsonFile": "roleAnimation/bomb/bomb.ExportJson",
             "animationDirection": "right",
             "width": 70,
             "height": 100,

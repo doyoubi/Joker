@@ -1,8 +1,8 @@
 #ifndef JOKER_SCENE
 #define JOKER_SCENE
 
-#include "cocostudio/CocoStudio.h"
 #include "cocos2d.h"
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
@@ -49,7 +49,7 @@ namespace joker
         void setScore(int score) { _score = score; }
     private:
         bool init() override;
-        cocostudio::Armature * _curtain;
+        AnimationSprite * _curtain;
         int _score;
     };
 

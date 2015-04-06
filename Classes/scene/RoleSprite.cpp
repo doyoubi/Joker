@@ -9,39 +9,11 @@ namespace joker
     using namespace cocostudio;
     using std::string;
 
-    void RoleSprite::loadAnimationSource()
+    RoleSprite * RoleSprite::create(const string & animationName, const string & exportJsonFile, string animationDirection)
     {
-        ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "roleAnimation/joker/joker0.png",
-            "roleAnimation/joker/joker0.plist",
-            "roleAnimation/joker/joker.ExportJson"
-            );
-        ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "roleAnimation/enemy/enemy0.png",
-            "roleAnimation/enemy/enemy0.plist",
-            "roleAnimation/enemy/enemy.ExportJson"
-            );
-        ArmatureDataManager::getInstance()->addArmatureFileInfo(
-            "roleAnimation/bomb/bomb0.png",
-            "roleAnimation/bomb/bomb0.plist",
-            "roleAnimation/bomb/bomb.ExportJson"
-            );
-    }
+        AnimationSprite * s = AnimationSprite::create(animationName, exportJsonFile);
 
-    RoleSprite * RoleSprite::create(const string & animationName, string animationDirection)
-    {
-        static bool loadOnceTag = false;
-        if (!loadOnceTag)
-        {
-            RoleSprite::loadAnimationSource();
-            loadOnceTag = true;
-        }
-        // check if animation has been loaded
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName) != nullptr,
-            "missing animation: " + animationName);
-        Armature * armature = Armature::create(animationName);
-
-        RoleSprite * role = new (std::nothrow) RoleSprite(armature, animationDirection);
+        RoleSprite * role = new (std::nothrow) RoleSprite(s, animationDirection);
         if (!role || !role->init())
         {
             CC_SAFE_DELETE(role);
@@ -51,31 +23,25 @@ namespace joker
         return role;
     }
 
-    RoleSprite::RoleSprite(Armature * armature, string animationDirection)
-        : _armature(armature), _animationDirection(animationDirection == "left" ? -1 : 1)
+    RoleSprite::RoleSprite(AnimationSprite * animationSprite, string animationDirection)
+        : _animationSprite(animationSprite), _animationDirection(animationDirection == "left" ? -1 : 1)
     {
-        CHECKNULL(_armature);
+        CHECKNULL(_animationSprite);
         DEBUGCHECK(animationDirection == "left" || animationDirection == "right",
             "animationDirection must be either 'left' or 'right'.");
-        addChild(_armature);
-        _armature->retain();
+        addChild(_animationSprite);
+        _animationSprite->retain();
     }
 
     void RoleSprite::die()
     {
         auto missingAnimation = [](const string & animName) { return "RoleSprite::die(): missing '" + animName + "' movement."; };
         static const string deadAnimName = Config::getInstance().getStringValue({ "animation", "role", "dead" });
-        DEBUGCHECK(getArmature()->getAnimation()->getAnimationData()->getMovement(deadAnimName) != nullptr,
-            missingAnimation(deadAnimName));
-        getArmature()->getAnimation()->play(deadAnimName);
-        getArmature()->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "dead")
-            {
-                if (this->deadCallback)
-                    deadCallback();
-                this->removeFromParent();
-            }
+        _animationSprite->playAnimAction(deadAnimName);
+        _animationSprite->setActionCompleteCallback("dead", [this](){
+            if (this->deadCallback)
+                deadCallback();
+            this->removeFromParent();
         });
         if (JOKER_DEBUG_ON)
             removeRoleSpriteDebug();
@@ -83,14 +49,14 @@ namespace joker
 
     void RoleSprite::setDirection(RoleDirection direction)
     {
-        float sx = std::abs(_armature->getScaleX()) * _animationDirection;
+        float sx = std::abs(_animationSprite->getScaleX()) * _animationDirection;
         if (direction == RoleDirection::LEFT) sx *= -1;
-        _armature->setScaleX(sx);
+        _animationSprite->setScaleX(sx);
     }
 
     RoleDirection RoleSprite::getDirection() const
     {
-        return _armature->getScaleX() * _animationDirection > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT;
+        return _animationSprite->getScaleX() * _animationDirection > 0 ? RoleDirection::RIGHT : RoleDirection::LEFT;
     }
 
     void RoleSprite::addRoleSpriteDebug(Role * role)

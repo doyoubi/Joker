@@ -61,12 +61,12 @@ namespace joker
         bool isPlayer() const { return getRoleType() == RoleType::PLAYER; }
         RoleType getRoleType() const { return _roleType; }
 
-        cocostudio::Armature * getArmature() { return _roleSprite->getArmature(); }
-
         BattleDirector * getBattleDirector() const { return _battleDirector; }
 
         bool isAlive() { return !_dead; }
         void die();
+
+        RoleSprite * getRoleSprite() { return _roleSprite; }
 
     private:
         std::unique_ptr<StateManager> _stateManager;

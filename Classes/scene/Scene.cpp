@@ -62,7 +62,6 @@ namespace joker
         {
             loadBlackImg();
             loadOnceTag = true;
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("UI/title/title.ExportJson");
         }
 
         using namespace cocos2d::ui;
@@ -106,12 +105,8 @@ namespace joker
         static float bgScale = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundScale" });
         static float bgX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundPositionX" });
         static float bgY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "backgroundPositionY" });
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(bgAnim) != nullptr,
-            "missing animation: " + bgAnim);
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(bgAnim)->getMovement(bgMove) != nullptr,
-            "missing movement: " + bgMove);
-        auto bg = Armature::create(bgAnim);
-        bg->getAnimation()->play(bgMove);
+        auto bg = AnimationSprite::create(bgAnim, "UI/title/title.ExportJson");
+        bg->playAnimAction(bgMove);
         bg->setScale(bgScale);
         bg->setPosition(Vec2(size.width / 2.0f + bgX, size.height / 2.0f + bgY));
         addChild(bg, -1);
@@ -187,22 +182,8 @@ namespace joker
     bool GameOverAnim::init()
     {
         if (!Node::init()) return false;
-        using namespace cocostudio;
-        static bool loadOnceTag = false;
-        if (!loadOnceTag)
-        {
-            loadOnceTag = true;
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("UI/gameover/gameover.ExportJson");
-        }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover") != nullptr,
-            "missing animation: gameover");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("show") != nullptr,
-            "missing movement: show");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("move") != nullptr,
-            "missing movement: move");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("gameover")->getMovement("over") != nullptr,
-            "missing movement: over");
-        _curtain = Armature::create("gameover");
+
+        _curtain = AnimationSprite::create("gameover", "UI/gameover/gameover.ExportJson");
         CHECKNULL(_curtain);
         addChild(_curtain);
         static float scale = Config::getInstance().getDoubleValue({ "UI", "GameOverAnim", "scale" });
@@ -216,34 +197,19 @@ namespace joker
 
     void GameOverAnim::show(int score)
     {
-        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("show") != nullptr,
-            "missing movement: show");
-        _curtain->getAnimation()->play("show");
-        using namespace cocostudio;
-        _curtain->getAnimation()->setMovementEventCallFunc(
-            [this, score](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "show")
-            {
-                auto scene = GameOverScene::create();
-                scene->setScore(score);
-                Director::getInstance()->replaceScene(scene);
-            }
+        _curtain->playAnimAction("show");
+        _curtain->setActionCompleteCallback("show", [this, score](){
+            auto scene = GameOverScene::create();
+            scene->setScore(score);
+            Director::getInstance()->replaceScene(scene);
         });
     }
 
     void GameOverAnim::move()
     {
-        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("move") != nullptr,
-            "missing movement: move");
-        _curtain->getAnimation()->play("move");
+        _curtain->playAnimAction("move");
         using namespace cocostudio;
-        _curtain->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "move")
-            {
-                this->showScore();
-            }
-        });
+        _curtain->setActionCompleteCallback("move", [this](){ this->showScore(); });
     }
 
     void GameOverAnim::showScore()
@@ -280,18 +246,11 @@ namespace joker
 
     void GameOverAnim::over()
     {
-        DEBUGCHECK(_curtain->getAnimation()->getAnimationData()->getMovement("show") != nullptr,
-            "missing movement: over");
-        _curtain->getAnimation()->play("over");
+        _curtain->playAnimAction("over");
         removeChildByName("returnButton");
         removeChildByName("scoreLabel");
-        using namespace cocostudio;
-        _curtain->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "over")
-            {
-                Director::getInstance()->replaceScene(EnterGameScene::create());
-            }
+        _curtain->setActionCompleteCallback("over", [](){
+            Director::getInstance()->replaceScene(EnterGameScene::create());
         });
     }
 

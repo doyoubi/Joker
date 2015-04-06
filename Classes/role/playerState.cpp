@@ -35,12 +35,7 @@ namespace joker
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
         static const float changedDistance = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackChangedDistance" });
         DEBUGCHECK(changedDistance >= 0, "changedDistance can't be negative");
-        for (int i = 0; i < attackStageQuantity; ++i)
-        {
-            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)) != nullptr,
-                missingAnimation(animName + std::to_string(i)));
-        }
-        role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
+        role->getRoleSprite()->playAnimAction(animName + std::to_string(_currStage));
         float d = role->getDirection() == RoleDirection::LEFT ? -changedDistance : changedDistance;
         role->getPhysicsBody()->setX(d + role->getPhysicsBody()->getX());
 
@@ -49,7 +44,7 @@ namespace joker
 
     void PlayerAttackState::execute(Role * role)
     {
-        if (!role->getArmature()->getAnimation()->isPlaying())
+        if (!role->getRoleSprite()->isPlaying())
         {
             role->getStateManager()->changeState(IdleState::create());
         }
@@ -74,12 +69,7 @@ namespace joker
     void EmptyAttackState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "PlayerAttackState" });
-        for (int i = 0; i < attackStageQuantity; ++i)
-        {
-            DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName + std::to_string(i)) != nullptr,
-                missingAnimation(animName + std::to_string(i)));
-        }
-        role->getArmature()->getAnimation()->play(animName + std::to_string(_currStage));
+        role->getRoleSprite()->playAnimAction(animName + std::to_string(_currStage));
 
         role->getBattleDirector()->addEvent(EventPtr(new EmptyAttackEvent()));
     }
@@ -91,7 +81,7 @@ namespace joker
 
     void EmptyAttackState::execute(Role * role)
     {
-        if (!role->getArmature()->getAnimation()->isPlaying())
+        if (!role->getRoleSprite()->isPlaying())
         {
             role->getStateManager()->changeState(IdleState::create());
         }
@@ -117,9 +107,7 @@ namespace joker
     void PlayerAttackedState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "role", "attacked" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
-            missingAnimation(animName));
-        role->getArmature()->getAnimation()->play(animName);
+        role->getRoleSprite()->playAnimAction(animName);
 
         static float attackedFallBackSpeed = Config::getInstance().getDoubleValue({ "RoleProperty", "player", "attackedFallBackSpeed" });
         float v = (_direction == RoleDirection::LEFT ? 1 : -1) * attackedFallBackSpeed;
@@ -131,7 +119,7 @@ namespace joker
 
     void PlayerAttackedState::execute(Role * role)
     {
-        if (!role->getArmature()->getAnimation()->isPlaying())
+        if (!role->getRoleSprite()->isPlaying())
         {
             role->getStateManager()->changeState(IdleState::create());
         }
@@ -168,9 +156,7 @@ namespace joker
     void JumpState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "JumpState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
-            missingAnimation(animName));
-        role->getArmature()->getAnimation()->play(animName);
+        role->getRoleSprite()->playAnimAction(animName);
         role->getPhysicsBody()->jump();
         if (_velocityX != 0)
         {
@@ -228,9 +214,7 @@ namespace joker
     void CollideState::enterState(Role * role)
     {
         static const string animName = Config::getInstance().getStringValue({ "animation", "player", "CollideState" });
-        DEBUGCHECK(role->getArmature()->getAnimation()->getAnimationData()->getMovement(animName) != nullptr,
-            missingAnimation(animName));
-        role->getArmature()->getAnimation()->play(animName);
+        role->getRoleSprite()->playAnimAction(animName);
         role->setDirection(_direction == RoleDirection::LEFT ? RoleDirection::RIGHT : RoleDirection::LEFT);
         static float collideFallBackSpeed = Config::getInstance().getDoubleValue({"RoleProperty", "player", "collideFallBackSpeed"});
         float v = (_direction == RoleDirection::LEFT ? -1 : 1) * collideFallBackSpeed;
