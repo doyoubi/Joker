@@ -4,7 +4,6 @@
 #include "ui/CocosGUI.h"
 #include "ui/UIHelper.h"
 #include "ui/UIButton.h"
-#include "cocostudio/CCArmature.h"
 
 #include "BattleScene.h"
 #include "RoleSprite.h"
@@ -14,6 +13,7 @@
 #include "utils/config.h"
 #include "LoadingCurtain.h"
 #include "Scene.h"
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
@@ -55,10 +55,7 @@ namespace joker
         loadingCurtain->setPosition(center);
         addChild(loadingCurtain, 5);
         loadingCurtain->drawUp();
-        loadingCurtain->setDrawUpEndCallback([this](
-            cocostudio::Armature *armature,
-            cocostudio::MovementEventType movementType,
-            const std::string& movementID){
+        loadingCurtain->setDrawUpEndCallback([this](){
             BattleScene * scene = dynamic_cast<BattleScene*>(getScene());
             CHECKNULL(scene);
             addChild(getBattleLayer());
@@ -106,7 +103,6 @@ namespace joker
     // BattleLayer
 
     // SpikesSprite 
-    using cocostudio::Armature;
     class SpikesSprite : public cocos2d::Node
     {
     public:
@@ -115,7 +111,7 @@ namespace joker
         void arise();
     private:
         bool init() override;
-        Vector<Armature*> _spikes;
+        Vector<AnimationSprite*> _spikes;
     };
 
     bool BattleLayer::init()
@@ -277,7 +273,7 @@ namespace joker
         DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName) != nullptr,
             "missing animation: " + movementName);
         for (auto spike : _spikes)
-            spike->getAnimation()->play(movementName);
+            spike->playAnimAction(movementName);
     }
 
     bool SpikesSprite::init()
@@ -288,25 +284,13 @@ namespace joker
         const static float localZ = Config::getInstance().getDoubleValue({ "RoleProperty", "spike", "localZ" });
         this->setLocalZOrder(localZ);
 
-        using cocostudio::ArmatureDataManager;
-        static bool addArmatureFileInfo = false;
-        if (!addArmatureFileInfo)
-        {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo(
-                "roleAnimation/spike/spike0.png",
-                "roleAnimation/spike/spike0.plist",
-                "roleAnimation/spike/spike.ExportJson"
-                );
-            addArmatureFileInfo = true;
-        }
         const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName) != nullptr, "missing animation: " + animationName);
         const static float width = Config::getInstance().getDoubleValue({"RoleProperty", "spike", "spriteWidth"});
         auto size = Director::getInstance()->getVisibleSize();
         int spikeNum = int(size.width / width);
         for (int i = 0; i < spikeNum; ++i)
         {
-            _spikes.pushBack(Armature::create(animationName));
+            _spikes.pushBack(AnimationSprite::create(animationName, "roleAnimation/spike/spike.ExportJson"));
         }
         
         float leftmost = -(spikeNum * width / 2.0f);
@@ -323,18 +307,11 @@ namespace joker
     {
         const static string animationName = Config::getInstance().getStringValue({ "RoleProperty", "spike", "animationName" });
         const static string movementName = Config::getInstance().getStringValue({ "animation", "spike", "attack" });
-        using namespace cocostudio;
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(animationName)->getMovement(movementName) != nullptr,
-            "missing animation: " + movementName);
         for (auto spike : _spikes)
-            spike->getAnimation()->play(movementName);
+            spike->playAnimAction(movementName);
         DEBUGCHECK(!_spikes.empty(), "array of spike sprites is empty");
-        _spikes.at(0)->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string & movementID){
-            if (movementType == MovementEventType::COMPLETE)
-            {
-                this->setVisible(false);
-            }
+        _spikes.at(0)->setActionCompleteCallback("attack", [this](){
+            this->setVisible(false);
         });
     }
 

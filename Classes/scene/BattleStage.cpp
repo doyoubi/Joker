@@ -5,28 +5,15 @@
 
 namespace joker
 {
-    using cocostudio::Armature;
-
     // BattleStage
     bool BattleStage::init()
     {
         if (!Node::init()) return false;
 
-        using namespace cocostudio;
-        static bool addArmatureFileInfo = false;
-        if (!addArmatureFileInfo)
-        {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/stage/stage.ExportJson");
-            addArmatureFileInfo = true;
-        }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage") != nullptr,
-            "missing animation: stage");
-        _stage = Armature::create("stage");
+        _stage = AnimationSprite::create("stage", "background/stage/stage.ExportJson");
 
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage")->getMovement("show") != nullptr,
-            "missing animation movement: show");
         addChild(_stage);
-        _stage->getAnimation()->play("show");
+        _stage->playAnimAction("show");
         _stage->pause();
 
         return true;
@@ -39,24 +26,17 @@ namespace joker
 
     void BattleStage::shake()
     {
-        _stage->getAnimation()->play("shake");
+        _stage->playAnimAction("shake");
     }
 
     void BattleStage::quake()
     {
-        _stage->getAnimation()->play("quake");
+        _stage->playAnimAction("quake");
     }
 
     void BattleStage::setEnterAnimFinishCallback(std::function<void(void)> callback)
     {
-        using namespace cocostudio;
-        _stage->getAnimation()->setMovementEventCallFunc(
-            [this, callback](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "show")
-            {
-                callback();
-            }
-        });
+        _stage->setActionCompleteCallback("show", callback);
     }
 
     // Curtain
@@ -69,28 +49,13 @@ namespace joker
     {
         if (!Node::init()) return false;
 
-        using namespace cocostudio;
-        static bool addArmatureFileInfo = false;
-        if (!addArmatureFileInfo)
-        {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/curtain/curtain.ExportJson");
-            addArmatureFileInfo = true;
-        }
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("curtain") != nullptr,
-            "missing animation: curtain");
-        _curtain = Armature::create("curtain");
+        _curtain = AnimationSprite::create("curtain", "background/curtain/curtain.ExportJson");
 
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("stage")->getMovement("show") != nullptr,
-            "missing animation movement: show");
         addChild(_curtain);
-        _curtain->getAnimation()->play("show");
+        _curtain->playAnimAction("show");
         _curtain->pause();
-        _curtain->getAnimation()->setMovementEventCallFunc(
-            [this](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "show")
-            {
-                _curtain->getAnimation()->play("static");
-            }
+        _curtain->setActionCompleteCallback("show", [this](){
+            _curtain->playAnimAction("static");
         });
         return true;
     }
@@ -126,25 +91,6 @@ namespace joker
         const float offsetY1 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY1" });
         const float offsetY2 = Config::getInstance().getDoubleValue({ "LayeringCakes", "offsetY2" });
 
-        using namespace cocostudio;
-        static bool addArmatureFileInfo = false;
-        if (!addArmatureFileInfo)
-        {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/" + layer1Anim + "/" + layer1Anim + ".ExportJson");
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("background/" + layer2Anim + "/" + layer2Anim + ".ExportJson");
-            addArmatureFileInfo = true;
-        }
-        auto anims = std::vector<string>({ layer1Anim, layer2Anim });
-        for (auto anim : anims)
-        {
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim) != nullptr,
-                "missing animation: " + anim);
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim)->getMovement("show") != nullptr,
-                anim + " missing movement: show");
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim)->getMovement("static") != nullptr,
-                anim + " missing movement: static");
-        }
-
         _layer1 = Node::create();
         _layer2 = Node::create();
         _layer1->setPositionY(offsetY1);
@@ -153,16 +99,16 @@ namespace joker
         addChild(_layer2, 0);
         for (float i = -layer1Width / 2.0f; i < layer1Width / 2.0f; i += gap1)
         {
-            auto n = Armature::create(layer1Anim);
-            n->getAnimation()->play("show");
+            auto n = AnimationSprite::create(layer1Anim, "background/" + layer1Anim + "/" + layer1Anim + ".ExportJson");
+            n->playAnimAction("show");
             n->setPosition(i, 0);
             n->setScale(scale1);
             _layer1->addChild(n);
         }
         for (float i = -layer2Width / 2.0f; i < layer2Width / 2.0f; i += gap2)
         {
-            auto n = Armature::create(layer2Anim);
-            n->getAnimation()->play("show");
+            auto n = AnimationSprite::create(layer2Anim, "background/" + layer2Anim + "/" + layer2Anim + ".ExportJson");
+            n->playAnimAction("show");
             n->setPosition(i, 0);
             n->setScale(scale2);
             _layer2->addChild(n);

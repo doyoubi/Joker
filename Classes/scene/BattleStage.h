@@ -2,7 +2,8 @@
 #define JOKER_BATTLE_STAGE
 
 #include "cocos2d.h"
-#include "cocostudio/CCArmature.h"
+
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
@@ -16,7 +17,7 @@ namespace joker
         void setEnterAnimFinishCallback(std::function<void(void)> callback);
     private:
         bool init() override;
-        cocostudio::Armature * _stage;   // weak ref
+        AnimationSprite * _stage;   // weak ref
     };
 
     class Curtain : public cocos2d::Node
@@ -26,7 +27,7 @@ namespace joker
         void enter();
     private:
         bool init() override;
-        cocostudio::Armature * _curtain; // weak ref
+        AnimationSprite * _curtain; // weak ref
     };
 
     class LayeringCakes : public cocos2d::Node

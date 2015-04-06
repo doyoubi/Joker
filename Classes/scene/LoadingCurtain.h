@@ -2,8 +2,11 @@
 #define JOKER_LOADING_CURTAIN
 
 #include <functional>
+#include <string>
 
 #include "cocos2d.h"
+
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
@@ -14,14 +17,11 @@ namespace joker
         void fallDown();
         void drawUp();
         void loading();
-        typedef std::function<void(
-            cocostudio::Armature *armature,
-            cocostudio::MovementEventType movementType,
-            const std::string& movementID)> DrawUpEndCallback;
+        typedef std::function<void(void)> DrawUpEndCallback;
         void setDrawUpEndCallback(DrawUpEndCallback callback);
     private:
         bool init() override;
-        cocostudio::Armature * _loadingCurtain;
+        AnimationSprite * _loadingCurtain;
     };
 }
 

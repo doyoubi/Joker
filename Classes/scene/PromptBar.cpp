@@ -65,21 +65,19 @@ namespace joker
         { "animation", "PromptBar", "MovingObject", "enemy" });
         spike = Config::getInstance().getStringValue(
         { "animation", "PromptBar", "MovingObject", "spike" });
-
-        string anims[] = { backgroundAnimProj, mark0AnimProj, mark1AnimProj, mark2AnimProj };
-
-        using namespace cocostudio;
-        for (string & anim : anims)
-        {
-            ArmatureDataManager::getInstance()->addArmatureFileInfo(
-                "PromptBar/" + anim + "/" + anim + ".ExportJson");
-        }
     }
 
 
     bool PromptBar::init()
     {
         if (!Node::init()) return false;
+
+        static bool tag = false;
+        if (!tag)
+        {
+            addSource();
+            tag = true;
+        }
 
         static float barPositionX = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionX" });
         static float barPositionY = Config::getInstance().getDoubleValue({ "PromptBar", "barPositionY" });
@@ -88,42 +86,16 @@ namespace joker
         static float endX = Config::getInstance().getDoubleValue({ "PromptBar", "endX" });
         static float endY = Config::getInstance().getDoubleValue({ "PromptBar", "endY" });
 
-        using namespace cocostudio;
-        static bool addArmatureFileInfo = false;
-        if (!addArmatureFileInfo)
-        {
-            addSource();
-            addArmatureFileInfo = true;
-        }
-
-        string bMovement[] = { bSat, bPerfect, bGood, bOk, bMiss };
-        string mMovement[] = { mSat, mPerfect, mGood, mOk, mMiss };
-        string anims[] = { backgroundAnimProj, mark0AnimProj, mark1AnimProj, mark2AnimProj };
-
-        for (string & anim : anims)
-        {
-            DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(anim) != nullptr,
-                "missing animation: " + anim);
-        }
-        for (string & anim : anims)
-        {
-            for (string & movement : bMovement)
-            {
-                DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData(
-                    anim)->getMovement(movement) != nullptr,
-                    "missing animation: " + anim + "--" + backgroundAnimProj);
-            }
-        }
-
         auto size = Director::getInstance()->getVisibleSize();
         this->setPosition(size.width / 2 + barPositionX, barPositionY);
 
         static float bgX = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundX" });
         static float bgY = Config::getInstance().getDoubleValue({ "PromptBar", "backgroundY" });
-        _barBackground = Armature::create(backgroundAnimProj);
+        _barBackground = AnimationSprite::create(backgroundAnimProj,
+            "PromptBar/" + backgroundAnimProj + "/" + backgroundAnimProj + ".ExportJson");
         _barBackground->setPosition(bgX, bgY);
         CHECKNULL(_barBackground);
-        _barBackground->getAnimation()->play(bSat);
+        _barBackground->playAnimAction(bSat);
         this->addChild(_barBackground, 0);
 
         _startPoint = Vec2(startX, startY);
@@ -134,7 +106,8 @@ namespace joker
         static float markOffsetY = Config::getInstance().getDoubleValue({ "PromptBar", "markOffsetY" });
         for (int i = 0; i < 3; ++i)
         {
-            _marks[i] = Armature::create(marks[i]);
+            _marks[i] = AnimationSprite::create(marks[i],
+                "PromptBar/" + marks[i] + "/" + marks[i] + ".ExportJson");
             _marks[i]->setPosition(_endPoint + Vec2(markOffsetX, markOffsetY));
             this->addChild(_marks[i], i+1);
         }
@@ -216,12 +189,10 @@ namespace joker
         string sat = mSat;
         for (auto mark : _marks)
         {
-            mark->getAnimation()->play(anim);
-            mark->getAnimation()->setMovementEventCallFunc(
-                [mark, sat](Armature *armature, MovementEventType movementType, const std::string& movementID){
-                if (movementType == MovementEventType::COMPLETE)
-                    mark->getAnimation()->play(sat);
-            });
+            mark->playAnimAction(anim);
+            mark->setActionCompleteCallback("", [mark, sat](){
+                mark->playAnimAction(sat);
+            }, true);
         }
         anim =
             result == HitResult::BOMB ? mOk :
@@ -229,7 +200,7 @@ namespace joker
             result == HitResult::GOOD ? mGood :
             result == HitResult::OK ? mOk :
             result == HitResult::MISS ? mMiss : "invalid-anim";
-        _barBackground->getAnimation()->play(anim);
+        _barBackground->playAnimAction(anim);
     }
 
     void PromptBar::clearPromptSprite()

@@ -13,28 +13,11 @@ namespace joker
     bool LoadingCurtain::init()
     {
         if (!Node::init()) return false;
-        using namespace cocostudio;
-        static bool loadOnceTag = false;
-        if (!loadOnceTag)
-        {
-            loadOnceTag = true;
-            ArmatureDataManager::getInstance()->addArmatureFileInfo("UI/loading/loading.ExportJson");
-        }
 
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("loading") != nullptr,
-            "missing animation: loading");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("loading")->getMovement("show") != nullptr,
-            "missing movement: show");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("loading")->getMovement("loading") != nullptr,
-            "missing movement: loading");
-        DEBUGCHECK(ArmatureDataManager::getInstance()->getAnimationData("loading")->getMovement("over") != nullptr,
-            "missing movement: over");
-        _loadingCurtain = Armature::create("loading");
+        _loadingCurtain = AnimationSprite::create("loading", "UI/loading/loading.ExportJson");
         addChild(_loadingCurtain);
-        _loadingCurtain->getAnimation()->setMovementEventCallFunc(
-            [](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "show")
-                Director::getInstance()->replaceScene(LoadingScene::create());
+        _loadingCurtain->setActionCompleteCallback("show", [](){
+            Director::getInstance()->replaceScene(LoadingScene::create());
         });
         static float curtainX = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainX" });
         static float curtainY = Config::getInstance().getDoubleValue({ "UI", "LoadingScene", "curtainY" });
@@ -49,27 +32,22 @@ namespace joker
 
     void LoadingCurtain::fallDown()
     {
-        _loadingCurtain->getAnimation()->play("show");
+        _loadingCurtain->playAnimAction("show");
     }
 
     void LoadingCurtain::drawUp()
     {
-        _loadingCurtain->getAnimation()->play("over");
+        _loadingCurtain->playAnimAction("over");
     }
 
     void LoadingCurtain::loading()
     {
-        _loadingCurtain->getAnimation()->play("loading");
+        _loadingCurtain->playAnimAction("loading");
     }
 
     void LoadingCurtain::setDrawUpEndCallback(DrawUpEndCallback callback)
     {
-        using namespace cocostudio;
-        _loadingCurtain->getAnimation()->setMovementEventCallFunc(
-            [callback](Armature *armature, MovementEventType movementType, const std::string& movementID){
-            if (movementType == MovementEventType::COMPLETE && movementID == "over")
-                callback(armature, movementType, movementID);
-        });
+        _loadingCurtain->setActionCompleteCallback("over", callback);
     }
 
 }

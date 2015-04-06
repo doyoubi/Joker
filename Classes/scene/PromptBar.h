@@ -8,6 +8,7 @@
 #include "cocostudio/CCArmature.h"
 
 #include "gameplay/BattleJudge.h"
+#include "utils/AnimationSprite.h"
 
 namespace joker
 {
@@ -39,8 +40,8 @@ namespace joker
         static void addSource();
 
         std::queue<cocos2d::Sprite*> _promptSpriteQueue;
-        cocostudio::Armature * _barBackground;
-        cocostudio::Armature * _marks[3];
+        AnimationSprite * _barBackground;
+        AnimationSprite * _marks[3];
 
         Vec2 _startPoint;
         Vec2 _endPoint;
