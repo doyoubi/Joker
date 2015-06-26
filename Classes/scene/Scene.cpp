@@ -1,4 +1,5 @@
 #include "ui/UIButton.h"
+#include "SimpleAudioEngine.h"
 
 #include "Scene.h"
 #include "BattleScene.h"
@@ -91,6 +92,7 @@ namespace joker
         start->addTouchEventListener([this, start](Ref*, Widget::TouchEventType){
             start->setTouchEnabled(false);
             _loadingCurtain->fallDown();
+            CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         });
         instruction->addTouchEventListener([instruction](Ref*, Widget::TouchEventType){
             instruction->setTouchEnabled(false);
@@ -136,6 +138,12 @@ namespace joker
         addChild(black, 4);
         auto fadeIn = FadeTo::create(1, 0);
         black->runAction(fadeIn);
+
+        if (!CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
+        {
+            static string bgm = Config::getInstance().getStringValue({ "MusicScript", "backgroundMusic" });
+            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(bgm.c_str());
+        }
     }
 
     // InstructionScene
@@ -179,6 +187,13 @@ namespace joker
         _rules->setActionCompleteCallback("page2out", [this](){
             _rules->playAnimAction("show");
         });
+
+        static float cprX = Config::getInstance().getDoubleValue({ "UI", "InstructionScene", "copyrightX" });
+        static float cprY = Config::getInstance().getDoubleValue({ "UI", "InstructionScene", "copyrightY" });
+        auto copyright = Sprite::create("UI/copyright.png");
+        copyright->setScale(0.5);
+        addChild(copyright);
+        copyright->setPosition(Vec2(size.width / 2.0f + cprX, size.height / 2.0f + cprY));
 
         return true;
     }

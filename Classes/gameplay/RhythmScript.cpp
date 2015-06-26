@@ -63,7 +63,8 @@ namespace joker
     {
         DEBUGCHECK(_rhythmScript.size() > 0, "invalid rhythm script");
         vector<float> ret(_rhythmScript.size());
-        ret[0] = std::max(0.0f, _rhythmScript[0] + putOff);
+        ret[0] = _rhythmScript[0] + putOff;
+        DEBUGCHECK(ret[0] > 0, "negative or zero time");
         std::copy(++begin(_rhythmScript), end(_rhythmScript), ++begin(ret));
         return ret;
     }

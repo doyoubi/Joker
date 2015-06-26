@@ -33,7 +33,9 @@
             "backButtonPositionX": 100,
             "backButtonPositionY": -230,
             "nextButtonPositionX": -100,
-            "nextButtonPositionY": -230
+            "nextButtonPositionY": -230,
+            "copyrightX": 0,
+            "copyrightY": -280
         },
         "LoadingScene": {
             "curtainX": 8,
@@ -57,9 +59,10 @@
         }
     },
     "MusicScript":{
-        "winMusicFile": "music/theGrimoireOfAlice.wav",
-        "androidMusicFile": "music/theGrimoireOfAlice.ogg",
-        "script": "music/theGrimoireOfAlice.json"
+        "winMusicFile": "music/old_gold.wav",
+        "androidMusicFile": "music/old_gold.ogg",
+        "script": "music/old_gold.json",
+        "backgroundMusic": "music/MidstreamJam.mp3"
     },
     "BattleStage": {
         "width": 2000,
