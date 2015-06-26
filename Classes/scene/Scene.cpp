@@ -143,11 +143,13 @@ namespace joker
     {
         if (!Scene::init()) return false;
 
-        string instructionText = FileUtils::getInstance()->getStringFromFile("instruction.txt");
-        auto label = Label::createWithSystemFont(instructionText, "Arial", 24);
-        addChild(label);
         auto size = Director::getInstance()->getVisibleSize();
-        label->setPosition(size.width / 2.0f, size.height / 2.0f);
+
+        _rules = AnimationSprite::create("rules", "rules/rules.ExportJson");
+        CHECKNULL(_rules);
+        addChild(_rules);
+        _rules->setPosition(size.width / 2.0f, size.height / 2.0f);
+        _rules->playAnimAction("show");
 
         using namespace cocos2d::ui;
         auto back = Button::create("UI/back.png", "UI/back.png", "UI/back.png");
@@ -157,6 +159,25 @@ namespace joker
         addChild(back);
         back->addTouchEventListener([](Ref*, Widget::TouchEventType){
             Director::getInstance()->replaceScene(EnterGameScene::create());
+        });
+
+        auto next = Button::create("UI/next.png", "UI/next.png", "UI/next.png");
+        static float nextX = Config::getInstance().getDoubleValue({ "UI", "InstructionScene", "nextButtonPositionX" });
+        static float nextY = Config::getInstance().getDoubleValue({ "UI", "InstructionScene", "nextButtonPositionY" });
+        next->setPosition(Vec2(size.width / 2.0f + nextX, size.height / 2.0f + nextY));
+        addChild(next);
+        next->addTouchEventListener([this](Ref*, Widget::TouchEventType){
+            if (!_rules->isComplete())
+                return;
+            static bool firstPage = true;
+            if (firstPage)
+                _rules->playAnimAction("pg2nothing");
+            else
+                _rules->playAnimAction("page2out");
+            firstPage = !firstPage;
+        });
+        _rules->setActionCompleteCallback("page2out", [this](){
+            _rules->playAnimAction("show");
         });
 
         return true;

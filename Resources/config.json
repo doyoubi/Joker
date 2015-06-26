@@ -30,8 +30,10 @@
             "exitScale": 0.8
         },
         "InstructionScene": {
-            "backButtonPositionX": 0,
-            "backButtonPositionY": -140
+            "backButtonPositionX": 100,
+            "backButtonPositionY": -230,
+            "nextButtonPositionX": -100,
+            "nextButtonPositionY": -230
         },
         "LoadingScene": {
             "curtainX": 8,

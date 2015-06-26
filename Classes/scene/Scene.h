@@ -36,6 +36,7 @@ namespace joker
         CREATE_FUNC(InstructionScene);
     private:
         bool init() override;
+        AnimationSprite * _rules;
     };
 
     class GameOverAnim : public cocos2d::Node
