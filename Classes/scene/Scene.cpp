@@ -63,6 +63,7 @@ namespace joker
             loadBlackImg();
             loadOnceTag = true;
         }
+        return true;
     }
 
     void LogoScene::onEnterTransitionDidFinish()
@@ -86,10 +87,10 @@ namespace joker
         _black->setPosition(size.width / 2.0f, size.height / 2.0f);  // camera position
         _black->setOpacity(255);
         addChild(_black, 4);
-        auto fadeIn = FadeTo::create(1, 0);
+        auto fadeIn = FadeTo::create(2, 0);
         _black->runAction(fadeIn);
 
-        this->scheduleOnce(schedule_selector(LogoScene::fadeOut), 2.0f);
+        this->scheduleOnce(schedule_selector(LogoScene::fadeOut), 3.0f);
     }
 
     void LogoScene::fadeOut(float)
