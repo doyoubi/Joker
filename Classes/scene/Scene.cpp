@@ -38,8 +38,8 @@ namespace joker
         Director::getInstance()->replaceScene(battleScene);
     }
 
-    // EnterGameScene
-    void EnterGameScene::loadBlackImg()
+    // LogoScene
+    void loadBlackImg()
     {
         auto size = Director::getInstance()->getVisibleSize();
         Texture2D * blackTex = new Texture2D();
@@ -54,17 +54,61 @@ namespace joker
         SpriteFrameCache::getInstance()->addSpriteFrame(spriteFrame, "blackSpriteFrame");
     }
 
-    bool EnterGameScene::init()
+    bool LogoScene::init()
     {
         if (!Scene::init()) return false;
-        using namespace cocostudio;
         static bool loadOnceTag = false;
         if (!loadOnceTag)
         {
             loadBlackImg();
             loadOnceTag = true;
         }
+    }
 
+    void LogoScene::onEnterTransitionDidFinish()
+    {
+        Scene::onEnterTransitionDidFinish();
+
+        auto whiteBg = LayerColor::create(Color4B(255, 255, 255, 255));
+        auto logo = Sprite::create("team_logo.png");
+        _black = Sprite::createWithSpriteFrame(
+            SpriteFrameCache::getInstance()->getSpriteFrameByName("blackSpriteFrame"));
+
+        auto size = Director::getInstance()->getVisibleSize();
+
+        whiteBg->setContentSize(size);
+        addChild(whiteBg);
+
+        logo->setPosition(size.width / 2.0f, size.height / 2.0f);
+        logo->setScale(size.height / logo->getContentSize().height / 2.0f);
+        addChild(logo);
+
+        _black->setPosition(size.width / 2.0f, size.height / 2.0f);  // camera position
+        _black->setOpacity(255);
+        addChild(_black, 4);
+        auto fadeIn = FadeTo::create(1, 0);
+        _black->runAction(fadeIn);
+
+        this->scheduleOnce(schedule_selector(LogoScene::fadeOut), 2.0f);
+    }
+
+    void LogoScene::fadeOut(float)
+    {
+        _black->setOpacity(0);
+        auto out = FadeTo::create(1, 255);
+        auto changeScene = CallFunc::create([](){
+            Director::getInstance()->replaceScene(EnterGameScene::create());
+        });
+        auto seq = cocos2d::Sequence::createWithTwoActions(out, changeScene);
+        _black->runAction(seq);
+    }
+
+    // EnterGameScene
+
+    bool EnterGameScene::init()
+    {
+        if (!Scene::init()) return false;
+        using namespace cocostudio;
         using namespace cocos2d::ui;
         static float startX = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionX" });
         static float startY = Config::getInstance().getDoubleValue({ "UI", "EnterScene", "enterButtonPositionY" });

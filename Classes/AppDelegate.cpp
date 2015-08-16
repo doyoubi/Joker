@@ -48,7 +48,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     joker::Config::setUsable();
 
     // create a scene. it's an autorelease object
-    auto scene = joker::EnterGameScene::create();
+    auto scene = joker::LogoScene::create();
 
     // run
     director->runWithScene(scene);

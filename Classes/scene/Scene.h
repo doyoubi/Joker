@@ -19,12 +19,22 @@ namespace joker
         LoadingCurtain * _loadingCurtain;
     };
 
+    class LogoScene : public cocos2d::Scene
+    {
+    public:
+        CREATE_FUNC(LogoScene);
+        void onEnterTransitionDidFinish() override;
+        void fadeOut(float);
+    private:
+        bool init() override;
+        cocos2d::Sprite * _black;
+    };
+
     class EnterGameScene : public cocos2d::Scene
     {
     public:
         CREATE_FUNC(EnterGameScene);
         void onEnterTransitionDidFinish() override;
-        static void loadBlackImg();
     private:
         bool init() override;
         LoadingCurtain * _loadingCurtain;
