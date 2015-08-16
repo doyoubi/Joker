@@ -130,7 +130,7 @@
             "restreatSpeed": 300,
             "normalSpeed": 100,
             "fastSpeed": 300,
-            "maxQuantity": 2,
+            "maxQuantity": 3,
             "attackScope": 200,
             "attackedFallBackSpeed": 400,
             "defenceFallBackSpeed": 100,

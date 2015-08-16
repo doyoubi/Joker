@@ -142,7 +142,7 @@ namespace joker
         if (!CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
         {
             static string bgm = Config::getInstance().getStringValue({ "MusicScript", "backgroundMusic" });
-            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(bgm.c_str());
+            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(bgm.c_str(), true);
         }
     }
 
