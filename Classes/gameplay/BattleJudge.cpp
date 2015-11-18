@@ -13,8 +13,8 @@ namespace joker
         DEBUGCHECK(okDt == hitDeltaTime, "okDt must equal hitDeltaTime");
         DEBUGCHECK(dt > 0, "negative dt");
         return
-            dt < 0.01 ? HitResult::PERFECT :
-            dt < 0.03 ? HitResult::GOOD :
+            dt < perfectDt ? HitResult::PERFECT :
+            dt < goodDt ? HitResult::GOOD :
             HitResult::OK;
     }
 

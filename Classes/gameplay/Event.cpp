@@ -48,8 +48,6 @@ namespace joker
         RoleCommand command(RoleAction::ATTACKED);
         command.add("direction", sufferer->getDirection());
         sufferer->executeCommand(command);
-
-        director->getSoundManager()->playSound("hit");
     }
 
     // EnemyAttackEvent
