@@ -2,7 +2,7 @@
 
 《Joker》是一个结合了节奏元素的平台游戏，玩家需要跟着节拍指示控制人物移动、躲避机关、击倒敌人。
 
-[游戏视频](http://v.youku.com/v_show/id_XOTA3ODU2MjI0.html)
+[Video](http://v.youku.com/v_show/id_XMTMwNDE3MTY4NA==.html?spm=a2h0j.11185381.listitem_page1.5~A)
 
 开发人员：
 - 程序：黄光星，刘多原
